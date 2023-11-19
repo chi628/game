@@ -23,7 +23,7 @@ const stageList = [
     description: '完美防守 逢凶化吉迎貴人',
   },
   {
-    id: 'wallet',
+    id: 'money',
     name: '荷包空空',
     description: '年終翻倍 投資有賺無賠',
   },
@@ -48,7 +48,7 @@ const stageList = [
     description: '單身轉角遇到愛 脫單好人好事多',
   },
   {
-    id: 'dirty',
+    id: 'clothes',
     name: '新衣服秒髒',
     description: '打破莫非定律魔咒 衰神退散吧',
   },
@@ -57,6 +57,10 @@ const stageList = [
 const MAIN_BACKGROUND_COLOR = '#f3bbac'
 const GROUND_1_BGCOLOR = '#a38971'
 const GROUND_2_BGCOLOR = '#8fac79'
+const BIG_CLOUD_INIT_XCOORD = -60
+const MID_CLOUD_INIT_XCOORD = -105
+const MINI_CLOUD_INIT_XCOORD = 70
+const TREE_INIT_XCOORD = 180
 
 class Object {
   x
@@ -65,6 +69,9 @@ class Object {
   width
   height
   frames = []
+  camera = { x: 0, y: 0 }
+  xSpeed = 0
+  ySpeed = 0
 
   constructor(x, y, width, height) {
     this.x = x
@@ -78,18 +85,16 @@ class Object {
     frame.src = filename
     this.frames.push(frame)
   }
-}
 
-class SpecialObject {
-  type = ''
-  x = 0
-  y = 0
-  width = 0
-  height = 0
-  alive = true
-  currFrame = 0
-  xSpeed = 0
-  ySpeed = 0
+  SetSpeed({ x, y }) {
+    this.xSpeed = x
+    this.ySpeed = y
+  }
+
+  MovingCamera({ x, y }) {
+    this.camera.x += x
+    this.camera.y += y
+  }
 }
 
 class myGame {
@@ -101,7 +106,6 @@ class myGame {
   width
   height
   stairObject = []
-  stageObject = []
   bigClouds = []
   midClouds = []
   smallClouds = []
@@ -150,6 +154,19 @@ class myGame {
 
   playerGravity = 0
 
+  bigCloudList = []
+  midCloudList = []
+  miniCloudList = []
+  stairList = []
+  stageDetailList = []
+  playerAnimatorCounter = 0
+  stairInviewIndex = -1
+  failAnimator = 0
+  aaa = 0
+  bbb = []
+  overStage = false
+  playBrokenWood = false
+
   constructor() {
     this.width = window.innerWidth
     this.height = window.innerHeight
@@ -184,174 +201,311 @@ class myGame {
     })
   }
 
-  initGame() {
-    this.ctx.fillStyle = '#f3bbac'
-    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height)
+  loadImages() {
+    // console.log('loadImages')
+    this.cloudObject = new Object(0, 0, 0, 0)
+    this.cloudObject.LoadFrame('Images/cloud_L.webp')
+    this.cloudObject.LoadFrame('Images/cloud_M.webp')
+    this.cloudObject.LoadFrame('Images/cloud_S.webp')
 
-    this.groundOne = {
-      x: 0,
-      y: this.height - this.height * 0.1,
-      width: this.width,
-      height: this.height * 0.1,
-    }
+    this.bigCloudObject = new Object(0, 0, 230, 111)
+    this.bigCloudObject.LoadFrame('Images/cloud_L.webp')
+    this.bigCloudObject.SetSpeed({ x: 1.6, y: 0 })
 
-    this.groundTwo = {
-      x: 0,
-      y: this.height - this.height * 0.1 - this.height * 0.06,
-      width: this.width,
-      height: this.height * 0.07,
-    }
+    this.midCloudObject = new Object(0, 0, 135, 72)
+    this.midCloudObject.LoadFrame('Images/cloud_M.webp')
+    this.midCloudObject.SetSpeed({ x: 1.2, y: 0 })
 
-    this.groundThree = {
-      x: 0,
-      y: this.height - this.height * 0.1 - this.height * 0.06 - this.height * 0.05,
-      width: this.width,
-      height: this.height * 0.1,
-    }
+    this.miniCloudObject = new Object(0, 0, 95, 60)
+    this.miniCloudObject.LoadFrame('Images/cloud_S.webp')
+    this.miniCloudObject.SetSpeed({ x: 0.8, y: 0 })
 
-    // 230 * 111
-    this.bigCloud = new Object(0, 0, 230, 111)
-    this.bigCloud.LoadFrame('Images/cloud_L.webp')
-    this.midCloud = new Object(0, 0, 135, 72)
-    this.midCloud.LoadFrame('Images/cloud_M.webp')
-    this.clouds = new Object(0, 0, 95, 60)
-    this.clouds.LoadFrame('Images/cloud_S.webp')
+    this.groundObject = new Object(0, 0, 0, 0)
+    this.groundObject.LoadFrame('Images/ground.webp')
+    this.groundObject.LoadFrame('Images/ground_L2.webp')
+    this.groundObject.SetSpeed({ x: 0, y: 1.6 })
 
-    this.grounds = new Object(0, 0, 0, 0)
-    this.grounds.LoadFrame('Images/ground.webp')
-    this.grounds.LoadFrame('Images/ground_L2.webp')
+    this.treeObject = new Object(0, 0, 1070, 80)
+    this.treeObject.LoadFrame('Images/tree.webp')
 
-    this.groundL1 = new Object(0, 0, 0, 0)
-    this.groundL1.LoadFrame('Images/ground.webp')
-    this.groundL2 = new Object(0, 0, 0, 0)
-    this.groundL2.LoadFrame('Images/ground_L2.webp')
+    this.mountL1Object = new Object(0, 0, 885, 480)
+    this.mountL1Object.LoadFrame('Images/mt_L1.webp')
 
-    this.tree = new Object(0, 0, 1070, 80)
-    this.tree.LoadFrame('Images/tree.webp')
+    this.mountL2Object = new Object(0, 0, 1245, 200)
+    this.mountL2Object.LoadFrame('Images/mt_L2.webp')
 
-    this.mount = new Object(0, 0, 0, 0)
-    this.mount.LoadFrame('Images/mt_L1.webp')
-    this.mount.LoadFrame('Images/mt_L2.webp')
-    this.mount.LoadFrame('Images/mt_L3.webp')
+    this.mountL3Object = new Object(0, 0, 1104, 210)
+    this.mountL3Object.LoadFrame('Images/mt_L3.webp')
 
-    this.mountL1 = new Object(0, 0, 885, 480)
-    this.mountL1.LoadFrame('Images/mt_L1.webp')
+    this.stairObject = new Object(0, 0, 0, 0)
+    this.stairObject.LoadFrame('Images/platform_N.webp')
+    this.stairObject.LoadFrame('Images/platform_S.webp')
+    this.stairObject.LoadFrame('Images/platform_W.webp')
+    this.stairObject.SetSpeed({ x: 5, y: 2 })
 
-    this.mountL2 = new Object(0, 0, 1245, 200)
-    this.mountL2.LoadFrame('Images/mt_L2.webp')
+    this.endPointObject = new Object(0, 0, 300, 370)
+    this.endPointObject.LoadFrame('Images/Endpoint.webp')
 
-    this.mountL3 = new Object(0, 0, 1104, 210)
-    this.mountL3.LoadFrame('Images/mt_L3.webp')
+    this.winBoard = new Object(0, 0, 210, 96)
+    this.winBoard.LoadFrame('Images/win-board.webp')
 
-    this.stair = new Object(0, 0, 0, 0)
-    this.stair.LoadFrame('Images/platform_N.webp')
-    this.stair.LoadFrame('Images/platform_S.webp')
-    this.stair.LoadFrame('Images/platform_W.webp')
-
-    this.endPoint = new Object(0, 0, 300, 370)
-    this.endPoint.LoadFrame('Images/Endpoint.webp')
-
-    // 障礙物 42*80
-    this.stages = new Object(0, 0, 50, 50)
+    this.stageObject = new Object(0, 0, 50, 50)
     for (let i = 0; i < stageList.length; i++) {
-      this.stages.LoadFrame('Images/' + stageList[i].id + '.png')
+      this.stageObject.LoadFrame('Images/jump_' + stageList[i].id + '.png')
     }
-    this.flag = new Object(0, 0, 50, 83)
+
+    this.flagObject = new Object(0, 0, 50, 83)
     for (let i = 0; i < 10; i++) {
-      this.flag.LoadFrame('Images/flag' + i + '.webp')
+      this.flagObject.LoadFrame('Images/flag' + i + '.webp')
     }
 
-    this.player = new Object(0, 0, 70, 100)
+    this.playerObject = new Object(0, 0, 70, 100)
+    this.playerObject.LoadFrame('Images/standby0.webp')
     for (let i = 0; i < 12; i++) {
-      this.player.LoadFrame('Images/standby' + i + '.webp')
+      this.playerObject.LoadFrame('Images/roll' + i + '.webp')
     }
 
-    this.rollPlayer = new Object(0, 0, 70, 100)
-    for (let i = 0; i < 12; i++) {
-      this.rollPlayer.LoadFrame('Images/roll' + i + '.webp')
+    this.failPlayerObject = new Object(0, 0, 70, 100)
+    for (let i = 0; i < 6; i++) {
+      this.failPlayerObject.LoadFrame('Images/fail' + i + '.webp')
     }
 
-    const maxBigClouds = Math.ceil(this.width / 230) + 1
-    const bigClouds_StartXCoord = -60
-    for (let i = 0; i < maxBigClouds; i++) {
-      this.bigClouds.push({
-        x: 350 * i + bigClouds_StartXCoord,
-        y: i % 2 === 0 ? 10 : 40,
-        width: this.bigCloud.width,
-        height: this.bigCloud.height,
-        alive: true,
+    this.brokenWood = new Object(0, 0, 85, 100)
+    this.brokenWood.LoadFrame('Images/platformsW0.webp')
+    this.brokenWood.LoadFrame('Images/platformsW1.webp')
+  }
+
+  initObject() {
+    for (let i = 0; i < 10; i++) {
+      const yCoord = i % 2 === 0 ? 10 : 40
+      this.bigCloudList.push({
+        x: 350 * i + BIG_CLOUD_INIT_XCOORD,
+        y: yCoord + Math.random(),
+        width: this.bigCloudObject.width,
+        height: this.bigCloudObject.height,
       })
     }
 
-    const maxMidClouds = Math.ceil(this.width / 140) + 1
-    const midClouds_StartXCoord = -105
-    for (let i = 0; i < maxMidClouds; i++) {
-      this.midClouds.push({
-        x: 200 * i + midClouds_StartXCoord,
-        y: i % 2 === 0 ? 220 : 140,
-        width: this.midCloud.width,
-        height: this.midCloud.height,
-        alive: true,
+    for (let i = 0; i < 15; i++) {
+      const yCoord = i % 2 === 0 ? 220 : 140
+      this.midCloudList.push({
+        x: 200 * i + MID_CLOUD_INIT_XCOORD,
+        y: yCoord + Math.random(),
+        width: this.midCloudObject.width,
+        height: this.midCloudObject.height,
       })
     }
 
-    const maxClouds = Math.ceil(this.width / 95) + 1
-    const clouds_StartXCoord = 70
-    for (let i = 0; i < maxClouds; i++) {
-      this.smallClouds.push({
-        x: 220 * i + clouds_StartXCoord,
-        y: i % 2 === 0 ? 300 : 330,
-        width: this.clouds.width,
-        height: this.clouds.height,
-        alive: true,
+    for (let i = 0; i < 20; i++) {
+      const yCoord = i % 2 === 0 ? 300 : 330
+      this.miniCloudList.push({
+        x: 220 * i + MINI_CLOUD_INIT_XCOORD,
+        y: yCoord + Math.random(),
+        width: this.miniCloudObject.width,
+        height: this.miniCloudObject.height,
       })
     }
 
     for (let i = 0; i < stairLevel.length; i++) {
       const startX = Math.floor(this.width * 0.6)
       const startY = this.height * 0.75
-      let index = 0
+
+      let frameIndex = 0
       let width = 0
       let height = 23
+
       switch (stairLevel[i]) {
         case 'l':
-          index = 0
+          frameIndex = 0
           width = 85
           break
         case 's':
-          index = 1
+          frameIndex = 1
           width = 60
           break
         case 'w':
-          index = 2
+          frameIndex = 2
           width = 85
           break
         default:
           break
       }
 
-      this.stairObject.push({
+      this.stairList.push({
         x: startX + 120 * i,
         y: startY - 50 * i,
         width,
         height,
-        currFrame: index,
+        currFrame: frameIndex,
       })
     }
+  }
 
+  createRandomStages() {
     while (this.stageIndexes.length < 3) {
       const randomNum = Math.floor(Math.random() * 9)
       if (this.stageIndexes.indexOf(randomNum) === -1) {
         this.stageIndexes.push(randomNum)
       }
     }
+  }
 
-    console.log('index', this.stageIndexes)
-
-    // var randomNumbers = generateRandomNumbers()
-
+  async initGame() {
+    this.loadImages()
+    this.initObject()
+    this.createRandomStages()
     window.requestAnimationFrame(this.draw.bind(this))
   }
+
+  // initGame() {
+  //   this.ctx.fillStyle = '#f3bbac'
+  //   this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height)
+
+  //   this.groundOne = {
+  //     x: 0,
+  //     y: this.height - this.height * 0.1,
+  //     width: this.width,
+  //     height: this.height * 0.1,
+  //   }
+
+  //   this.groundTwo = {
+  //     x: 0,
+  //     y: this.height - this.height * 0.1 - this.height * 0.06,
+  //     width: this.width,
+  //     height: this.height * 0.07,
+  //   }
+
+  //   this.groundThree = {
+  //     x: 0,
+  //     y: this.height - this.height * 0.1 - this.height * 0.06 - this.height * 0.05,
+  //     width: this.width,
+  //     height: this.height * 0.1,
+  //   }
+
+  //   // 230 * 111
+  //   this.bigCloud = new Object(0, 0, 230, 111)
+  //   this.bigCloud.LoadFrame('Images/cloud_L.webp')
+  //   this.midCloud = new Object(0, 0, 135, 72)
+  //   this.midCloud.LoadFrame('Images/cloud_M.webp')
+  //   this.clouds = new Object(0, 0, 95, 60)
+  //   this.clouds.LoadFrame('Images/cloud_S.webp')
+
+  //   this.grounds = new Object(0, 0, 0, 0)
+  //   this.grounds.LoadFrame('Images/ground.webp')
+  //   this.grounds.LoadFrame('Images/ground_L2.webp')
+
+  //   this.groundL1 = new Object(0, 0, 0, 0)
+  //   this.groundL1.LoadFrame('Images/ground.webp')
+  //   this.groundL2 = new Object(0, 0, 0, 0)
+  //   this.groundL2.LoadFrame('Images/ground_L2.webp')
+
+  //   this.tree = new Object(0, 0, 1070, 80)
+  //   this.tree.LoadFrame('Images/tree.webp')
+
+  //   this.mount = new Object(0, 0, 0, 0)
+  //   this.mount.LoadFrame('Images/mt_L1.webp')
+  //   this.mount.LoadFrame('Images/mt_L2.webp')
+  //   this.mount.LoadFrame('Images/mt_L3.webp')
+
+  //   this.mountL1 = new Object(0, 0, 885, 480)
+  //   this.mountL1.LoadFrame('Images/mt_L1.webp')
+
+  //   this.mountL2 = new Object(0, 0, 1245, 200)
+  //   this.mountL2.LoadFrame('Images/mt_L2.webp')
+
+  //   this.mountL3 = new Object(0, 0, 1104, 210)
+  //   this.mountL3.LoadFrame('Images/mt_L3.webp')
+
+  //   this.stair = new Object(0, 0, 0, 0)
+  //   this.stair.LoadFrame('Images/platform_N.webp')
+  //   this.stair.LoadFrame('Images/platform_S.webp')
+  //   this.stair.LoadFrame('Images/platform_W.webp')
+
+  //   this.endPoint = new Object(0, 0, 300, 370)
+  //   this.endPoint.LoadFrame('Images/Endpoint.webp')
+
+  //   // 障礙物 42*80
+  //   this.stages = new Object(0, 0, 60, 60)
+  //   for (let i = 0; i < stageList.length; i++) {
+  //     this.stages.LoadFrame('Images/jump_' + stageList[i].id + '.png')
+  //   }
+  //   this.flag = new Object(0, 0, 50, 83)
+  //   for (let i = 0; i < 10; i++) {
+  //     this.flag.LoadFrame('Images/flag' + i + '.webp')
+  //   }
+
+  //   this.player = new Object(0, 0, 70, 100)
+  //   for (let i = 0; i < 12; i++) {
+  //     this.player.LoadFrame('Images/standby' + i + '.webp')
+  //   }
+
+  //   this.rollPlayer = new Object(0, 0, 70, 100)
+  //   for (let i = 0; i < 12; i++) {
+  //     this.rollPlayer.LoadFrame('Images/roll' + i + '.webp')
+  //   }
+
+  //   const maxBigClouds = Math.ceil(this.width / 230) + 1
+  //   const bigClouds_StartXCoord = -60
+  //   for (let i = 0; i < maxBigClouds; i++) {
+  //     this.bigClouds.push({
+  //       x: 350 * i + bigClouds_StartXCoord,
+  //       y: i % 2 === 0 ? 10 : 40,
+  //       width: this.bigCloud.width,
+  //       height: this.bigCloud.height,
+  //       alive: true,
+  //     })
+  //   }
+
+  //   const maxMidClouds = Math.ceil(this.width / 140) + 1
+  //   const midClouds_StartXCoord = -105
+  //   for (let i = 0; i < maxMidClouds; i++) {
+  //     this.midClouds.push({
+  //       x: 200 * i + midClouds_StartXCoord,
+  //       y: i % 2 === 0 ? 220 : 140,
+  //       width: this.midCloud.width,
+  //       height: this.midCloud.height,
+  //       alive: true,
+  //     })
+  //   }
+
+  //   const maxClouds = Math.ceil(this.width / 95) + 1
+  //   const clouds_StartXCoord = 70
+  //   for (let i = 0; i < maxClouds; i++) {
+  //     this.smallClouds.push({
+  //       x: 220 * i + clouds_StartXCoord,
+  //       y: i % 2 === 0 ? 300 : 330,
+  //       width: this.clouds.width,
+  //       height: this.clouds.height,
+  //       alive: true,
+  //     })
+  //   }
+
+  //   for (let i = 0; i < stairLevel.length; i++) {
+  //     const startX = Math.floor(this.width * 0.6)
+  //     const startY = this.height * 0.75
+
+  //     this.stairObject.push({
+  //       x: startX + 120 * i,
+  //       y: startY - 50 * i,
+  //       width,
+  //       height,
+  //       currFrame: index,
+  //     })
+  //   }
+
+  //   while (this.stageIndexes.length < 3) {
+  //     const randomNum = Math.floor(Math.random() * 9)
+  //     if (this.stageIndexes.indexOf(randomNum) === -1) {
+  //       this.stageIndexes.push(randomNum)
+  //     }
+  //   }
+
+  //   console.log('index', this.stageIndexes)
+
+  //   // var randomNumbers = generateRandomNumbers()
+
+  //   window.requestAnimationFrame(this.draw.bind(this))
+  // }
 
   clearScreen() {
     this.ctx.fillStyle = MAIN_BACKGROUND_COLOR
@@ -370,207 +524,257 @@ class myGame {
       this.fpscounter = 0
       this.lastCalledTime = new Date()
     }
-    // console.log('fpscounter', this.fpscounter, this.currentfps)
+  }
+
+  updateCamera() {
+    if (this.isMovingX && this.isJumping && !this.isDying) {
+      this.groundObject.MovingCamera({ x: 0, y: 1.6 })
+
+      if (this.treeObject.camera.x <= 10) {
+        this.treeObject.MovingCamera({ x: 0.4, y: 0 })
+      } else if (this.treeObject.camera.x <= 40) {
+        this.treeObject.MovingCamera({ x: 1.25, y: 0 })
+      } else {
+        this.treeObject.MovingCamera({ x: 2, y: 0 })
+      }
+
+      if (this.treeObject.camera.y <= 10) {
+        this.treeObject.MovingCamera({ x: 0, y: 0.4 })
+      } else if (this.treeObject.camera.y <= 30) {
+        this.treeObject.MovingCamera({ x: 0, y: 0.8 })
+      } else {
+        this.treeObject.MovingCamera({ x: 0, y: 1.25 })
+      }
+
+      this.test += 1
+      if (Math.floor(this.test / 24) < 9) {
+        const l3 = this.mountL3XSpace[Math.floor(this.test / 24)] / 24
+        const l3Y = this.mountL3YSapce[Math.floor(this.test / 24)] / 24
+        this.mountL3Object.MovingCamera({ x: l3, y: l3Y })
+
+        const l2 = this.mountL2XSpace[Math.floor(this.test / 24)] / 24
+        const l2Y = this.mountL2YSapce[Math.floor(this.test / 24)] / 24
+        this.mountL2Object.MovingCamera({ x: l2, y: l2Y })
+
+        const l1 = this.test1[Math.floor(this.test / 24)] / 24
+        const l1Y = this.test2[Math.floor(this.test / 24)] / 24
+        this.mountL1Object.MovingCamera({ x: l1, y: l1Y })
+      } else {
+        console.log('else')
+        this.mountL1Object.MovingCamera({ x: 0.5, y: 0.02 })
+        this.mountL2Object.MovingCamera({ x: 0.5, y: 0.02 })
+        this.mountL3Object.MovingCamera({ x: 0.5, y: 0.02 })
+      }
+    }
   }
 
   draw() {
     console.log('draw')
     this.clearScreen()
-    this.isJumping = (this.fpscounter + 10) % 60 > 10
+    this.countFPS()
 
     // updateInput
-    this.countFPS()
     this.gameMain()
+    this.updateCamera()
 
     this.flagIndex += 1
     this.flagIndex = Math.floor(this.fpscounter / 2) % 9
 
-    this.playerIndex = Math.floor(this.fpscounter / 2) % 12
+    this.playerAnimatorCounter += 1
+
+    if (!this.isStartGame) {
+      this.isStartGame = this.stairList[0].x < this.playerObject.x + this.playerObject.width - 20
+    }
+
+    if (this.isDying) {
+      this.failAnimator += 0.35
+      const FAIL_ANIM_CHANGE = 6
+
+      if (this.failAnimator >= FAIL_ANIM_CHANGE) {
+        this.failAnimator = 0
+      }
+    }
+
+    // this.playerIndex = Math.floor(this.fpscounter / 2) % 12
     // this.playerIndex = this.playerIndex % 12
 
-    this.cloudCamera.x += 1.6
-    this.midCloudCamera.x += 1.2
-    this.miniCloudCamera.x += 0.8
-
-    this.fpsTestCount += 1
+    // this.fpsTestCount += 1
 
     // if (this.playerGravity <= 90) {
     //   this.playerGravity += 2
     // } else if (this.playerGravity > -1) {
     //   this.playerGravity -= 2
     // }
-    this.playerGravity = 90
+    // this.playerGravity = 90
     // this.stairCamera.x = 1800
     // this.stairCamera.y = 720
 
-    if (this.isMovingX && this.isJumping && !this.isDying) {
-      this.camera.x += 0.4
-      this.camera.y += 1.6
-      this.isStartGame = true
+    // if (this.isMovingX && this.isJumping && !this.isDying) {
+    //   this.camera.x += 0.4
+    //   this.camera.y += 1.6
+    //   this.isStartGame = true
 
-      this.test += 1
+    //   this.test += 1
 
-      if (this.endPoint.x >= 20) {
-        this.stairCamera.x += 5
-        this.stairCamera.y += 2
-      }
+    //   if (this.endPoint.x >= 20) {
+    //     this.stairCamera.x += 5
+    //     this.stairCamera.y += 2
+    //   }
 
-      // tree camera
-      if (Math.floor(this.test / 24) < 6) {
-        this.treeCamera.x += this.treeXSapce[Math.floor(this.test / 24)] / 24
-        this.treeCamera.y += this.treeYSapce[Math.floor(this.test / 24)] / 24
-      }
+    //   // tree camera
+    //   if (Math.floor(this.test / 24) < 6) {
+    //     this.treeCamera.x += this.treeXSapce[Math.floor(this.test / 24)] / 24
+    //     this.treeCamera.y += this.treeYSapce[Math.floor(this.test / 24)] / 24
+    //   }
 
-      // mount camera
-      if (Math.floor(this.test / 24) < this.test1.length) {
-        this.mountCamera.x += this.test1[Math.floor(this.test / 24)] / 24
-        this.mountCamera.y += this.test2[Math.floor(this.test / 24)] / 24
-        this.mount2Camera.x += this.mountL2XSpace[Math.floor(this.test / 24)] / 24
-        this.mount2Camera.y += this.mountL2YSapce[Math.floor(this.test / 24)] / 24
-        this.mount3Camera.x += this.mountL3XSpace[Math.floor(this.test / 24)] / 24
-        this.mount3Camera.y += this.mountL3YSapce[Math.floor(this.test / 24)] / 24
-      }
-    }
+    //   // mount camera
+    //   if (Math.floor(this.test / 24) < this.test1.length) {
+    //     this.mountCamera.x += this.test1[Math.floor(this.test / 24)] / 24
+    //     this.mountCamera.y += t/,,,,,,,,,,,,k  m m,mmhis.test2[Math.floor(this.test / 24)] / 24
+    //     this.mount2Camera.x += this.mountL2XSpace[Math.floor(this.test / 24)] / 24
+    //     this.mount2Camera.y += this.mountL2YSapce[Math.floor(this.test / 24)] / 24
+    //     this.mount3Camera.x += this.mountL3XSpace[Math.floor(this.test / 24)] / 24
+    //     this.mount3Camera.y += this.mountL3YSapce[Math.floor(this.test / 24)] / 24
+    //   }
+    // }
 
     window.requestAnimationFrame(this.draw.bind(this))
   }
 
   gameMain() {
-    // if (!this.isGameOver && !this.isDying) {
-    //   // player jumping
-    // }
-
     this.findStairIndex()
     this.drawGroundL2()
-    // this.drawClouds()
+    this.checkMiniClouds()
+    this.drawMiniClouds()
     this.drawMount()
-    // this.drawBigClouds()
-    // this.drawMidClouds()
+    this.checkBigClouds()
+    this.drawBigClouds()
+    this.checkMidClouds()
+    this.drawMidClouds()
     this.drawTree()
     this.drawGroundL1()
     this.drawEndPoint()
     this.drawFlag()
     this.drawStair()
     this.drawStages()
-    if (this.isJumping && !this.isDying) {
-      this.drawRollPlayer()
+
+    if (this.overStage) {
+      this.drawWinBoard()
+    }
+    if (this.isDying) {
+      this.drawFailPlayer()
     } else {
       this.drawPlayer()
+    }
+    if (this.playBrokenWood) {
+      // this.drawBrokenWood()
+    }
+  }
+
+  checkBigClouds() {
+    const outOfBoundIndex = this.bigCloudList.findIndex(o => o.x + o.width < 0)
+
+    const lastCloudIndex = this.bigCloudList.findIndex(o => o.x === Math.max(...this.bigCloudList.map(o => o.x)))
+
+    if (lastCloudIndex > -1 && outOfBoundIndex > -1) {
+      this.bigCloudList[outOfBoundIndex].x = this.bigCloudList[lastCloudIndex].x + 270
+    }
+  }
+
+  checkMidClouds() {
+    const outOfBoundIndex = this.midCloudList.findIndex(o => o.x + o.width < 0)
+
+    const lastCloudIndex = this.midCloudList.findIndex(o => o.x === Math.max(...this.midCloudList.map(o => o.x)))
+
+    if (lastCloudIndex > -1 && outOfBoundIndex > -1) {
+      this.midCloudList[outOfBoundIndex].x = this.midCloudList[lastCloudIndex].x + 200
+    }
+  }
+
+  checkMiniClouds() {
+    const outOfBoundIndex = this.miniCloudList.findIndex(o => o.x + o.width < 0)
+
+    const lastCloudIndex = this.miniCloudList.findIndex(o => o.x === Math.max(...this.miniCloudList.map(o => o.x)))
+
+    if (lastCloudIndex > -1 && outOfBoundIndex > -1) {
+      this.miniCloudList[outOfBoundIndex].x = this.miniCloudList[lastCloudIndex].x + 220
     }
   }
 
   drawBigClouds() {
-    for (let i = 0; i < this.bigClouds.length - 1; i++) {
-      const xCoord = this.bigClouds[i].x - this.cloudCamera.x
-      if (this.bigClouds[i].alive) {
-        this.ctx.drawImage(
-          this.bigCloud.frames[0],
-          xCoord,
-          this.bigClouds[i].y,
-          this.bigClouds[i].width,
-          this.bigClouds[i].height
-        )
-      }
+    for (let i = 0; i < this.bigCloudList.length - 1; i++) {
+      this.bigCloudList[i].x -= this.bigCloudObject.xSpeed
 
-      if (xCoord < 10) {
-        this.bigClouds.push({
-          x: this.bigClouds.length * 350 - 60,
-          y: (i + this.bigClouds.length) % 2 === 0 ? 10 : 40,
-          width: this.bigCloud.width,
-          height: this.bigCloud.height,
-          alive: true,
-        })
-      }
-      if (xCoord + this.bigCloud.width < 0) {
-        this.bigClouds[i].alive = false
-      }
+      this.ctx.drawImage(
+        this.bigCloudObject.frames[0],
+        this.bigCloudList[i].x,
+        this.bigCloudList[i].y,
+        this.bigCloudList[i].width,
+        this.bigCloudList[i].height
+      )
     }
   }
 
   drawMidClouds() {
-    for (let i = 0; i < this.midClouds.length - 1; i++) {
-      const xCoord = this.midClouds[i].x - this.midCloudCamera.x
-      if (this.midClouds[i].alive) {
-        this.ctx.drawImage(
-          this.midCloud.frames[0],
-          xCoord,
-          this.midClouds[i].y,
-          this.midClouds[i].width,
-          this.midClouds[i].height
-        )
-      }
+    for (let i = 0; i < this.midCloudList.length - 1; i++) {
+      this.midCloudList[i].x -= this.midCloudObject.xSpeed
 
-      if (xCoord < 10) {
-        this.midClouds.push({
-          x: this.midClouds.length * 200 - 105,
-          y: (i + this.midClouds.length) % 2 === 0 ? 220 : 140,
-          width: this.midCloud.width,
-          height: this.midCloud.height,
-          alive: true,
-        })
-      }
-      if (xCoord + this.midCloud.width < 0) {
-        this.midClouds[i].alive = false
-      }
+      this.ctx.drawImage(
+        this.midCloudObject.frames[0],
+        this.midCloudList[i].x,
+        this.midCloudList[i].y,
+        this.midCloudList[i].width,
+        this.midCloudList[i].height
+      )
     }
   }
 
-  drawClouds() {
-    // ;-this.cloudCamera.x
-    for (let i = 0; i < this.smallClouds.length - 1; i++) {
-      const xCoord = this.smallClouds[i].x - this.miniCloudCamera.x
-      if (this.smallClouds[i].alive) {
-        this.ctx.drawImage(
-          this.clouds.frames[0],
-          xCoord,
-          this.smallClouds[i].y,
-          this.smallClouds[i].width,
-          this.smallClouds[i].height
-        )
-      }
+  drawMiniClouds() {
+    for (let i = 0; i < this.miniCloudList.length - 1; i++) {
+      this.miniCloudList[i].x -= this.miniCloudObject.xSpeed
 
-      if (xCoord < 10) {
-        this.smallClouds.push({
-          x: this.smallClouds.length * 220 + 70,
-          y: (i + this.smallClouds.length) % 2 === 0 ? 300 : 330,
-          width: this.clouds.width,
-          height: this.clouds.height,
-          alive: true,
-        })
-      }
-      if (xCoord + this.clouds.width < 0) {
-        this.smallClouds[i].alive = false
-      }
+      this.ctx.drawImage(
+        this.midCloudObject.frames[0],
+        this.miniCloudList[i].x,
+        this.miniCloudList[i].y,
+        this.miniCloudList[i].width,
+        this.miniCloudList[i].height
+      )
     }
   }
 
   drawGroundL1() {
-    if (this.groundL1.y <= this.height) {
-      // ground1 (24格) y: 40
-      // ground1 (24格) y: 40 + 55
-      // ground1 (24格) y: 40 + 55 +10
-      this.groundL1.y = this.height * 0.84 + this.camera.y
-      this.ctx.drawImage(this.groundL1.frames[0], this.groundL1.x, this.groundL1.y, this.width, this.height * 0.07)
-      this.ctx.fillStyle = GROUND_1_BGCOLOR
-      this.ctx.fillRect(0, this.height * 0.9 + this.camera.y, this.width, this.height * 0.1)
-    }
+    const imageYCoord = this.height * 0.84 + this.groundObject.camera.y
+    const colorYcoord = this.height * 0.9 + this.groundObject.camera.y
+
+    this.ctx.drawImage(this.groundObject.frames[0], 0, imageYCoord, this.width, this.height * 0.07)
+    this.ctx.fillStyle = GROUND_1_BGCOLOR
+    this.ctx.fillRect(0, colorYcoord, this.width, this.height * 0.1)
   }
 
   drawGroundL2() {
     this.ctx.fillStyle = GROUND_2_BGCOLOR
-    this.groundL2.y = this.height * 0.8 + this.ground2Camera.y
+    const yCoord = this.height * 0.8
 
-    this.ctx.fillRect(0, this.groundL2.y, this.width, this.height * 0.2)
-    this.ctx.drawImage(this.groundL2.frames[0], this.groundL2.x, this.groundL2.y, this.width, this.height * 0.2)
+    this.ctx.fillRect(0, yCoord, this.width, this.height * 0.2)
+    this.ctx.drawImage(this.groundObject.frames[1], 0, yCoord, this.width, this.height * 0.2)
   }
 
   drawTree() {
     // - 10 - 30 - 50 - 70 - 90 - 110
     // + 10 + 10 + 20 + 30 + 40 + 50
-    this.tree.x = 180 - this.treeCamera.x
-    this.tree.y = this.height * 0.84 - this.tree.height * 0.7 + this.treeCamera.y
+    // - this.treeCamera.x
+    // + this.treeCamera.y
+    this.treeObject.x = TREE_INIT_XCOORD - this.treeObject.camera.x
+    this.treeObject.y = this.height * 0.84 - this.treeObject.height * 0.7 + this.treeObject.camera.y
 
-    this.ctx.drawImage(this.tree.frames[0], this.tree.x, this.tree.y, this.tree.width, this.tree.height)
+    this.ctx.drawImage(
+      this.treeObject.frames[0],
+      this.treeObject.x,
+      this.treeObject.y,
+      this.treeObject.width,
+      this.treeObject.height
+    )
   }
 
   drawMount() {
@@ -585,84 +789,131 @@ class myGame {
     // mountL3 (24格) x;-60, y: +10
     // [5,45,50,55,60,70,150,60]
     // 0,0,0,10,2,-20,-40,40,10
-    this.mountL3.x = 5 - this.mount3Camera.x
-    this.mountL3.y = this.height * 0.84 - this.mountL3.height - 2 + this.mount3Camera.y
+    this.mountL3Object.x = 5 - this.mountL3Object.camera.x
+    this.mountL3Object.y = this.height * 0.84 - this.mountL3Object.height - 2 + this.mountL3Object.camera.y
 
-    this.mountL2.x = 5 - this.mount2Camera.x
-    this.mountL2.y = this.height * 0.84 - this.mountL2.height * 0.9 + 5 + this.mount2Camera.y
+    this.mountL2Object.x = 5 - this.mountL2Object.camera.x
+    this.mountL2Object.y = this.height * 0.84 - this.mountL2Object.height * 0.9 + 5 + this.mountL2Object.camera.y
 
-    this.mountL1.x = 150 - this.mountCamera.x
-    this.mountL1.y = this.height * 0.84 - this.mountL1.height * 0.98 + this.mountCamera.y
+    this.mountL1Object.x = 150 - this.mountL1Object.camera.x
+    this.mountL1Object.y = this.height * 0.84 - this.mountL1Object.height * 0.98 + this.mountL1Object.camera.y
 
-    this.ctx.drawImage(this.mountL3.frames[0], this.mountL3.x, this.mountL3.y, this.mountL3.width, this.mountL3.height)
-    this.ctx.drawImage(this.mountL2.frames[0], this.mountL2.x, this.mountL2.y, this.mountL2.width, this.mountL2.height)
-    this.ctx.drawImage(this.mountL1.frames[0], this.mountL1.x, this.mountL1.y, this.mountL1.width, this.mountL1.height)
+    this.ctx.drawImage(
+      this.mountL3Object.frames[0],
+      this.mountL3Object.x,
+      this.mountL3Object.y,
+      this.mountL3Object.width,
+      this.mountL3Object.height
+    )
+    this.ctx.drawImage(
+      this.mountL2Object.frames[0],
+      this.mountL2Object.x,
+      this.mountL2Object.y,
+      this.mountL2Object.width,
+      this.mountL2Object.height
+    )
+    this.ctx.drawImage(
+      this.mountL1Object.frames[0],
+      this.mountL1Object.x,
+      this.mountL1Object.y,
+      this.mountL1Object.width,
+      this.mountL1Object.height
+    )
   }
   // 起跳在第一秒13格，降落到第一階在第二秒13格(一秒有24格)
   drawStair() {
-    for (let i = 0; i < this.stairObject.length - 1; i++) {
-      const xCoord = this.stairObject[i].x - this.stairCamera.x
-      const yCoord = this.stairObject[i].y + this.stairCamera.y
-
+    for (let i = 0; i < this.stairList.length; i++) {
+      // 最後一個階梯的 x 在 35
+      if (this.isMovingX && this.isJumping && !this.isDying) {
+        this.stairList[i].x -= this.stairObject.xSpeed
+        this.stairList[i].y += this.stairObject.ySpeed
+      }
       this.ctx.drawImage(
-        this.stair.frames[this.stairObject[i].currFrame],
-        xCoord,
-        yCoord,
-        this.stairObject[i].width,
-        this.stairObject[i].height
+        this.stairObject.frames[this.stairList[i].currFrame],
+        this.stairList[i].x,
+        this.stairList[i].y,
+        this.stairList[i].width,
+        this.stairList[i].height
       )
     }
   }
 
   drawEndPoint() {
-    this.endPoint.x = this.stairObject[this.stairObject.length - 1].x - this.stairCamera.x - 130
-    this.endPoint.y = this.stairObject[this.stairObject.length - 1].y + this.stairCamera.y - 115
+    this.endPointObject.x = this.stairList[this.stairList.length - 1].x - 10
+    this.endPointObject.y = this.stairList[this.stairList.length - 1].y - 160
 
     this.ctx.drawImage(
-      this.endPoint.frames[0],
-      this.endPoint.x,
-      this.endPoint.y,
-      this.endPoint.width,
-      this.endPoint.height
+      this.endPointObject.frames[0],
+      this.endPointObject.x,
+      this.endPointObject.y,
+      this.endPointObject.width,
+      this.endPointObject.height
     )
   }
 
   drawFlag() {
-    const xCoord = this.endPoint.x + 180
-    const yCoord = this.endPoint.y + 40
-    this.ctx.drawImage(this.flag.frames[this.flagIndex], xCoord, yCoord, this.flag.width, this.flag.height)
-  }
-
-  drawPlayer() {
-    this.player.y = this.height * 0.84 - this.player.height
-
-    if (this.midStairIndex > -1) {
-      this.player.y = this.stairObject[this.midStairIndex].y + this.stairCamera.y - this.player.height
-    }
+    this.flagObject.x = this.endPointObject.x + 180
+    this.flagObject.y = this.endPointObject.y + 40
     this.ctx.drawImage(
-      this.player.frames[this.playerIndex],
-      this.stairObject[0].x - 70,
-      this.player.y,
-      this.player.width,
-      this.player.height
+      this.flagObject.frames[this.flagIndex],
+      this.flagObject.x,
+      this.flagObject.y,
+      this.flagObject.width,
+      this.flagObject.height
     )
   }
 
-  drawRollPlayer() {
-    this.rollPlayer.y = this.stairObject[0].y + this.stairCamera.y - this.rollPlayer.height - this.playerGravity
-    //  &&this.midStairIndex < this.stairObject.length - 1
+  drawPlayer() {
+    // player padding right 20px
+    this.playerObject.x = Math.floor(this.width * 0.6) - 70
 
-    if (this.midStairIndex > -1) {
-      this.rollPlayer.y =
-        this.stairObject[this.midStairIndex].y + this.stairCamera.y - this.rollPlayer.height - this.playerGravity
+    if (this.stairInviewIndex > -1 && this.stairInviewIndex < this.stairList.length) {
+      this.playerObject.y = this.stairList[this.stairInviewIndex].y - this.playerObject.height
+    } else {
+      this.playerObject.y = this.height * 0.84 - this.playerObject.height
+    }
+
+    let currFrame = 0
+    if (this.playerAnimatorCounter % 70 <= 10) {
+      this.isJumping = false
+      currFrame = 0
+      // if (this.stairInviewIndex > -1 && this.stairInviewIndex < this.stairList.length) {
+      //   const index =
+      //     this.stairInviewIndex + 1 === this.stairList.length ? this.stairInviewIndex : this.stairInviewIndex + 1
+      //   this.playerObject.y = this.stairList[index].y - this.playerObject.height
+      // }
+      // this.playerObject.y = 0
+    } else {
+      this.isJumping = true
+      currFrame = Math.floor((((this.playerAnimatorCounter % 70) - 10) % 24) / 2) + 1
+      this.playerObject.y = this.stairList[0].y - this.playerObject.height - 50
+
+      if (this.stairInviewIndex > -1 && this.stairInviewIndex < this.stairList.length) {
+        const index =
+          this.stairInviewIndex + 1 === this.stairList.length ? this.stairInviewIndex : this.stairInviewIndex + 1
+        this.playerObject.y = this.stairList[index].y - this.playerObject.height - 50
+      }
     }
 
     this.ctx.drawImage(
-      this.rollPlayer.frames[this.playerIndex],
-      Math.floor(this.width * 0.6) - 70,
-      this.rollPlayer.y,
-      this.rollPlayer.width,
-      this.rollPlayer.height
+      this.playerObject.frames[currFrame],
+      this.playerObject.x,
+      this.playerObject.y,
+      this.playerObject.width,
+      this.playerObject.height
+    )
+  }
+
+  drawFailPlayer() {
+    const xCoord = Math.floor(this.width * 0.6) - 70
+    const yCoord = this.height * 0.84 - this.failPlayerObject.height
+    const index = Math.floor(this.failAnimator)
+    this.ctx.drawImage(
+      this.failPlayerObject.frames[index],
+      xCoord,
+      yCoord,
+      this.failPlayerObject.width,
+      this.failPlayerObject.height
     )
   }
 
@@ -670,69 +921,50 @@ class myGame {
     if (this.isJumping) {
       return
     }
-    const playerXCoord = Math.floor(this.width * 0.6) - 70 + 10
-    const playerEndXCoord = playerXCoord + this.player.width - 20
+    this.stairInviewIndex = this.stairList.findIndex(
+      o =>
+        (o.x <= this.playerObject.x + 30 && o.x + o.width >= this.playerObject.x + 30) ||
+        (o.x <= this.playerObject.x + this.playerObject.width - 21 &&
+          o.x + o.width >= this.playerObject.x + this.playerObject.width - 21)
+    )
 
-    this.midStairIndex = this.stairObject.findIndex(o => {
-      const stairXcoord = o.x - this.stairCamera.x
-      const stairEndXcoord = stairXcoord + o.width
+    this.isDying =
+      (this.stairInviewIndex === -1 && this.isStartGame) || this.stageOnStair.includes(this.stairInviewIndex)
 
-      return (
-        (playerXCoord >= stairXcoord && playerXCoord < stairEndXcoord - 5) ||
-        (playerEndXCoord - 5 > stairXcoord && playerEndXCoord - 5 <= stairEndXcoord)
-      )
-    })
-
-    if (this.isStartGame && this.midStairIndex === -1) {
-      this.isDying = true
-    }
-
-    // console.log('index', this.midStairIndex)
-    // console.log(
-    //   'xcoord',
-    //   playerXCoord,
-    //   playerEndXCoord,
-    //   this.stairObject.map((o) => {
-    //     return {
-    //       x: o.x - this.stairCamera.x,
-    //       endX: o.x - this.stairCamera.x + o.width,
-    //     }
-    //   })
-    // )
+    this.overStage = this.stairInviewIndex === 3 || this.stairInviewIndex === 8 || this.stairInviewIndex === 13
+    this.playBrokenWood = stairLevel[this.stairInviewIndex] === 'w'
   }
 
-  drawBrokenWood() {}
+  drawBrokenWood() {
+    this.ctx.drawImage(this.brokenWood.frames[0], 0, 350, this.brokenWood.width, this.brokenWood.height)
+  }
 
   drawStages() {
     for (let i = 0; i < this.stageIndexes.length; i++) {
-      const xCoord = this.stairObject[this.stageOnStair[i]].x - this.stairCamera.x
-      const yCoord = this.stairObject[this.stageOnStair[i]].y + this.stairCamera.y - this.stages.height
-
       this.ctx.drawImage(
-        this.stages.frames[this.stageIndexes[i]],
-        xCoord,
-        yCoord,
-        this.stages.width,
-        this.stages.height
+        this.stageObject.frames[this.stageIndexes[i]],
+        this.stairList[this.stageOnStair[i]].x,
+        this.stairList[this.stageOnStair[i]].y - this.stageObject.height,
+        this.stageObject.width,
+        this.stageObject.height
       )
     }
   }
 
-  createStairObject(obj) {
-    let stair = new SpecialObject()
-    stair.type = 'stair'
-    stair.x = obj.x - this.camera.x
-    let testY = obj.y + this.camera.y
-
-    if (testY >= this.height * 0.85) {
-      testY = this.height * 0.85
+  drawWinBoard() {
+    if (!this.overStage) {
+      return
     }
-
-    stair.y = testY
-    stair.width = obj.width
-    stair.height = obj.height
-    stair.currFrame = obj.currFrame
-    this.stairObject.push(stair)
+    this.ctx.drawImage(this.winBoard.frames[0], 0, 300, this.winBoard.width, this.winBoard.height)
+    this.ctx.font = 'bold 22px NotoSansCJKTC'
+    this.ctx.fillStyle = '#000'
+    this.ctx.textAlign = 'center'
+    const i = this.stageOnStair.findIndex(o => o === this.stairInviewIndex - 1)
+    this.ctx.fillText(
+      stageList[this.stageIndexes[i]].name,
+      this.winBoard.width / 2,
+      300 + Math.floor(this.winBoard.height / 2)
+    )
   }
 }
 
