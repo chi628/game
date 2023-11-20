@@ -186,7 +186,7 @@ class myGame {
 
   async log() {
     await new Promise(resolve => {
-      setTimeout(resolve, 5000)
+      setTimeout(resolve, 1500)
     })
   }
 
@@ -354,6 +354,7 @@ class myGame {
 
   async initGame() {
     this.loadImages()
+    this.log()
     this.initObject()
     this.createRandomStages()
     window.requestAnimationFrame(this.draw.bind(this))
