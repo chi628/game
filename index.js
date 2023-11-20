@@ -1,3 +1,4 @@
+import Swiper from 'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.mjs'
 /**
  * l -> 長階梯
  * s -> 短階梯
@@ -72,6 +73,7 @@ class Object {
   camera = { x: 0, y: 0 }
   xSpeed = 0
   ySpeed = 0
+  alive = true
 
   constructor(x, y, width, height) {
     this.x = x
@@ -99,32 +101,11 @@ class Object {
 
 class myGame {
   ctx
-  camera = {
-    x: 0,
-    y: 0,
-  }
   width
   height
-  stairObject = []
-  bigClouds = []
-  midClouds = []
-  smallClouds = []
   isMovingX = false
-  treeSpeed = 1
-  mountSpeed = 1
-  mountXSpeed = 1
   isGameOver = false
   isDying = false
-
-  ground2Camera = { x: 0, y: 0 }
-  mountCamera = { x: 0, y: 0 }
-  mount2Camera = { x: 0, y: 0 }
-  mount3Camera = { x: 0, y: 0 }
-  treeCamera = { x: 0, y: 0 }
-  cloudCamera = { x: 0, y: 0 }
-  midCloudCamera = { x: 0, y: 0 }
-  miniCloudCamera = { x: 0, y: 0 }
-  stairCamera = { x: 0, y: 0 }
 
   test = 0
   test1 = [10, 30, 30, 100, 50, 70, 70, 90, 10]
@@ -141,6 +122,7 @@ class myGame {
   stageIndexes = []
 
   stageOnStair = [2, 7, 12]
+  shoeOnStair = [1, 6, 11]
 
   fpsTestCount = 0
 
@@ -162,10 +144,17 @@ class myGame {
   playerAnimatorCounter = 0
   stairInviewIndex = -1
   failAnimator = 0
-  aaa = 0
-  bbb = []
   overStage = false
   playBrokenWood = false
+  brokenWoodIndex = 0
+  broken_wood_animator = 0
+  isStayOnWood = false
+  isOnEndPoint = false
+  isTouched = false
+  win_player_animator = 0
+  winPlayerIndex = 0
+  ctxAlpha = 0.5
+  win_board_animator = 0
 
   constructor() {
     this.width = window.innerWidth
@@ -180,7 +169,7 @@ class myGame {
       e => {
         console.log('start')
         e.preventDefault()
-        this.isMovingX = true
+        this.isTouched = true
       },
       {
         passive: false,
@@ -189,7 +178,7 @@ class myGame {
 
     document.addEventListener('touchend', () => {
       console.log('end')
-      this.isMovingX = false
+      this.isTouched = false
     })
 
     this.initGame()
@@ -202,12 +191,6 @@ class myGame {
   }
 
   loadImages() {
-    // console.log('loadImages')
-    this.cloudObject = new Object(0, 0, 0, 0)
-    this.cloudObject.LoadFrame('Images/cloud_L.webp')
-    this.cloudObject.LoadFrame('Images/cloud_M.webp')
-    this.cloudObject.LoadFrame('Images/cloud_S.webp')
-
     this.bigCloudObject = new Object(0, 0, 230, 111)
     this.bigCloudObject.LoadFrame('Images/cloud_L.webp')
     this.bigCloudObject.SetSpeed({ x: 1.6, y: 0 })
@@ -246,8 +229,10 @@ class myGame {
     this.endPointObject = new Object(0, 0, 300, 370)
     this.endPointObject.LoadFrame('Images/Endpoint.webp')
 
-    this.winBoard = new Object(0, 0, 210, 96)
+    // 708*359
+    this.winBoard = new Object(0, 0, 180, 90)
     this.winBoard.LoadFrame('Images/win-board.webp')
+    this.winBoard.SetSpeed({ x: 0, y: 1 })
 
     this.stageObject = new Object(0, 0, 50, 50)
     for (let i = 0; i < stageList.length; i++) {
@@ -265,6 +250,10 @@ class myGame {
       this.playerObject.LoadFrame('Images/roll' + i + '.webp')
     }
 
+    this.winPlayerObject = new Object(0, 0, 70, 100)
+    this.winPlayerObject.LoadFrame('Images/win0.webp')
+    this.winPlayerObject.LoadFrame('Images/win1.webp')
+
     this.failPlayerObject = new Object(0, 0, 70, 100)
     for (let i = 0; i < 6; i++) {
       this.failPlayerObject.LoadFrame('Images/fail' + i + '.webp')
@@ -273,6 +262,18 @@ class myGame {
     this.brokenWood = new Object(0, 0, 85, 100)
     this.brokenWood.LoadFrame('Images/platformsW0.webp')
     this.brokenWood.LoadFrame('Images/platformsW1.webp')
+
+    // 470*336
+    this.propsBoxObject = new Object(0, 0, 150, 107)
+    this.propsBoxObject.LoadFrame('Images/props-box.webp')
+    this.propsShoes = new Object(0, 0, 95, 45)
+    this.propsShoes.LoadFrame('Images/550-black.png')
+    this.propsShoes.LoadFrame('Images/550-brown.png')
+    this.propsShoes.LoadFrame('Images/550-red.png')
+    this.propsShoes.LoadFrame('Images/1906-red.png')
+    this.propsShoes.LoadFrame('Images/1906-blue.png')
+    this.propsShoes.LoadFrame('Images/1906-gray.png')
+    this.propsShoes.LoadFrame('Images/1906-silver.png')
   }
 
   initObject() {
@@ -337,6 +338,7 @@ class myGame {
         width,
         height,
         currFrame: frameIndex,
+        alive: true,
       })
     }
   }
@@ -560,7 +562,6 @@ class myGame {
         const l1Y = this.test2[Math.floor(this.test / 24)] / 24
         this.mountL1Object.MovingCamera({ x: l1, y: l1Y })
       } else {
-        console.log('else')
         this.mountL1Object.MovingCamera({ x: 0.5, y: 0.02 })
         this.mountL2Object.MovingCamera({ x: 0.5, y: 0.02 })
         this.mountL3Object.MovingCamera({ x: 0.5, y: 0.02 })
@@ -582,8 +583,28 @@ class myGame {
 
     this.playerAnimatorCounter += 1
 
+    if (this.isTouched) {
+      this.isMovingX = this.stairList[this.stairList.length - 1].x > 35
+    } else {
+      this.isMovingX = false
+    }
+
     if (!this.isStartGame) {
       this.isStartGame = this.stairList[0].x < this.playerObject.x + this.playerObject.width - 20
+    }
+
+    if (this.playBrokenWood) {
+      this.broken_wood_animator++
+      if (this.broken_wood_animator < 4) {
+        this.brokenWoodIndex = Math.floor(this.broken_wood_animator / 2)
+        console.log('index', this.brokenWoodIndex)
+      } else {
+        this.playBrokenWood = false
+        this.brokenWood.alive = false
+        // this.broken_wood_animator = 0
+      }
+    } else {
+      this.brokenWood.alive = true
     }
 
     if (this.isDying) {
@@ -593,6 +614,19 @@ class myGame {
       if (this.failAnimator >= FAIL_ANIM_CHANGE) {
         this.failAnimator = 0
       }
+    }
+
+    if (this.isOnEndPoint) {
+      this.win_player_animator += 1
+      this.winPlayerIndex = Math.floor(this.win_player_animator / 6)
+      console.log('playerind', this.winPlayerIndex)
+      const win_player_counter = 11
+      if (this.win_player_animator === win_player_counter) {
+        this.win_player_animator = 0
+      }
+    }
+    if (this.win_board_animator > 0 && !this.overStage) {
+      this.win_board_animator = 0
     }
 
     // this.playerIndex = Math.floor(this.fpscounter / 2) % 12
@@ -657,18 +691,22 @@ class myGame {
     this.drawFlag()
     this.drawStair()
     this.drawStages()
+    this.drawShoes()
 
     if (this.overStage) {
       this.drawWinBoard()
     }
     if (this.isDying) {
       this.drawFailPlayer()
+    } else if (this.isOnEndPoint) {
+      this.drawWinPlayer()
     } else {
       this.drawPlayer()
     }
     if (this.playBrokenWood) {
-      // this.drawBrokenWood()
+      this.drawBrokenWood()
     }
+    this.drawPropsBox()
   }
 
   checkBigClouds() {
@@ -763,8 +801,6 @@ class myGame {
   drawTree() {
     // - 10 - 30 - 50 - 70 - 90 - 110
     // + 10 + 10 + 20 + 30 + 40 + 50
-    // - this.treeCamera.x
-    // + this.treeCamera.y
     this.treeObject.x = TREE_INIT_XCOORD - this.treeObject.camera.x
     this.treeObject.y = this.height * 0.84 - this.treeObject.height * 0.7 + this.treeObject.camera.y
 
@@ -828,20 +864,27 @@ class myGame {
         this.stairList[i].x -= this.stairObject.xSpeed
         this.stairList[i].y += this.stairObject.ySpeed
       }
-      this.ctx.drawImage(
-        this.stairObject.frames[this.stairList[i].currFrame],
-        this.stairList[i].x,
-        this.stairList[i].y,
-        this.stairList[i].width,
-        this.stairList[i].height
-      )
+      if (this.stairList[i].alive) {
+        this.ctx.drawImage(
+          this.stairObject.frames[this.stairList[i].currFrame],
+          this.stairList[i].x,
+          this.stairList[i].y,
+          this.stairList[i].width,
+          this.stairList[i].height
+        )
+      }
     }
   }
 
   drawEndPoint() {
     this.endPointObject.x = this.stairList[this.stairList.length - 1].x - 10
     this.endPointObject.y = this.stairList[this.stairList.length - 1].y - 160
+    // this.endPointObject.x = -150
+    // this.endPointObject.y = -120
 
+    if (this.endPointObject.x < 375) {
+      console.log('endpoint', this.endPointObject.x, this.endPointObject.y)
+    }
     this.ctx.drawImage(
       this.endPointObject.frames[0],
       this.endPointObject.x,
@@ -866,32 +909,46 @@ class myGame {
   drawPlayer() {
     // player padding right 20px
     this.playerObject.x = Math.floor(this.width * 0.6) - 70
-
+    let player_animator_frames = 70
     if (this.stairInviewIndex > -1 && this.stairInviewIndex < this.stairList.length) {
-      this.playerObject.y = this.stairList[this.stairInviewIndex].y - this.playerObject.height
+      if (this.shoeOnStair.includes(this.stairInviewIndex)) {
+        this.playerObject.y =
+          this.stairList[this.stairInviewIndex].y -
+          this.playerObject.height -
+          Math.floor(this.stairList[this.stairInviewIndex].width / 2)
+
+        player_animator_frames = 90
+      } else {
+        this.playerObject.y = this.stairList[this.stairInviewIndex].y - this.playerObject.height
+      }
     } else {
       this.playerObject.y = this.height * 0.84 - this.playerObject.height
     }
 
     let currFrame = 0
-    if (this.playerAnimatorCounter % 70 <= 10) {
+    if (this.playerAnimatorCounter % player_animator_frames <= 10) {
       this.isJumping = false
       currFrame = 0
-      // if (this.stairInviewIndex > -1 && this.stairInviewIndex < this.stairList.length) {
-      //   const index =
-      //     this.stairInviewIndex + 1 === this.stairList.length ? this.stairInviewIndex : this.stairInviewIndex + 1
-      //   this.playerObject.y = this.stairList[index].y - this.playerObject.height
-      // }
-      // this.playerObject.y = 0
     } else {
       this.isJumping = true
-      currFrame = Math.floor((((this.playerAnimatorCounter % 70) - 10) % 24) / 2) + 1
+      currFrame = Math.floor((((this.playerAnimatorCounter % player_animator_frames) - 10) % 24) / 2) + 1
       this.playerObject.y = this.stairList[0].y - this.playerObject.height - 50
 
       if (this.stairInviewIndex > -1 && this.stairInviewIndex < this.stairList.length) {
         const index =
           this.stairInviewIndex + 1 === this.stairList.length ? this.stairInviewIndex : this.stairInviewIndex + 1
         this.playerObject.y = this.stairList[index].y - this.playerObject.height - 50
+
+        if (this.shoeOnStair.includes(this.stairInviewIndex)) {
+          this.playerObject.y = this.playerObject.y - Math.floor(this.stairList[this.stairInviewIndex].width / 2)
+        }
+      }
+      // TODO: 確認木頭階梯是否 alive
+      if (this.isStayOnWood && stairLevel[this.stairInviewIndex] === 'w') {
+        this.stairList[this.stairInviewIndex].alive = false
+        this.playBrokenWood = true
+      } else {
+        // this.playBrokenWood = false
       }
     }
 
@@ -917,6 +974,16 @@ class myGame {
     )
   }
 
+  drawWinPlayer() {
+    this.ctx.drawImage(
+      this.winPlayerObject.frames[this.winPlayerIndex],
+      this.endPointObject.x + 150,
+      this.endPointObject.y + 120 - this.winPlayerObject.height,
+      this.winPlayerObject.width,
+      this.winPlayerObject.height
+    )
+  }
+
   findStairIndex() {
     if (this.isJumping) {
       return
@@ -927,46 +994,155 @@ class myGame {
         (o.x <= this.playerObject.x + this.playerObject.width - 21 &&
           o.x + o.width >= this.playerObject.x + this.playerObject.width - 21)
     )
+    if (this.stairInviewIndex === -1 && this.endPointObject.x + 100 <= this.playerObject.x + 30) {
+      console.log('on end point ?')
+      this.isOnEndPoint = true
+      //  this.isDying = false
+    }
 
-    this.isDying =
-      (this.stairInviewIndex === -1 && this.isStartGame) || this.stageOnStair.includes(this.stairInviewIndex)
+    // this.isDying =
+    //   (this.stairInviewIndex === -1 && this.isStartGame) || this.stageOnStair.includes(this.stairInviewIndex)
+
+    if (!this.isOnEndPoint) {
+      this.isDying =
+        (this.stairInviewIndex === -1 && this.isStartGame) || this.stageOnStair.includes(this.stairInviewIndex)
+    }
 
     this.overStage = this.stairInviewIndex === 3 || this.stairInviewIndex === 8 || this.stairInviewIndex === 13
-    this.playBrokenWood = stairLevel[this.stairInviewIndex] === 'w'
+
+    if (stairLevel[this.stairInviewIndex] === 'w') {
+      if (!this.isStayOnWood) {
+        this.isStayOnWood = true
+        return
+      }
+      if (!this.stairList[this.stairInviewIndex].alive) {
+        this.isDying = true
+      }
+      // if (this.stairList[this.stairInviewIndex].alive) {
+      //   this.playBrokenWood = true
+      //   this.stairList[this.stairInviewIndex].alive = false
+      // }
+      // console.log('animato', this.broken_wood_animator)
+      // if (
+      //   this.broken_wood_animator > 10 &&
+      //   stairLevel[this.stairInviewIndex] === 'w' &&
+      //   !this.stairList[this.stairInviewIndex].alive
+      // ) {
+      //   // this.isDying = true
+      //   // this.broken_wood_animator = 0
+      //   // this.playBrokenWood = false
+      // }
+    }
   }
 
   drawBrokenWood() {
-    this.ctx.drawImage(this.brokenWood.frames[0], 0, 350, this.brokenWood.width, this.brokenWood.height)
-  }
-
-  drawStages() {
-    for (let i = 0; i < this.stageIndexes.length; i++) {
+    if (!this.playBrokenWood) {
+      return
+    }
+    if (this.brokenWood.alive) {
       this.ctx.drawImage(
-        this.stageObject.frames[this.stageIndexes[i]],
-        this.stairList[this.stageOnStair[i]].x,
-        this.stairList[this.stageOnStair[i]].y - this.stageObject.height,
-        this.stageObject.width,
-        this.stageObject.height
+        this.brokenWood.frames[this.brokenWoodIndex],
+        this.stairList[this.stairInviewIndex].x,
+        this.stairList[this.stairInviewIndex].y,
+        this.brokenWood.width,
+        this.brokenWood.height
       )
     }
   }
 
+  drawStages() {
+    for (let i = 0; i < this.stageIndexes.length; i++) {
+      let width = this.stageObject.width
+      let height = this.stageObject.height
+
+      if (this.stageIndexes[i] === 0) {
+        width = width + 20
+        height = height + 20
+      }
+
+      const restSpace = this.stairList[this.stageOnStair[i]].width - width
+      const xCoord = this.stairList[this.stageOnStair[i]].x + Math.floor(restSpace / 2)
+
+      this.ctx.drawImage(
+        this.stageObject.frames[this.stageIndexes[i]],
+        xCoord,
+        this.stairList[this.stageOnStair[i]].y - this.stageObject.height,
+        width,
+        height
+      )
+    }
+  }
+
+  drawShoes() {
+    for (let i = 0; i < this.shoeOnStair.length; i++) {
+      const width = this.stairList[this.shoeOnStair[i]].width
+      const height = Math.floor(width / 2)
+      const xcoord = this.stairList[this.shoeOnStair[i]].x
+      const ycoord = this.stairList[this.shoeOnStair[i]].y - height
+      this.ctx.drawImage(this.propsShoes.frames[0], xcoord, ycoord, width, height)
+    }
+  }
+
   drawWinBoard() {
-    if (!this.overStage) {
+    if (!this.overStage || this.win_board_animator > 80) {
       return
     }
-    this.ctx.drawImage(this.winBoard.frames[0], 0, 300, this.winBoard.width, this.winBoard.height)
-    this.ctx.font = 'bold 22px NotoSansCJKTC'
+    this.win_board_animator += 1
+    let yCoord = this.stairList[this.stairInviewIndex].y - this.stageObject.height - 40
+
+    if (this.win_board_animator < 40) {
+      if (this.ctxAlpha < 1) {
+        this.ctxAlpha += 0.01
+      }
+    } else {
+      this.ctxAlpha -= 0.01
+    }
+
+    this.ctx.globalAlpha = this.ctxAlpha
+    this.ctx.drawImage(this.winBoard.frames[0], 0, yCoord, this.winBoard.width, this.winBoard.height)
+    this.ctx.font = 'bold 18px NotoSansCJKTC'
     this.ctx.fillStyle = '#000'
     this.ctx.textAlign = 'center'
     const i = this.stageOnStair.findIndex(o => o === this.stairInviewIndex - 1)
     this.ctx.fillText(
       stageList[this.stageIndexes[i]].name,
-      this.winBoard.width / 2,
-      300 + Math.floor(this.winBoard.height / 2)
+      Math.floor(this.winBoard.width - 15) / 2,
+      yCoord + Math.floor(110 / 2)
     )
+    this.ctx.globalAlpha = 1
+  }
+
+  drawPropsBox() {
+    this.ctx.drawImage(this.propsBoxObject.frames[0], 0, 0, this.propsBoxObject.width, this.propsBoxObject.height)
+    this.ctx.font = ''
+    const shoeXcoord = Math.floor((this.propsBoxObject.width - 5 - this.propsShoes.width) / 2)
+    const shoeYcoord = Math.floor((this.propsBoxObject.height - 55) / 2)
+    this.ctx.drawImage(this.propsShoes.frames[0], shoeXcoord, shoeYcoord, this.propsShoes.width, this.propsShoes.height)
   }
 }
+
+// const swiper = new Swiper('.swiper', {
+//   // Optional parameters
+//   direction: 'horizontal',
+//   loop: true,
+
+//   // If we need pagination
+//   pagination: {
+//     el: '.swiper-pagination',
+//     clickable: true
+//   },
+
+//   // Navigation arrows
+//   navigation: {
+//     nextEl: '.swiper-button-next',
+//     prevEl: '.swiper-button-prev'
+//   }
+
+//   // And if we need scrollbar
+//   // scrollbar: {
+//   //   el: '.swiper-scrollbar'
+//   // }
+// })
 
 document.addEventListener('DOMContentLoaded', () => {
   window['myGame'] = new myGame()

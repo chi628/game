@@ -1,23 +1,186 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script src="./index.js"></script>
-  <title>Document</title>
-  <link rel="stylesheet" href="./initialize.css">
-  </link>
-  <style>
-    .canvas-fit {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-    }
-  </style>
-</head>
-<body>
-  <div>
-    <canvas class="canvas-fit" id="my-canvas" width="6670" height="3250"></canvas>
-  </div>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="./initialize.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
+    <script src="./index.js" type="module"></script>
+    <style>
+      .canvas-fit {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+      .swiper {
+        width: 100vw;
+        height: 300px;
+      }
+      .shoe-text {
+        /* color: #cf0a2c;
+        font-size: 70px;
+        font-weight: 800;
+        -webkit-text-stroke: 2px #fff; */
+      }
+      .shoe-describe {
+        /* font-size: 20px;
+        font-weight: bold;
+        color: #fff; */
+      }
+      .pre-game {
+        width: 100vw;
+        height: 100vh;
+        background-color: #cf0a2c;
+      }
+      .pre-game > .header {
+        width: 90vw;
+        height: 93px;
+        position: relative;
+        margin: 0 auto;
+        position: relative;
+
+        &::before {
+          /* content: '';
+          position: absolute;
+          left: 0;
+          right: 0;
+          top: 0;
+          bottom: 0;
+          background-image: url(./Images/line_short.webp);
+          background-repeat: no-repeat;
+          background-size: contain;
+          background-position: center; */
+        }
+
+        &::after {
+          content: '';
+          position: absolute;
+          /*
+          top: 0; */
+          height: 15px;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background-image: url(./Images/line_long.webp);
+          background-repeat: no-repeat;
+          background-size: contain;
+          background-position: center;
+        }
+      }
+      .pre-game > .header > .title {
+        color: #ffcb27;
+        font-size: 26px;
+        line-height: 93px;
+        font-weight: 800;
+        text-align: center;
+      }
+
+      /* 411 * 198 */
+      .pre-game > .shoes-bg {
+        width: 95vw;
+        height: 45vw;
+        margin: 0 auto;
+        background-image: url(./Images/pre-game-cloud.webp);
+        background-repeat: no-repeat;
+        background-size: contain;
+        background-position: center;
+      }
+      .swiper-wrapper {
+        position: relative;
+      }
+      .pre-game > .shoes-bg > .swiper-wrapper > .red-550 {
+        /* 281*126 */
+        width: 280px;
+        height: 125px;
+        background-image: url(./Images/550-red.png);
+        background-repeat: no-repeat;
+        background-size: contain;
+        background-position: center;
+        /* position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%); */
+      }
+      .pre-game > .shoes-bg > .swiper-wrapper > .brown-550 {
+        /* 281*126 */
+        width: 280px;
+        height: 125px;
+        background-image: url(./Images/550-brown.png);
+        background-repeat: no-repeat;
+        background-size: contain;
+        background-position: center;
+        /* position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%); */
+      }
+      .pre-game > .shoes-bg > .swiper-wrapper > .black-550 {
+        /* 281*126 */
+        width: 280px;
+        height: 125px;
+        background-image: url(./Images/550-black.png);
+        background-repeat: no-repeat;
+        background-size: contain;
+        background-position: center;
+        /* position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%); */
+        display: block;
+      }
+      .pre-game-btn {
+        width: 320px;
+        height: 70px;
+        border-radius: 35px;
+        background-color: #ffcb27;
+        box-shadow: 6px 6px 0 0 #fff;
+        margin: 0 auto;
+        text-align: center;
+        font-family: ProximaNova;
+        font-weight: bold;
+        font-size: 30px;
+        line-height: 70px;
+      }
+    </style>
+    <!-- css 階層: https://www.daconote.com/css-class-%E8%88%87-id-%E5%A5%97%E7%94%A8/ -->
+  </head>
+  <body>
+    <!-- TODO
+      遊戲開始前
+      TODO
+      1. shoes 選擇 > swiper
+      2. 就是你了 >  設定鞋子，會傳進 game
+
+      遊戲結束
+      fail ->  一個都沒有翻躍成功 > 哎呀 modal
+      once success -> stage modal 
+    -->
+
+    <div>
+      <!-- <div class="chooser">
+          <p class="shoe-text">550</p>
+          <p class="shoe-describe">酷帥紅</p>
+        </div> -->
+      <!-- <div class="bg-cloud">
+          <div class="test"></div>
+        </div> -->
+      <!-- <div class="pre-game">
+        <div class="header">
+          <div class="title">選擇幫助你翻越障礙的鞋</div>
+        </div>
+        <div class="shoes-bg swiper">
+          <div class="swiper-wrapper">
+            <div class="red-550"></div>
+            <div class="brown-550"></div>
+            <div class="black-550"></div>
+          </div>
+        </div>
+        <div class="pre-game-btn">就是你了</div>
+      </div> -->
+      <!-- style="display: none" -->
+      <canvas class="canvas-fit" id="my-canvas" width="6670" height="3250"></canvas>
+    </div>
+  </body>
 </html>
