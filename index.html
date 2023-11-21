@@ -33,6 +33,11 @@
         width: 100vw;
         height: 100vh;
         background-color: #cf0a2c;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px 0 30px;
       }
       .pre-game > .header {
         width: 90vw;
@@ -142,6 +147,145 @@
         font-weight: bold;
         font-size: 30px;
         line-height: 70px;
+        border: 2.5px solid #000000;
+      }
+      .solid-arrow {
+        display: inline-block;
+        width: 17px;
+        height: 19px;
+        mask: url('./Images/solid-arrow.webp') center/center;
+      }
+      .base-background {
+        background-color: #f3bbac;
+      }
+      .fail-modal {
+        width: 100vw;
+        height: 100vh;
+        background-color: rgba(0, 0, 0, 0.6);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+      .fail-modal-container {
+        width: 85vw;
+        height: 94vw;
+        background-image: url(./Images/fail-modal-bg.webp);
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+        position: relative;
+        /* display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center; */
+      }
+      .oops {
+        width: 50%;
+        height: 140px;
+        background-image: url(./Images/oops.webp);
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+        position: absolute;
+        top: -70px;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+      .fail-text {
+        font-size: 20px;
+        font-family: NotoSansCJKTC;
+        text-align: center;
+        color: #737b82;
+        padding-top: 110px;
+      }
+      .cheer-up {
+        width: 50%;
+        height: 162px;
+        background-image: url(./Images/cheerup.webp);
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+      .play-again {
+        width: 65%;
+        height: 50px;
+        border-radius: 35px;
+        background-color: #cf0a2c;
+        border: 2.5px solid #000000;
+        box-shadow: 6px 6px 0 0 #ffcb27;
+        color: white;
+        font-weight: bold;
+        font-size: 24px;
+        position: absolute;
+        bottom: -25px;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+      .back-home {
+        width: 140px;
+        height: 45px;
+        border-radius: 35px;
+        box-shadow: 3px 3px 0 0 #fff;
+        border: solid 2.5px #000;
+        background-color: #ffcb27;
+        margin-top: 60px;
+        font-weight: bold;
+        color: #151415;
+        font-size: 18px;
+      }
+
+      .success-modal-container {
+        width: 85vw;
+        height: 120vw;
+        background-image: url(./Images/stage-modal-bg.webp);
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+        position: relative;
+      }
+      .leaf {
+        width: 39px;
+        height: 55px;
+        background-image: url(./Images/leaf.webp);
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+        position: absolute;
+      }
+      .leaf1 {
+        top: -24px;
+        left: 18px;
+      }
+      .leaf2 {
+        top: 47px;
+        right: 15px;
+      }
+      .triangle {
+        width: 28px;
+        height: 24px;
+        background-image: url(./Images/triangle.webp);
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+        position: absolute;
+        top: -10px;
+        right: 60px;
+      }
+      .coin {
+        width: 33px;
+        height: 33px;
+        background-image: url(./Images/coin.webp);
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+        position: absolute;
+        left: -8px;
+        bottom: 100px;
       }
     </style>
     <!-- css 階層: https://www.daconote.com/css-class-%E8%88%87-id-%E5%A5%97%E7%94%A8/ -->
@@ -163,12 +307,13 @@
           <p class="shoe-text">550</p>
           <p class="shoe-describe">酷帥紅</p>
         </div> -->
-      <!-- <div class="bg-cloud">
-          <div class="test"></div>
-        </div> -->
       <!-- <div class="pre-game">
         <div class="header">
           <div class="title">選擇幫助你翻越障礙的鞋</div>
+        </div>
+        <div>
+          <div>550</div>
+          <div>1906R</div>
         </div>
         <div class="shoes-bg swiper">
           <div class="swiper-wrapper">
@@ -177,10 +322,35 @@
             <div class="black-550"></div>
           </div>
         </div>
-        <div class="pre-game-btn">就是你了</div>
+        <div class="pre-game-btn">就是你了<span class="solid-arrow"></span></div>
       </div> -->
-      <!-- style="display: none" -->
       <canvas class="canvas-fit" id="my-canvas" width="6670" height="3250"></canvas>
+      <div class="base-background" style="display: none">
+        <div class="fail-modal">
+          <div class="fail-modal-container">
+            <div class="oops"></div>
+            <p class="fail-text">沒能成功翻越那道過不去的坎... <br />沒關係!穿上NB再接再厲吧！</p>
+            <div class="cheer-up"></div>
+            <button class="play-again">再玩一次</button>
+          </div>
+          <button class="back-home">回首頁</button>
+        </div>
+      </div>
+      <div class="base-background" style="display: none">
+        <div class="fail-modal">
+          <div class="success-modal-container">
+            <div class="leaf leaf1"></div>
+            <div class="leaf leaf2"></div>
+            <div class="triangle"></div>
+            <div class="coin"></div>
+            <button class="play-again">前往下一翻</button>
+          </div>
+          <div>
+            <button class="back-home">分享結果</button>
+            <button class="back-home">查看兌換券</button>
+          </div>
+        </div>
+      </div>
     </div>
   </body>
 </html>
