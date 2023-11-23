@@ -6,7 +6,6 @@
     <title>Document</title>
     <link rel="stylesheet" href="./initialize.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-
     <script src="./index.js" type="module"></script>
     <style>
       .canvas-fit {
@@ -15,8 +14,8 @@
         object-fit: contain;
       }
       .swiper {
-        width: 100vw;
-        height: 300px;
+        /* width: 100vw;
+        height: 300px; */
       }
       .shoe-text {
         /* color: #cf0a2c;
@@ -81,9 +80,21 @@
         font-weight: 800;
         text-align: center;
       }
+      .test-container {
+        position: relative;
+        /* height: 400px; */
+      }
 
+      .shoe-series {
+        width: 100%;
+        display: flex;
+        justify-content: start;
+        align-items: center;
+        border: 1px solid yellow;
+      }
       /* 411 * 198 */
-      .pre-game > .shoes-bg {
+      /* .pre-game > */
+      .shoes-bg {
         width: 95vw;
         height: 45vw;
         margin: 0 auto;
@@ -91,11 +102,19 @@
         background-repeat: no-repeat;
         background-size: contain;
         background-position: center;
+        position: relative;
+      }
+      .mySwiper {
+        position: absolute;
+        left: 0;
+        right: 0;
+        height: 220px;
       }
       .swiper-wrapper {
         position: relative;
       }
-      .pre-game > .shoes-bg > .swiper-wrapper > .red-550 {
+      /* .pre-game > .shoes-bg > .swiper-wrapper >  */
+      .red-550 {
         /* 281*126 */
         width: 280px;
         height: 125px;
@@ -108,7 +127,8 @@
         left: 50%;
         transform: translateX(-50%); */
       }
-      .pre-game > .shoes-bg > .swiper-wrapper > .brown-550 {
+      /* .pre-game > .shoes-bg > .swiper-wrapper > */
+      .brown-550 {
         /* 281*126 */
         width: 280px;
         height: 125px;
@@ -121,7 +141,8 @@
         left: 50%;
         transform: translateX(-50%); */
       }
-      .pre-game > .shoes-bg > .swiper-wrapper > .black-550 {
+      /* .pre-game > .shoes-bg > .swiper-wrapper > */
+      .black-550 {
         /* 281*126 */
         width: 280px;
         height: 125px;
@@ -166,6 +187,11 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
       }
       .fail-modal-container {
         width: 85vw;
@@ -287,6 +313,88 @@
         left: -8px;
         bottom: 100px;
       }
+      .success-modal-title {
+        font-family: NotoSansCJKTC;
+        font-size: 28px;
+        line-height: 90px;
+        color: #000;
+        text-align: center;
+        > .amount {
+          font-family: ProximaNova;
+          font-size: 40px;
+          font-weight: 800;
+        }
+      }
+
+      /* 點點樣式 */
+      .swiper-pagination-bullet {
+        &:nth-child(1) {
+          border: solid 2px #151415;
+          background-color: #cf0a2c;
+        }
+        &:nth-child(2) {
+          border: solid 2px #151415;
+          background-color: #78564c;
+        }
+        &:nth-child(3) {
+          border: solid 2px #151415;
+          background-color: #fff;
+        }
+        width: 16px;
+        height: 16px;
+        opacity: 1;
+      }
+
+      .test-shoe-series-text {
+        font-family: ProximaNova;
+        font-size: 30px;
+        font-weight: 800;
+        text-align: center;
+        color: #fff;
+
+        &.choose {
+          -webkit-text-stroke: 2px #fff;
+          font-size: 70px;
+          font-weight: 800;
+          text-align: center;
+          color: #cf0a2c;
+          /* color: #151415; */
+        }
+
+        > .shoe-describe {
+          font-size: 20px;
+          font-weight: bold;
+          color: #fff;
+          &::after {
+            content: '/';
+          }
+        }
+      }
+
+      .icon-white-arrow {
+        &::before {
+          content: '';
+          display: inline-block;
+          width: 19px;
+          height: 19px;
+          background-image: url('./Images/arrow-w.svg');
+          background-repeat: no-repeat;
+          background-size: contain;
+          background-position: center;
+        }
+      }
+      .icon-black-arrow {
+        &::before {
+          content: '';
+          display: inline-block;
+          width: 12px;
+          height: 12px;
+          background-image: url('./Images/arrow.svg');
+          background-repeat: no-repeat;
+          background-size: contain;
+          background-position: center;
+        }
+      }
     </style>
     <!-- css 階層: https://www.daconote.com/css-class-%E8%88%87-id-%E5%A5%97%E7%94%A8/ -->
   </head>
@@ -303,27 +411,39 @@
     -->
 
     <div>
-      <!-- <div class="chooser">
-          <p class="shoe-text">550</p>
-          <p class="shoe-describe">酷帥紅</p>
-        </div> -->
-      <!-- <div class="pre-game">
+      <div class="pre-game" style="display: none">
         <div class="header">
           <div class="title">選擇幫助你翻越障礙的鞋</div>
         </div>
-        <div>
-          <div>550</div>
-          <div>1906R</div>
-        </div>
-        <div class="shoes-bg swiper">
-          <div class="swiper-wrapper">
-            <div class="red-550"></div>
-            <div class="brown-550"></div>
-            <div class="black-550"></div>
+        <div class="test-container">
+          <div class="shoe-series">
+            <div class="test-shoe-series-text choose">550 <span class="shoe-describe">XX紅</span></div>
+
+            <div class="test-shoe-series-text">1906R</div>
+          </div>
+          <div class="shoes-bg">
+            <div class="swiper mySwiper shoes-bg">
+              <div class="swiper-wrapper">
+                <div class="swiper-slide red-550"></div>
+                <div class="swiper-slide brown-550"></div>
+                <div class="swiper-slide black-550"></div>
+              </div>
+              <div class="swiper-pagination"></div>
+            </div>
+            <div class="swiper mySwiper shoes-bg" style="display: none">
+              <div class="swiper-wrapper">
+                <div class="swiper-slide red-550"></div>
+                <div class="swiper-slide brown-550"></div>
+                <div class="swiper-slide black-550"></div>
+                <div class="swiper-slide black-550"></div>
+              </div>
+              <div class="swiper-pagination"></div>
+            </div>
           </div>
         </div>
+
         <div class="pre-game-btn">就是你了<span class="solid-arrow"></span></div>
-      </div> -->
+      </div>
       <canvas class="canvas-fit" id="my-canvas" width="6670" height="3250"></canvas>
       <div class="base-background" style="display: none">
         <div class="fail-modal">
@@ -331,26 +451,49 @@
             <div class="oops"></div>
             <p class="fail-text">沒能成功翻越那道過不去的坎... <br />沒關係!穿上NB再接再厲吧！</p>
             <div class="cheer-up"></div>
-            <button class="play-again">再玩一次</button>
+            <button class="play-again">再玩一次<span class="icon-white-arrow"></span></button>
           </div>
-          <button class="back-home">回首頁</button>
+          <button class="back-home">回首頁<span class="icon-black-arrow"></span></button>
         </div>
       </div>
-      <div class="base-background" style="display: none">
-        <div class="fail-modal">
-          <div class="success-modal-container">
-            <div class="leaf leaf1"></div>
-            <div class="leaf leaf2"></div>
-            <div class="triangle"></div>
-            <div class="coin"></div>
-            <button class="play-again">前往下一翻</button>
+      <div id="success-modal" class="fail-modal" style="display: none">
+        <div class="success-modal-container">
+          <div class="leaf leaf1"></div>
+          <div class="leaf leaf2"></div>
+          <div class="triangle"></div>
+          <div class="coin"></div>
+          <div class="success-modal-title">恭喜翻越 <span class="amount">3</span> 個坎</div>
+          <div class="swiper stageSwiper" style="display: none">
+            <div class="swiper-wrapper">
+              <div class="swiper-slide">Stage 1</div>
+              <div class="swiper-slide">Stage 2</div>
+              <div class="swiper-slide">Stage 3</div>
+            </div>
+            <div class="swiper-button-prev"></div>
+            <div class="swiper-button-next"></div>
           </div>
-          <div>
-            <button class="back-home">分享結果</button>
-            <button class="back-home">查看兌換券</button>
-          </div>
+          <button class="play-again">前往下一翻</button>
+        </div>
+        <div>
+          <button class="back-home">分享結果</button>
+          <button class="back-home">查看兌換券</button>
         </div>
       </div>
     </div>
   </body>
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <script>
+    const swiper = new Swiper('.mySwiper', {
+      pagination: {
+        el: '.swiper-pagination',
+        clickable: true,
+      },
+    })
+    new Swiper('.stageSwiper', {
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+      },
+    })
+  </script>
 </html>

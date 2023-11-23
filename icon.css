@@ -1,0 +1,232 @@
+.icon {
+  &--default {
+    display: inline-block;
+    content: '';
+    width: 25px;
+    height: 25px;
+    background-color: var(--jav-color-text);
+  }
+
+  &--small {
+    &::before {
+      @apply w-2 h-2;
+    }
+  }
+
+  &--save {
+    &:before {
+      @extend .icon--default;
+      mask: url('~assets/images/save.svg') no-repeat center center / contain;
+    }
+  }
+
+  &--sidebar {
+    &:before {
+      @extend .icon--default;
+      mask: url('~assets/icons/icon-sidebar.svg') no-repeat center center / contain;
+    }
+  }
+
+  &--share {
+    &:before {
+      @extend .icon--default;
+      mask: url('~assets/images/share.svg') no-repeat center center / contain;
+    }
+  }
+
+  &--ticket {
+    &:before {
+      @extend .icon--default;
+      mask: url('~assets/icons/icon-ticket.svg') no-repeat center center / contain;
+    }
+  }
+
+  &--ticket-q {
+    &:before {
+      @extend .icon--default;
+      mask: url('~assets/icons/icon-ticket-q.svg') no-repeat center center / contain;
+    }
+  }
+
+  &--help {
+    &:before {
+      @extend .icon--default;
+      mask: url('~assets/icons/icon-help.svg') no-repeat center center / contain;
+    }
+  }
+
+  &--notification {
+    &:before {
+      @extend .icon--default;
+      mask: url('~assets/icons/icon-notification.svg') no-repeat center center / contain;
+    }
+  }
+
+  &--channel {
+    &:before {
+      @extend .icon--default;
+      mask: url('~assets/icons/icon-mychannel.svg') no-repeat center center / contain;
+    }
+  }
+
+  &--follow {
+    &:before {
+      @extend .icon--default;
+      mask: url('~assets/icons/icon-mytracking.svg') no-repeat center center / contain;
+    }
+  }
+
+  &--collectplaylist {
+    &:before {
+      @extend .icon--default;
+      mask: url('~assets/icons/icon-collectplaylist.svg') no-repeat center center / contain;
+    }
+  }
+
+  &--playhistory {
+    &:before {
+      @extend .icon--default;
+      mask: url('~assets/icons/icon-playhistory.svg') no-repeat center center / contain;
+    }
+  }
+
+  &--buylist {
+    &:before {
+      @extend .icon--default;
+      mask: url('~assets/icons/icon-mybuylist.svg') no-repeat center center / contain;
+    }
+  }
+
+  &--ticket {
+    &:before {
+      @extend .icon--default;
+      mask: url('~assets/icons/icon-ticket.svg') no-repeat center center / contain;
+    }
+  }
+
+  &--coupon {
+    &:before {
+      @extend .icon--default;
+      mask: url('~assets/icons/icon-coupon.svg') no-repeat center center / contain;
+    }
+  }
+
+  &--setting {
+    &:before {
+      @extend .icon--default;
+      mask: url('~assets/icons/icon-pagesetting.svg') no-repeat center center / contain;
+    }
+  }
+
+  &--close {
+    &:before {
+      @extend .icon--default;
+      mask: url('~/assets/icons/icon-close.svg') no-repeat center center / contain;
+    }
+  }
+
+  &--search {
+    &:before {
+      @extend .icon--default;
+      mask: url('~/assets/icons/icon-search.svg') no-repeat center center / contain;
+    }
+  }
+
+  &--arrow-down {
+    &::before {
+      @extend .icon--default;
+      mask: url('~/assets/icons/icon-arrow-down.svg') no-repeat center center / contain;
+    }
+  }
+
+  &--arrow-left {
+    &::before {
+      @extend .icon--default;
+      mask: url('~/assets/icons/icon-arrow-left.svg') no-repeat center center / contain;
+    }
+  }
+
+  &--arrow-right {
+    &::before {
+      @extend .icon--default;
+      mask: url('~/assets/icons/icon-arrow-right.svg') no-repeat center center / contain;
+    }
+  }
+
+  &--editlist {
+    &::before {
+      @extend .icon--default;
+      mask: url('~/assets/icons/icon-editlist.svg') no-repeat center center / contain;
+    }
+  }
+
+  &--information {
+    &::before {
+      @extend .icon--default;
+      mask: url('~/assets/icons/icon-information.svg') no-repeat center center / contain;
+    }
+  }
+
+  &--collectplaylist {
+    &::before {
+      @extend .icon--default;
+      mask: url('~/assets/icons/icon-collectplaylist.svg') no-repeat center center / contain;
+    }
+  }
+
+  &--share {
+    &::before {
+      @extend .icon--default;
+      mask: url('~/assets/icons/icon-share.svg') no-repeat center center / contain;
+    }
+  }
+
+  &--redeem {
+    &::before {
+      @extend .icon--default;
+      mask: url('~/assets/icons/icon-redeem.svg') no-repeat center center / contain;
+    }
+  }
+
+  &--public-list {
+    &::before {
+      @extend .icon--default;
+      mask: url('~/assets/icons/icon-publiclist.svg') no-repeat center center / contain;
+    }
+  }
+
+  &--private-list {
+    &::before {
+      @extend .icon--default;
+      mask: url('~/assets/icons/icon-privatelist.svg') no-repeat center center / contain;
+    }
+  }
+
+  &--vipmode-on {
+    &::before {
+      @extend .icon--default;
+      mask: url('~/assets/icons/vipmode/icon-open-eye.svg') no-repeat center center / contain;
+    }
+  }
+
+  &--vipmode-off {
+    &::before {
+      @extend .icon--default;
+      mask: url('~/assets/icons/vipmode/icon-close-eye.svg') no-repeat center center / contain;
+    }
+  }
+
+  &--app {
+    &::before {
+      @extend .icon--default;
+      mask: url('~/assets/icons/icon-application.png') no-repeat center center / contain;
+    }
+  }
+
+  &--av-product {
+    &::before {
+      @extend .icon--default;
+      mask: url('~/assets/icons/icon-avproduct.svg') no-repeat center center / contain;
+    }
+  }
+}
