@@ -6,494 +6,88 @@
     <title>Document</title>
     <link rel="stylesheet" href="./initialize.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <link rel="stylesheet" href="./index.css" />
     <script src="./index.js" type="module"></script>
-    <style>
-      .canvas-fit {
-        width: 100%;
-        height: 100%;
-        object-fit: contain;
-      }
-      .swiper {
-        /* width: 100vw;
-        height: 300px; */
-      }
-      .shoe-text {
-        /* color: #cf0a2c;
-        font-size: 70px;
-        font-weight: 800;
-        -webkit-text-stroke: 2px #fff; */
-      }
-      .shoe-describe {
-        /* font-size: 20px;
-        font-weight: bold;
-        color: #fff; */
-      }
-      .pre-game {
-        width: 100vw;
-        height: 100vh;
-        background-color: #cf0a2c;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        align-items: center;
-        padding: 20px 0 30px;
-      }
-      .pre-game > .header {
-        width: 90vw;
-        height: 93px;
-        position: relative;
-        margin: 0 auto;
-        position: relative;
-
-        &::before {
-          /* content: '';
-          position: absolute;
-          left: 0;
-          right: 0;
-          top: 0;
-          bottom: 0;
-          background-image: url(./Images/line_short.webp);
-          background-repeat: no-repeat;
-          background-size: contain;
-          background-position: center; */
-        }
-
-        &::after {
-          content: '';
-          position: absolute;
-          /*
-          top: 0; */
-          height: 15px;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background-image: url(./Images/line_long.webp);
-          background-repeat: no-repeat;
-          background-size: contain;
-          background-position: center;
-        }
-      }
-      .pre-game > .header > .title {
-        color: #ffcb27;
-        font-size: 26px;
-        line-height: 93px;
-        font-weight: 800;
-        text-align: center;
-      }
-      .test-container {
-        position: relative;
-        /* height: 400px; */
-      }
-
-      .shoe-series {
-        width: 100%;
-        display: flex;
-        justify-content: start;
-        align-items: center;
-        border: 1px solid yellow;
-      }
-      /* 411 * 198 */
-      /* .pre-game > */
-      .shoes-bg {
-        width: 95vw;
-        height: 45vw;
-        margin: 0 auto;
-        background-image: url(./Images/pre-game-cloud.webp);
-        background-repeat: no-repeat;
-        background-size: contain;
-        background-position: center;
-        position: relative;
-      }
-      .mySwiper {
-        position: absolute;
-        left: 0;
-        right: 0;
-        height: 220px;
-      }
-      .swiper-wrapper {
-        position: relative;
-      }
-      /* .pre-game > .shoes-bg > .swiper-wrapper >  */
-      .red-550 {
-        /* 281*126 */
-        width: 280px;
-        height: 125px;
-        background-image: url(./Images/550-red.png);
-        background-repeat: no-repeat;
-        background-size: contain;
-        background-position: center;
-        /* position: absolute;
-        top: 0;
-        left: 50%;
-        transform: translateX(-50%); */
-      }
-      /* .pre-game > .shoes-bg > .swiper-wrapper > */
-      .brown-550 {
-        /* 281*126 */
-        width: 280px;
-        height: 125px;
-        background-image: url(./Images/550-brown.png);
-        background-repeat: no-repeat;
-        background-size: contain;
-        background-position: center;
-        /* position: absolute;
-        top: 0;
-        left: 50%;
-        transform: translateX(-50%); */
-      }
-      /* .pre-game > .shoes-bg > .swiper-wrapper > */
-      .black-550 {
-        /* 281*126 */
-        width: 280px;
-        height: 125px;
-        background-image: url(./Images/550-black.png);
-        background-repeat: no-repeat;
-        background-size: contain;
-        background-position: center;
-        /* position: absolute;
-        top: 0;
-        left: 50%;
-        transform: translateX(-50%); */
-        display: block;
-      }
-      .pre-game-btn {
-        width: 320px;
-        height: 70px;
-        border-radius: 35px;
-        background-color: #ffcb27;
-        box-shadow: 6px 6px 0 0 #fff;
-        margin: 0 auto;
-        text-align: center;
-        font-family: ProximaNova;
-        font-weight: bold;
-        font-size: 30px;
-        line-height: 70px;
-        border: 2.5px solid #000000;
-      }
-      .solid-arrow {
-        display: inline-block;
-        width: 17px;
-        height: 19px;
-        mask: url('./Images/solid-arrow.webp') center/center;
-      }
-      .base-background {
-        background-color: #f3bbac;
-      }
-      .fail-modal {
-        width: 100vw;
-        height: 100vh;
-        background-color: rgba(0, 0, 0, 0.6);
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
-      }
-      .fail-modal-container {
-        width: 85vw;
-        height: 94vw;
-        background-image: url(./Images/fail-modal-bg.webp);
-        background-size: contain;
-        background-repeat: no-repeat;
-        background-position: center;
-        position: relative;
-        /* display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center; */
-      }
-      .oops {
-        width: 50%;
-        height: 140px;
-        background-image: url(./Images/oops.webp);
-        background-size: contain;
-        background-repeat: no-repeat;
-        background-position: center;
-        position: absolute;
-        top: -70px;
-        left: 50%;
-        transform: translateX(-50%);
-      }
-      .fail-text {
-        font-size: 20px;
-        font-family: NotoSansCJKTC;
-        text-align: center;
-        color: #737b82;
-        padding-top: 110px;
-      }
-      .cheer-up {
-        width: 50%;
-        height: 162px;
-        background-image: url(./Images/cheerup.webp);
-        background-size: contain;
-        background-repeat: no-repeat;
-        background-position: center;
-        position: absolute;
-        bottom: 0;
-        left: 50%;
-        transform: translateX(-50%);
-      }
-      .play-again {
-        width: 65%;
-        height: 50px;
-        border-radius: 35px;
-        background-color: #cf0a2c;
-        border: 2.5px solid #000000;
-        box-shadow: 6px 6px 0 0 #ffcb27;
-        color: white;
-        font-weight: bold;
-        font-size: 24px;
-        position: absolute;
-        bottom: -25px;
-        left: 50%;
-        transform: translateX(-50%);
-      }
-      .back-home {
-        width: 140px;
-        height: 45px;
-        border-radius: 35px;
-        box-shadow: 3px 3px 0 0 #fff;
-        border: solid 2.5px #000;
-        background-color: #ffcb27;
-        margin-top: 60px;
-        font-weight: bold;
-        color: #151415;
-        font-size: 18px;
-      }
-
-      .success-modal-container {
-        width: 85vw;
-        height: 120vw;
-        background-image: url(./Images/stage-modal-bg.webp);
-        background-size: contain;
-        background-repeat: no-repeat;
-        background-position: center;
-        position: relative;
-      }
-      .leaf {
-        width: 39px;
-        height: 55px;
-        background-image: url(./Images/leaf.webp);
-        background-size: contain;
-        background-repeat: no-repeat;
-        background-position: center;
-        position: absolute;
-      }
-      .leaf1 {
-        top: -24px;
-        left: 18px;
-      }
-      .leaf2 {
-        top: 47px;
-        right: 15px;
-      }
-      .triangle {
-        width: 28px;
-        height: 24px;
-        background-image: url(./Images/triangle.webp);
-        background-size: contain;
-        background-repeat: no-repeat;
-        background-position: center;
-        position: absolute;
-        top: -10px;
-        right: 60px;
-      }
-      .coin {
-        width: 33px;
-        height: 33px;
-        background-image: url(./Images/coin.webp);
-        background-size: contain;
-        background-repeat: no-repeat;
-        background-position: center;
-        position: absolute;
-        left: -8px;
-        bottom: 100px;
-      }
-      .success-modal-title {
-        font-family: NotoSansCJKTC;
-        font-size: 28px;
-        line-height: 90px;
-        color: #000;
-        text-align: center;
-        > .amount {
-          font-family: ProximaNova;
-          font-size: 40px;
-          font-weight: 800;
-        }
-      }
-
-      /* 點點樣式 */
-      .swiper-pagination-bullet {
-        &:nth-child(1) {
-          border: solid 2px #151415;
-          background-color: #cf0a2c;
-        }
-        &:nth-child(2) {
-          border: solid 2px #151415;
-          background-color: #78564c;
-        }
-        &:nth-child(3) {
-          border: solid 2px #151415;
-          background-color: #fff;
-        }
-        width: 16px;
-        height: 16px;
-        opacity: 1;
-      }
-
-      .test-shoe-series-text {
-        font-family: ProximaNova;
-        font-size: 30px;
-        font-weight: 800;
-        text-align: center;
-        color: #fff;
-
-        &.choose {
-          -webkit-text-stroke: 2px #fff;
-          font-size: 70px;
-          font-weight: 800;
-          text-align: center;
-          color: #cf0a2c;
-          /* color: #151415; */
-        }
-
-        > .shoe-describe {
-          font-size: 20px;
-          font-weight: bold;
-          color: #fff;
-          &::after {
-            content: '/';
-          }
-        }
-      }
-
-      .icon-white-arrow {
-        &::before {
-          content: '';
-          display: inline-block;
-          width: 19px;
-          height: 19px;
-          background-image: url('./Images/arrow-w.svg');
-          background-repeat: no-repeat;
-          background-size: contain;
-          background-position: center;
-        }
-      }
-      .icon-black-arrow {
-        &::before {
-          content: '';
-          display: inline-block;
-          width: 12px;
-          height: 12px;
-          background-image: url('./Images/arrow.svg');
-          background-repeat: no-repeat;
-          background-size: contain;
-          background-position: center;
-        }
-      }
-    </style>
-    <!-- css 階層: https://www.daconote.com/css-class-%E8%88%87-id-%E5%A5%97%E7%94%A8/ -->
   </head>
   <body>
-    <!-- TODO
-      遊戲開始前
-      TODO
-      1. shoes 選擇 > swiper
-      2. 就是你了 >  設定鞋子，會傳進 game
-
-      遊戲結束
-      fail ->  一個都沒有翻躍成功 > 哎呀 modal
-      once success -> stage modal 
-    -->
-
-    <div>
-      <div class="pre-game" style="display: none">
-        <div class="header">
-          <div class="title">選擇幫助你翻越障礙的鞋</div>
-        </div>
-        <div class="test-container">
-          <div class="shoe-series">
-            <div class="test-shoe-series-text choose">550 <span class="shoe-describe">XX紅</span></div>
-
-            <div class="test-shoe-series-text">1906R</div>
-          </div>
-          <div class="shoes-bg">
-            <div class="swiper mySwiper shoes-bg">
-              <div class="swiper-wrapper">
-                <div class="swiper-slide red-550"></div>
-                <div class="swiper-slide brown-550"></div>
-                <div class="swiper-slide black-550"></div>
-              </div>
-              <div class="swiper-pagination"></div>
+    <div class="container">
+      <div id="pre-game" class="pre-game">
+        <div class="pre-game-container">
+          <div class="pre-game-header">
+            <div class="before-title">
+              <div class="money-icon"></div>
             </div>
-            <div class="swiper mySwiper shoes-bg" style="display: none">
+            <div class="title">選擇幫助你翻越障礙的鞋</div>
+            <div class="after-title"></div>
+          </div>
+          <div class="shoes-container">
+            <div class="shoes-series">
+              <!-- <div class="choose">550 <span class="shoes-color">酷帥紅</span></div>
+              <div>1906R</div> -->
+            </div>
+            <div class="shoes-swiper">
+              <!-- <div class="shoes-bg-cloud"></div> -->
               <div class="swiper-wrapper">
-                <div class="swiper-slide red-550"></div>
-                <div class="swiper-slide brown-550"></div>
-                <div class="swiper-slide black-550"></div>
-                <div class="swiper-slide black-550"></div>
+                <div class="swiper-slide shoe-slide red-550"></div>
+                <div class="swiper-slide shoe-slide brown-550"></div>
+                <div class="swiper-slide shoe-slide black-550"></div>
               </div>
               <div class="swiper-pagination"></div>
             </div>
           </div>
+          <button type="button" id="pre-game-btn" class="pre-game-btn">
+            就是你了 <span class="icon-black-arrow"></span>
+          </button>
         </div>
+      </div>
 
-        <div class="pre-game-btn">就是你了<span class="solid-arrow"></span></div>
-      </div>
-      <canvas class="canvas-fit" id="my-canvas" width="6670" height="3250"></canvas>
-      <div class="base-background" style="display: none">
-        <div class="fail-modal">
-          <div class="fail-modal-container">
-            <div class="oops"></div>
-            <p class="fail-text">沒能成功翻越那道過不去的坎... <br />沒關係!穿上NB再接再厲吧！</p>
-            <div class="cheer-up"></div>
-            <button class="play-again">再玩一次<span class="icon-white-arrow"></span></button>
-          </div>
-          <button class="back-home">回首頁<span class="icon-black-arrow"></span></button>
+      <canvas class="canvas-fit" id="my-canvas" width="300" height="300"></canvas>
+
+      <div id="fail-modal" class="modal" style="display: none">
+        <div class="fail-modal-container">
+          <div class="oops"></div>
+          <p class="fail-text">沒能成功翻越那道過不去的坎... <br />沒關係!穿上NB再接再厲吧！</p>
+          <div class="cheer-up"></div>
+          <button class="play-again">再玩一次<span class="icon-white-arrow"></span></button>
         </div>
+        <button class="yellow-btn fail-back-btn">回首頁<span class="icon-black-arrow"></span></button>
       </div>
-      <div id="success-modal" class="fail-modal" style="display: none">
+
+      <div id="success-modal" class="modal" style="display: none">
         <div class="success-modal-container">
           <div class="leaf leaf1"></div>
           <div class="leaf leaf2"></div>
           <div class="triangle"></div>
           <div class="coin"></div>
-          <div class="success-modal-title">恭喜翻越 <span class="amount">3</span> 個坎</div>
-          <div class="swiper stageSwiper" style="display: none">
-            <div class="swiper-wrapper">
-              <div class="swiper-slide">Stage 1</div>
-              <div class="swiper-slide">Stage 2</div>
-              <div class="swiper-slide">Stage 3</div>
-            </div>
-            <div class="swiper-button-prev"></div>
-            <div class="swiper-button-next"></div>
+          <div class="star"></div>
+          <div class="success-modal-header">
+            <div class="title">恭喜翻越 <span id="stage-amount" class="amount">3</span> 個坎</div>
           </div>
-          <button class="play-again">前往下一翻</button>
+          <div class="stage-container">
+            <div id="stage-list" class="stage-detail">
+              <div id="stage-name" class="stage-name"></div>
+              <div class="swiper stage-swiper">
+                <div id="swiper-wrapper" class="swiper-wrapper">
+                  <!-- <div class="swiper-slide boss"></div>
+                  <div class="swiper-slide pig"></div>
+                  <div class="swiper-slide weasel"></div> -->
+                </div>
+                <div class="swiper-button-prev"></div>
+                <div class="swiper-button-next"></div>
+              </div>
+              <div id="stage-description" class="stage-description"></div>
+            </div>
+            <div class="stage-award">並獲得購物金</div>
+          </div>
+
+          <button class="red-btn">前往下一翻<span class="icon-white-arrow"></span></button>
         </div>
-        <div>
-          <button class="back-home">分享結果</button>
-          <button class="back-home">查看兌換券</button>
+        <div class="success-btn-container">
+          <button class="yellow-btn">分享結果<span class="icon-black-arrow"></span></button>
+          <button class="yellow-btn">查看兌換券<span class="icon-black-arrow"></span></button>
         </div>
       </div>
     </div>
   </body>
-  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-  <script>
-    const swiper = new Swiper('.mySwiper', {
-      pagination: {
-        el: '.swiper-pagination',
-        clickable: true,
-      },
-    })
-    new Swiper('.stageSwiper', {
-      navigation: {
-        nextEl: '.swiper-button-next',
-        prevEl: '.swiper-button-prev',
-      },
-    })
-  </script>
 </html>
+<!-- style="display: none" -->

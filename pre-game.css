@@ -1,0 +1,10 @@
+.pre-game {
+  width: 100vw;
+  height: 100vh;
+  background-color: #cf0a2c;
+  padding: 20px 0 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}

@@ -1,4 +1,4 @@
-// import Swiper from 'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.mjs'
+import Swiper from 'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.mjs'
 
 /**
  * l -> 長階梯
@@ -55,6 +55,9 @@ const stageList = [
     description: '打破莫非定律魔咒 衰神退散吧',
   },
 ]
+
+let shoeIndex = 0
+let stageIndex = 0
 
 const successStage = []
 
@@ -150,16 +153,6 @@ class myGame {
   isPlayingBrokenWood = false
   isJumpOnShoe = false
 
-  test = 0
-  test1 = [50, 70, 70, 90, 10]
-  test2 = [20, 30, 10, 30, 50]
-  mountL2XSpace = [70, 70, 0, 0, 150]
-  mountL2YSapce = [30, 40, 0, 0, -60]
-  mountL3XSpace = [50, 100, 80, 150, 50]
-  mountL3YSapce = [20, 40, 0, 0, 20]
-  // treeXSapce = [10, 30, 50, 50, 50, 50]
-  // treeYSapce = [10, 20, 30, 30, 30, 50]
-
   fpsTestCount = 0
 
   stageIndexes = [] // 隨機3個障礙物的index
@@ -192,24 +185,19 @@ class myGame {
     this.ctx = this.canvas.getContext('2d')
 
     // TODO: debounce
-    document.addEventListener(
-      'touchstart',
-      e => {
-        console.log('start')
-        e.preventDefault()
-        this.isTouched = true
-      },
-      {
-        passive: false,
-      }
-    )
+    document.addEventListener('touchstart', this.touchStart, { passive: false })
 
-    document.addEventListener('touchend', () => {
-      console.log('end')
-      this.isTouched = false
-    })
+    document.addEventListener('touchend', this.touchEnd)
 
     this.initGame()
+  }
+
+  touchStart(e) {
+    e.preventDefault()
+    window['myGame'].isTouched = true
+  }
+  touchEnd() {
+    window['myGame'].isTouched = false
   }
 
   async log() {
@@ -449,7 +437,6 @@ class myGame {
     this.createRandomStages()
     this.log()
     this.initObject()
-    console.log('stages', this.stagesOnStairList)
     window.requestAnimationFrame(this.draw.bind(this))
   }
 
@@ -563,12 +550,6 @@ class myGame {
           this.mountL3Object.camera.y += 0.8
           break
         default:
-          this.mountL1Object.camera.x += 0.5
-          this.mountL1Object.camera.y += 0.5
-          this.mountL2Object.camera.x += 0.5
-          this.mountL2Object.camera.y -= 0.5
-          this.mountL3Object.camera.x += 0.5
-          this.mountL3Object.camera.y += 0.5
           break
       }
     }
@@ -578,15 +559,23 @@ class myGame {
     console.log('draw')
     this.clearScreen()
 
-    // if (this.isGameOver) {
-    //   console.log('gameover')
-    //   window.cancelAnimationFrame(this.reqAnim)
+    if (this.isGameOver) {
+      console.log('gameover')
+      window.cancelAnimationFrame(this.reqAnim)
+      document.removeEventListener('touchstart', this.touchStart, { passive: false })
+      document.removeEventListener('touchend', this.touchEnd)
 
-    //   const successModal = document.getElementById('success-modal')
-    //   console.log('modal', successModal)
-    //   successModal.style.display = 'flex'
-    //   return
-    // }
+      const successModal = document.getElementById('success-modal')
+      const failModal = document.getElementById('fail-modal')
+      this.canvas.display = 'none'
+      if (successStage.length > 0) {
+        successModal.style.display = 'flex'
+        showStageList()
+      } else {
+        failModal.style.display = 'flex'
+      }
+      return
+    }
 
     this.gameMain()
     this.updateCamera()
@@ -608,7 +597,6 @@ class myGame {
     if (this.playerObject.anim >= this.playerObject.anim_change) {
       this.playerObject.anim = 0
     }
-    // if(this.playerOnStairIndex)
 
     this.failPlayerObject.anim += 1
     if (this.failPlayerObject.anim >= this.failPlayerObject.anim_change) {
@@ -634,10 +622,10 @@ class myGame {
       }
     }
 
-    // if (this.isWin || this.isDying) {
-    //   this.countFPS()
-    //   this.isGameOver = this.fpsTimer === 2
-    // }
+    if (this.isWin || this.isDying) {
+      this.countFPS()
+      this.isGameOver = this.fpsTimer === 2
+    }
 
     this.reqAnim = window.requestAnimationFrame(this.draw.bind(this))
   }
@@ -1155,6 +1143,63 @@ class myGame {
   }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  window['myGame'] = new myGame()
+const shoeSwiper = new Swiper('.shoes-swiper', {
+  pagination: {
+    el: '.swiper-pagination',
+    clickable: true,
+  },
+  on: {
+    activeIndexChange: function (swiper) {
+      shoeIndex = swiper.activeIndex
+    },
+    init: function (swiper) {
+      shoeIndex = swiper.activeIndex
+    },
+  },
 })
+
+const stageSwiper = new Swiper('.stage-swiper', {
+  navigation: {
+    nextEl: '.swiper-button-next',
+    prevEl: '.swiper-button-prev',
+  },
+  on: {
+    activeIndexChange: function (swiper) {
+      stageIndex = swiper.activeIndex
+      if (successStage.length) {
+        document.getElementById('stage-name').innerHTML = successStage[swiper.activeIndex].name
+        document.getElementById('stage-description').innerHTML = successStage[swiper.activeIndex].description
+      }
+    },
+    init: function (swiper) {
+      stageIndex = swiper.activeIndex
+    },
+  },
+})
+
+document.addEventListener('DOMContentLoaded', () => {
+  const preGame = document.getElementById('pre-game')
+  const preGameBtn = document.getElementById('pre-game-btn')
+
+  if (preGameBtn && preGame) {
+    preGameBtn.addEventListener('click', () => {
+      preGame.style.display = 'none'
+      window['myGame'] = new myGame()
+    })
+  }
+})
+
+function showStageList() {
+  if (successStage.length) {
+    document.getElementById('stage-name').innerHTML = successStage[stageIndex].name
+    document.getElementById('stage-description').innerHTML = successStage[stageIndex].description
+    document.getElementById('stage-amount').innerHTML = `${successStage.length}`
+    const wrapper = document.getElementById('swiper-wrapper')
+    for (let i = 0; i < successStage.length; i++) {
+      const stage = document.createElement('div')
+      stage.classList.add('swiper-slide')
+      stage.classList.add(successStage[i].id)
+      wrapper.appendChild(stage)
+    }
+  }
+}
