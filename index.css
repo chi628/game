@@ -1,3 +1,7 @@
+@font-face {
+  font-family: ProximaNova;
+  src: url('/Proxima Nova Font.woff') format('woff2');
+}
 .container {
   width: 100vw;
   height: 100vh;
@@ -29,65 +33,6 @@
   position: relative;
   width: 100%;
   height: fit-content;
-  /* border: 1px solid red; */
-  /* height: 70px; */
-
-  > .before-title {
-    position: absolute;
-    left: 0;
-    right: 0;
-
-    > .money-icon {
-      position: absolute;
-      top: -20px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 46px;
-      height: 28px;
-      background-image: url('./Images/money.webp');
-      background-repeat: no-repeat;
-      background-size: contain;
-      background-position: center;
-    }
-
-    &::before {
-      content: '';
-      position: absolute;
-      left: 20px;
-      bottom: 0;
-      width: 106px;
-      height: 2px;
-      background-image: url('./Images/line_short.webp');
-      background-repeat: no-repeat;
-      background-size: cover;
-      background-position: center;
-    }
-
-    &::after {
-      content: '';
-      position: absolute;
-      right: 20px;
-      bottom: 0;
-      width: 106px;
-      height: 2px;
-      background-image: url('./Images/line_short.webp');
-      background-repeat: no-repeat;
-      background-size: cover;
-      background-position: center;
-    }
-  }
-
-  > .after-title {
-    position: absolute;
-    left: 20px;
-    right: 20px;
-    bottom: 0;
-    height: 10px;
-    background-image: url('./Images/line_long.webp');
-    background-repeat: no-repeat;
-    background-size: contain;
-    background-position: center;
-  }
 }
 
 .pre-game-header::before {
@@ -128,6 +73,7 @@
   background-size: contain;
   background-position: center;
 }
+
 .pre-game-header > .money::before {
   content: '';
   position: absolute;
@@ -140,6 +86,7 @@
   background-size: cover;
   background-position: center;
 }
+
 .pre-game-header > .money::after {
   content: '';
   position: absolute;
@@ -180,23 +127,23 @@
 .shoes-container {
   width: 100%;
   height: 60vh;
-  margin-top: 45px;
-  /* background: #fff; */
+  position: relative;
 }
 
 .shoes-series {
   width: 100%;
-  height: 85px;
+  height: 15%;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: baseline;
   color: #fff;
-  font-family: ProximaNova;
-  font-size: 30px;
+  font-family: 'ProximaNova';
+  font-size: 7vw;
   font-weight: 800;
   text-align: center;
 
-  > .choose {
+  /* > .choose {
+    font-size: 16.3vw;
     width: 66%;
     color: #cf0a2c;
     text-align: left;
@@ -204,7 +151,7 @@
     font-weight: 800;
     -webkit-text-stroke: 2px #fff;
     position: relative;
-    font-family: ProximaNova-Extrabold;
+    font-family: 'ProximaNova';
 
     > .shoes-color {
       font-family: NotoSansCJKTC;
@@ -222,38 +169,80 @@
       font-weight: normal;
       color: #fff;
     }
-  }
+  } */
 }
 
-.shoes-swiper {
-  width: 100%;
-  height: 45%;
+.shoes-series > .choose {
+  width: 95%;
+  font-size: 16.3vw;
+  font-weight: normal;
+  -webkit-text-stroke: 1px #fff;
+  text-stroke: 1px #fff;
+  color: transparent;
+  text-align: left;
   position: relative;
-  margin-top: 35px;
 }
-.swiper-wrapper {
-  align-items: center;
+.shoes-series > .choose::after {
+  content: '';
+  position: absolute;
+  width: 2px;
+  top: 60%;
+  bottom: 0;
+  right: 35px;
+  transform: rotate(45deg) translateY(-80%);
+  background-color: #fff;
+}
+.shoes-series > .choose > .shoes-color {
+  font-size: 4.5vw;
+}
+
+.demo-shoes-container {
+  width: 110%;
+  height: 85%;
+  position: absolute;
+  left: -5%;
+  bottom: 0;
 }
 
 .shoes-bg-cloud {
-  width: 95vw;
-  height: 47.5vw;
+  width: 96vw;
+  height: 45.7vw;
   position: absolute;
-  top: 0px;
-  left: -2.5%;
+  top: 50%;
+  left: 2vw;
+  transform: translateY(-50%);
   background-image: url(./Images/pre-game-cloud.webp);
   background-repeat: no-repeat;
-  background-size: contain;
+  background-size: cover;
   background-position: center;
 }
 
-.shoe-slide {
-  width: 280px;
-  height: 125px;
+.shoes-swiper {
+  position: absolute;
+  width: 70%;
+  height: 100%;
+  left: 20%;
+  top: -10px;
+  /* border: 1px solid; */
+}
+
+.swiper-wrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.shoes-slide {
+  width: 100%;
+  height: 30vw;
   background-repeat: no-repeat;
   background-size: contain;
   background-position: center;
+  flex-shrink: 0;
+  display: block;
 }
+
 .red-550 {
   background-image: url(./Images/550-red.png);
 }
@@ -265,10 +254,11 @@
 }
 
 .swiper-pagination {
-  bottom: -70px !important;
+  /* bottom: -70px !important; */
 }
 
 .swiper-pagination-bullet {
+  border: 1px solid yellow;
   &:nth-child(1) {
     border: solid 2px #151415 !important;
     background-color: #cf0a2c !important;
@@ -292,40 +282,36 @@
   border-radius: 35px;
   background-color: #ffcb27;
   box-shadow: 6px 6px 0 0 #fff;
-  margin: 0 auto;
   text-align: center;
   font-family: ProximaNova;
   font-weight: bold;
   font-size: 30px;
-  line-height: 70px;
+  line-height: 2;
   border: 2.5px solid #000000;
   color: #000;
 }
 
-.icon-white-arrow {
-  &::before {
-    content: '';
-    display: inline-block;
-    width: 19px;
-    height: 19px;
-    background-image: url('./Images/arrow-w.svg');
-    background-repeat: no-repeat;
-    background-size: contain;
-    background-position: center;
-  }
+.icon-white-arrow::before {
+  content: '';
+  display: inline-block;
+  width: 19px;
+  height: 19px;
+  background-image: url('./Images/arrow-w.svg');
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
 }
 
-.icon-black-arrow {
-  &::before {
-    content: '';
-    display: inline-block;
-    width: 17px;
-    height: 19px;
-    background-image: url('./Images/arrow.svg');
-    background-repeat: no-repeat;
-    background-size: contain;
-    background-position: center;
-  }
+.icon-black-arrow::before {
+  content: '';
+  display: inline-block;
+  width: 17px;
+  height: 19px;
+  margin-left: 10px;
+  background-image: url('./Images/arrow.svg');
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
 }
 
 .modal {
