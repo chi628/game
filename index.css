@@ -11,7 +11,7 @@
   padding: 60px 0 30px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  /* justify-content: space-betwseen; */
   align-items: center;
 }
 
@@ -59,11 +59,11 @@
   }
 
   > .title {
-    color: #ffcb27;
+    /* color: #ffcb27;
     font-size: 26px;
     font-weight: 800;
     text-align: center;
-    line-height: 70px;
+    line-height: 70px; */
   }
 
   > .before-title {
@@ -122,6 +122,19 @@
     background-size: contain;
     background-position: center;
   }
+}
+
+.pre-game-header > .title {
+  --min-size: 26;
+  --max-size: 30;
+
+  color: #ffcb27;
+  font-size: clamp(var(--min-size) * 1px, 7vw, var(--max-size) * 1px);
+  font-weight: 800;
+  text-align: center;
+
+  /* font-size: 26px; */
+  /* line-height: 70px; */
 }
 
 .shoes-container {
