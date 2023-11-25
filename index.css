@@ -230,19 +230,19 @@
 
 .swiper-pagination-bullet {
   &:nth-child(1) {
-    border: solid 2px #151415;
-    background-color: #cf0a2c;
+    border: solid 2px #151415 !important;
+    background-color: #cf0a2c !important;
   }
   &:nth-child(2) {
-    border: solid 2px #151415;
-    background-color: #78564c;
+    border: solid 2px #151415 !important;
+    background-color: #78564c !important;
   }
   &:nth-child(3) {
-    border: solid 2px #151415;
-    background-color: #fff;
+    border: solid 2px #151415 !important;
+    background-color: #fff !important;
   }
-  width: 16px;
-  height: 16px;
+  width: 16px !important;
+  height: 16px !important;
   opacity: 1;
 }
 
@@ -259,6 +259,7 @@
   font-size: 30px;
   line-height: 70px;
   border: 2.5px solid #000000;
+  color: #000;
 }
 
 .icon-white-arrow {
