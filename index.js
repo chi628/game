@@ -253,13 +253,13 @@ class myGame {
     this.propsBoxObject.LoadFrame('Images/props-box.webp')
 
     this.propsShoes = new Object(0, 0, 95, 45)
-    this.propsShoes.LoadFrame('Images/550-red.png')
-    this.propsShoes.LoadFrame('Images/550-brown.png')
-    this.propsShoes.LoadFrame('Images/550-black.png')
-    this.propsShoes.LoadFrame('Images/1906-red.png')
-    this.propsShoes.LoadFrame('Images/1906-blue.png')
-    this.propsShoes.LoadFrame('Images/1906-gray.png')
-    this.propsShoes.LoadFrame('Images/1906-silver.png')
+    this.propsShoes.LoadFrame('Images/550-red.webp')
+    this.propsShoes.LoadFrame('Images/550-brown.webp')
+    this.propsShoes.LoadFrame('Images/550-black.webp')
+    this.propsShoes.LoadFrame('Images/1906-red.webp')
+    this.propsShoes.LoadFrame('Images/1906-blue.webp')
+    this.propsShoes.LoadFrame('Images/1906-gray.webp')
+    this.propsShoes.LoadFrame('Images/1906-silver.webp')
 
     this.flagObject = new AnimatorObject(50, 83)
     for (let i = 0; i < 10; i++) {
