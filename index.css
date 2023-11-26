@@ -253,27 +253,30 @@
   background-image: url(./Images/550-black.png);
 }
 
-.swiper-pagination {
-  /* bottom: -70px !important; */
+.pagination-550 > :nth-child(1) {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  opacity: 1;
+  border: solid 2px #151415;
+  background-color: #cf0a2c;
+}
+.pagination-550 > :nth-child(2) {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  opacity: 1;
+  border: solid 2px #151415;
+  background-color: #78564c;
 }
 
-.swiper-pagination-bullet {
-  border: 1px solid yellow;
-  &:nth-child(1) {
-    border: solid 2px #151415 !important;
-    background-color: #cf0a2c !important;
-  }
-  &:nth-child(2) {
-    border: solid 2px #151415 !important;
-    background-color: #78564c !important;
-  }
-  &:nth-child(3) {
-    border: solid 2px #151415 !important;
-    background-color: #fff !important;
-  }
-  width: 16px !important;
-  height: 16px !important;
+.pagination-550 > :nth-child(3) {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
   opacity: 1;
+  border: solid 2px #151415;
+  background-color: #fff;
 }
 
 .pre-game-btn {
