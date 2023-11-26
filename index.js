@@ -253,10 +253,9 @@ class myGame {
     this.propsBoxObject.LoadFrame('Images/props-box.webp')
 
     this.propsShoes = new Object(0, 0, 95, 45)
-    this.propsShoes.LoadFrame('Images/550-black.webp')
-    this.propsShoes.LoadFrame('Images/550-black.png')
-    this.propsShoes.LoadFrame('Images/550-brown.png')
     this.propsShoes.LoadFrame('Images/550-red.png')
+    this.propsShoes.LoadFrame('Images/550-brown.png')
+    this.propsShoes.LoadFrame('Images/550-black.png')
     this.propsShoes.LoadFrame('Images/1906-red.png')
     this.propsShoes.LoadFrame('Images/1906-blue.png')
     this.propsShoes.LoadFrame('Images/1906-gray.png')
@@ -1106,8 +1105,7 @@ class myGame {
       const ycoord = this.stairList[this.shoeOnStairIndex[i]].y - height
 
       if (this.propsShoeList[i].alive) {
-        // this.propsShoes.frames[this.propsShoeList[i].currFrame]
-        this.ctx.drawImage(this.propsShoes.frames[0], xcoord, ycoord, width, height)
+        this.ctx.drawImage(this.propsShoes.frames[shoeIndex], xcoord, ycoord, width, height)
       }
     }
   }
@@ -1135,7 +1133,13 @@ class myGame {
     this.ctx.drawImage(this.propsBoxObject.frames[0], 10, 10, this.propsBoxObject.width, this.propsBoxObject.height)
     const shoeXcoord = Math.floor((this.propsBoxObject.width + 25 - this.propsShoes.width) / 2)
     const shoeYcoord = Math.floor((this.propsBoxObject.height - 25) / 2)
-    this.ctx.drawImage(this.propsShoes.frames[0], shoeXcoord, shoeYcoord, this.propsShoes.width, this.propsShoes.height)
+    this.ctx.drawImage(
+      this.propsShoes.frames[shoeIndex],
+      shoeXcoord,
+      shoeYcoord,
+      this.propsShoes.width,
+      this.propsShoes.height
+    )
     this.ctx.font = 'bold 13px ProximaNova'
     this.ctx.fillStyle = '#151415'
     this.ctx.textAlign = 'center'
@@ -1143,6 +1147,7 @@ class myGame {
   }
 }
 
+let baseIndex = 0
 const shoeSwiper = new Swiper('.shoes-swiper', {
   pagination: {
     el: '.swiper-pagination',
@@ -1150,10 +1155,13 @@ const shoeSwiper = new Swiper('.shoes-swiper', {
   },
   on: {
     activeIndexChange: function (swiper) {
-      shoeIndex = swiper.activeIndex
+      shoeIndex = swiper.activeIndex + baseIndex
     },
     init: function (swiper) {
       shoeIndex = swiper.activeIndex
+    },
+    slidesLengthChange: function (swiper) {
+      console.log('length change', swiper)
     },
   },
 })
@@ -1177,6 +1185,9 @@ const stageSwiper = new Swiper('.stage-swiper', {
   },
 })
 
+const shoes550List = ['red', 'brown', 'black']
+const shoes1906List = ['red', 'blue', 'gray', 'silver']
+
 document.addEventListener('DOMContentLoaded', () => {
   const preGame = document.getElementById('pre-game')
   const preGameBtn = document.getElementById('pre-game-btn')
@@ -1187,6 +1198,55 @@ document.addEventListener('DOMContentLoaded', () => {
       window['myGame'] = new myGame()
     })
   }
+
+  const series550 = document.getElementById('series-550')
+  const series1906 = document.getElementById('series-1906')
+
+  const swiperPagination = document.getElementById('swiper-pagination')
+
+  for (let i = 0; i < shoes550List.length; i++) {
+    const shoes = document.createElement('div')
+    shoes.classList.add('swiper-slide')
+    shoes.classList.add('shoes-slide')
+    shoes.classList.add(`${shoes550List[i]}-550`)
+    shoeSwiper.appendSlide(shoes)
+    swiperPagination.classList.add('pagination-550')
+  }
+
+  series550.addEventListener('click', e => {
+    series550.classList.add('choose')
+    series1906.classList.remove('choose')
+    shoeSwiper.removeAllSlides()
+    for (let i = 0; i < shoes550List.length; i++) {
+      const shoes = document.createElement('div')
+      shoes.classList.add('swiper-slide')
+      shoes.classList.add('shoes-slide')
+      shoes.classList.add(`${shoes550List[i]}-550`)
+      shoeSwiper.appendSlide(shoes)
+      swiperPagination.classList.add('pagination-550')
+    }
+    baseIndex = 0
+  })
+  series1906.addEventListener('click', e => {
+    baseIndex = 3
+    series1906.classList.add('choose')
+    series550.classList.remove('choose')
+    shoeSwiper.removeAllSlides()
+    for (let i = 0; i < shoes1906List.length; i++) {
+      const shoes = document.createElement('div')
+      shoes.classList.add('swiper-slide')
+      shoes.classList.add('shoes-slide')
+      shoes.classList.add(`${shoes1906List[i]}-1906`)
+      shoeSwiper.appendSlide(shoes)
+      swiperPagination.classList.add('pagination-1906')
+    }
+  })
+
+  const playAgainBtn = document.getElementById('play-again')
+  playAgainBtn.addEventListener('click', () => {
+    document.getElementById('fail-modal').style.display = 'none'
+    document.getElementById('pre-game').style.display = 'flex'
+  })
 })
 
 function showStageList() {
@@ -1200,6 +1260,7 @@ function showStageList() {
       stage.classList.add('swiper-slide')
       stage.classList.add(successStage[i].id)
       wrapper.appendChild(stage)
+      stageSwiper.appendSlide(stage)
     }
   }
 }

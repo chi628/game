@@ -141,6 +141,8 @@
   font-size: 7vw;
   font-weight: 800;
   text-align: center;
+  position: relative;
+  z-index: 2;
 
   /* > .choose {
     font-size: 16.3vw;
@@ -179,10 +181,18 @@
   -webkit-text-stroke: 1px #fff;
   text-stroke: 1px #fff;
   color: transparent;
-  text-align: left;
   position: relative;
 }
-.shoes-series > .choose::after {
+
+.shoes-series > .series-550.choose {
+  text-align: left;
+}
+
+.shoes-series > .series-1906.choose {
+  text-align: right;
+}
+
+.shoes-series > .series-550.choose::after {
   content: '';
   position: absolute;
   width: 2px;
@@ -192,8 +202,30 @@
   transform: rotate(45deg) translateY(-80%);
   background-color: #fff;
 }
-.shoes-series > .choose > .shoes-color {
+
+.shoes-series > .series-1906.choose::before {
+  content: '';
+  position: absolute;
+  width: 2px;
+  top: 60%;
+  bottom: 0;
+  left: 0;
+  transform: rotate(45deg) translateY(-80%);
+  background-color: #fff;
+}
+
+.series-550 > .shoes-color {
   font-size: 4.5vw;
+  display: none;
+}
+
+.series-1906 > .shoes-color {
+  font-size: 4.5vw;
+  display: none;
+}
+
+.choose > .shoes-color {
+  display: inline-block;
 }
 
 .demo-shoes-container {
@@ -253,6 +285,22 @@
   background-image: url(./Images/550-black.png);
 }
 
+.red-1906 {
+  background-image: url(./Images/1906-red.png);
+}
+
+.blue-1906 {
+  background-image: url(./Images/1906-blue.png);
+}
+
+.gray-1906 {
+  background-image: url(./Images/1906-gray.png);
+}
+
+.silver-1906 {
+  background-image: url(./Images/1906-silver.png);
+}
+
 .pagination-550 > :nth-child(1) {
   display: inline-block;
   width: 16px;
@@ -279,6 +327,40 @@
   background-color: #fff;
 }
 
+.pagination-1906 > :nth-child(1) {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  opacity: 1;
+  border: solid 2px #151415;
+  background-color: #cf0a2c;
+}
+.pagination-1906 > :nth-child(2) {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  opacity: 1;
+  border: solid 2px #151415;
+  background-color: #0a5d89;
+}
+
+.pagination-1906 > :nth-child(3) {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  opacity: 1;
+  border: solid 2px #151415;
+  background-color: #919191;
+}
+
+.pagination-1906 > :nth-child(4) {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  opacity: 1;
+  border: solid 2px #151415;
+  background-color: #fff;
+}
 .pre-game-btn {
   width: 320px;
   height: 70px;
