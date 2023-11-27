@@ -1019,7 +1019,7 @@ class myGame {
                 this.playerObject.SetAnimChange(120)
                 this.isJumpOnShoe = true
                 this.propsShoeList[index].alive = false
-              } else {
+              } else if (this.isJumpOnShoe && this.playerObject.anim >= 70) {
                 this.isJumpOnShoe = false
                 this.playerObject.SetAnimChange(70)
               }
