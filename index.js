@@ -208,7 +208,6 @@ class myGame {
   }
 
   startGame() {
-    // TODO: debounce
     document.addEventListener('touchstart', this.touchStart, { passive: false })
     document.addEventListener('touchend', this.touchEnd)
   }
@@ -449,7 +448,6 @@ class myGame {
 
     this.winBoard.SetAnimChange(60)
     this.flagObject.SetAnimChange(18)
-    // TODO 要不要改成 60，初始狀態獨立出來
     this.playerObject.SetAnimChange(70)
     this.winPlayerObject.SetAnimChange(12)
     this.failPlayerObject.SetAnimChange(18)
@@ -484,7 +482,7 @@ class myGame {
     special.y = 0
     special.width = width
     special.height = height
-    special.currFrame = shoeIndex // TODO: 遊戲開始前，選擇鞋款
+    special.currFrame = shoeIndex
     special.alive = true
     this.propsShoeList.push(special)
   }
@@ -941,16 +939,16 @@ class myGame {
     } else if (this.isWin) {
       this.winPlayerObject.currFrame = Math.floor(this.winPlayerObject.anim / 6)
       this.winPlayerObject.x = this.playerObject.x
-      this.winPlayerObject.y = this.endPointObject.y + 120 - this.winPlayerObject.height
+      this.winPlayerObject.y = this.endPointObject.y + 120 - this.winPlayerObject.height + 2
       this.drawWinPlayer()
     } else {
       if (this.playerObject.anim <= 10) {
         // stand
         this.playerObject.currFrame = 0
-        this.playerObject.y = this.height * 0.84 - this.playerObject.height
+        this.playerObject.y = this.height * 0.84 - this.playerObject.height + 2
 
         if (this.playerOnStairIndex > -1) {
-          this.playerObject.y = this.stairList[this.playerOnStairIndex].y - this.playerObject.height
+          this.playerObject.y = this.stairList[this.playerOnStairIndex].y - this.playerObject.height + 2
         }
       } else {
         // jump
@@ -960,7 +958,6 @@ class myGame {
         } else {
           this.playerObject.currFrame += 1
         }
-
         if (this.playerObject.anim - 10 < Math.floor(this.playerObject.anim_change - 10) / 2) {
           this.playerObject.y -= 5
         } else {
