@@ -180,16 +180,21 @@ class myGame {
     this.width = window.innerWidth
     this.height = window.innerHeight
     this.canvas = document.getElementById('my-canvas')
-    this.canvas.width = this.width
-    this.canvas.height = this.height
+    this.canvas.width = this.width * 3
+    this.canvas.height = this.height * 3
+    this.canvas.style.width = `${this.width}px`
+    this.canvas.style.height = `${this.height}px`
     this.ctx = this.canvas.getContext('2d')
+    this.ctx.scale(3,3)
 
-    // TODO: debounce
-    document.addEventListener('touchstart', this.touchStart, { passive: false })
-
-    document.addEventListener('touchend', this.touchEnd)
 
     this.initGame()
+  }
+
+  startGame() {
+    // TODO: debounce
+    document.addEventListener('touchstart', this.touchStart, { passive: false })
+    document.addEventListener('touchend', this.touchEnd)
   }
 
   touchStart(e) {
@@ -252,7 +257,7 @@ class myGame {
     this.propsBoxObject = new Object(0, 0, 150, 107)
     this.propsBoxObject.LoadFrame('Images/props-box.webp')
 
-    this.propsShoes = new Object(0, 0, 95, 45)
+    this.propsShoes = new Object(0, 0, 90, 40)
     this.propsShoes.LoadFrame('Images/550-red.webp')
     this.propsShoes.LoadFrame('Images/550-brown.webp')
     this.propsShoes.LoadFrame('Images/550-black.webp')
@@ -1189,13 +1194,14 @@ const shoes550List = ['red', 'brown', 'black']
 const shoes1906List = ['red', 'blue', 'gray', 'silver']
 
 document.addEventListener('DOMContentLoaded', () => {
+  window['myGame'] = new myGame()
   const preGame = document.getElementById('pre-game')
   const preGameBtn = document.getElementById('pre-game-btn')
 
   if (preGameBtn && preGame) {
     preGameBtn.addEventListener('click', () => {
       preGame.style.display = 'none'
-      window['myGame'] = new myGame()
+      window['myGame'].startGame()
     })
   }
 
