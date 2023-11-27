@@ -2,6 +2,7 @@
   font-family: ProximaNova;
   src: url('/Proxima Nova Font.woff') format('woff2');
 }
+
 .container {
   width: 100vw;
   height: 100vh;
@@ -143,35 +144,6 @@
   text-align: center;
   position: relative;
   z-index: 2;
-
-  /* > .choose {
-    font-size: 16.3vw;
-    width: 66%;
-    color: #cf0a2c;
-    text-align: left;
-    font-size: 70px;
-    font-weight: 800;
-    -webkit-text-stroke: 2px #fff;
-    position: relative;
-    font-family: 'ProximaNova';
-
-    > .shoes-color {
-      font-family: NotoSansCJKTC;
-      font-size: 18px;
-      font-weight: normal;
-      color: #fff;
-    }
-
-    &::after {
-      content: '/';
-      position: absolute;
-      right: 0;
-      bottom: 0;
-      font-size: 18px;
-      font-weight: normal;
-      color: #fff;
-    }
-  } */
 }
 
 .shoes-series > .choose {
@@ -434,7 +406,7 @@
   transform: translateX(-50%);
 }
 .fail-text {
-  font-size: 20px;
+  font-size: clamp(16px, 5vw, 22px);
   font-family: NotoSansCJKTC;
   text-align: center;
   color: #737b82;
@@ -481,16 +453,24 @@
 }
 
 .yellow-btn {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
   width: 140px;
   height: 45px;
   border: solid 2.5px #000;
   border-radius: 35px;
   background-color: #ffcb27;
   box-shadow: 3px 3px 0 0 #fff;
-  /* margin-top: 60px; */
-  font-size: 18px;
+  font-size: clamp(14px, 4vw, 18px);
   font-weight: bold;
   color: #151415;
+}
+
+.yellow-btn > .icon-black-arrow {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
 }
 
 .red-btn {
@@ -502,7 +482,7 @@
   box-shadow: 6px 6px 0 0 #ffcb27;
   color: white;
   font-weight: bold;
-  font-size: 24px;
+  font-size: clamp(20px, 5.6vw, 24px);
   position: absolute;
   bottom: -25px;
   left: 50%;
@@ -525,34 +505,36 @@
   background-repeat: no-repeat;
   background-position: center;
 }
+
 .success-btn-container {
   display: flex;
   justify-content: center;
   align-items: center;
   margin-top: 40px;
-
-  > :nth-child(1) {
-    margin-right: 20px;
-  }
 }
+
+.success-btn-container > :nth-child(1) {
+  margin-right: 20px;
+}
+
 .success-modal-header {
   width: 100%;
   height: 18.5%;
   display: flex;
   justify-content: center;
   align-items: center;
+}
 
-  > .title {
-    color: #000;
-    font-size: 26px;
-    font-family: NotoSansCJKTC;
-    text-align: center;
+.success-modal-header > .title {
+  color: #000;
+  font-size: clamp(24px, 7vw, 30px);
+  font-family: NotoSansCJKTC;
+  text-align: center;
+}
 
-    > .amount {
-      font-size: 40px;
-      font-weight: 800;
-    }
-  }
+.success-modal-header > .title > .amount {
+  font-size: clamp(35px, 9vw, 40px);
+  font-weight: 800;
 }
 
 .leaf {
@@ -611,6 +593,7 @@
   width: 100%;
   height: 81.5%;
 }
+
 .stage-detail {
   width: 100%;
   height: 75%;
@@ -618,46 +601,44 @@
   flex-direction: column;
   align-items: center;
 }
+
+.stage-detail > .stage-name {
+  position: relative;
+  color: #cf0a2c;
+  font-size: clamp(35px, 9vw, 40px);
+  font-weight: bold;
+  margin-top: 20px;
+}
+
+.stage-detail > .stage-name::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background-image: url(./Images/line-red.webp);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.stage-detail > .stage-name::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background-image: url(./Images/line-red.webp);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
 .stage-award {
   width: 100%;
   height: 25%;
-  font-size: 30px;
-  font-weight: bold;
-  text-align: center;
-}
-
-.stage-name {
-  font-size: 40px;
-  color: #cf0a2c;
-  font-weight: bold;
-  margin-top: 20px;
-  /* text-align: center; */
-  position: relative;
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: -2px;
-    left: 0;
-    right: 0;
-    height: 3px;
-    background-image: url(./Images/line-red.webp);
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center;
-  }
-  &::after {
-    content: '';
-    position: absolute;
-    bottom: -2px;
-    left: 0;
-    right: 0;
-    height: 3px;
-    background-image: url(./Images/line-red.webp);
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center;
-  }
 }
 
 .stage-swiper {
@@ -665,117 +646,68 @@
   height: 50%;
   margin: 20px 0 10px;
   position: relative;
-
-  /* &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    width: 100%;
-    border: 2px solid #cf0a2c;
-  } */
 }
 
-.boss {
-  width: 130px;
-  height: 130px;
-  background-image: url(./Images/jump_boss.png);
-  background-size: contain;
+.stage-swiper > .swiper-button-prev::after {
+  content: '';
+  display: inline-block;
+  width: 20px;
+  height: 35px;
+  background-image: url('./Images/arrow-rl.svg');
   background-repeat: no-repeat;
-  background-position: center;
-}
-.pig {
-  width: 130px;
-  height: 130px;
-  background-image: url(./Images/jump_pig.png);
   background-size: contain;
-  background-repeat: no-repeat;
   background-position: center;
-}
-.weasel {
-  width: 130px;
-  height: 130px;
-  background-image: url(./Images/jump_weasel.png);
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-}
-.money {
-  width: 130px;
-  height: 130px;
-  background-image: url(./Images/jump_money.png);
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-}
-.invoice {
-  width: 130px;
-  height: 130px;
-  background-image: url(./Images/jump_invoice.png);
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-}
-.goldfish {
-  width: 130px;
-  height: 130px;
-  background-image: url(./Images/jump_goldfish.png);
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-}
-.ghost {
-  width: 130px;
-  height: 130px;
-  background-image: url(./Images/jump_ghost.png);
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-}
-.love {
-  width: 130px;
-  height: 130px;
-  background-image: url(./Images/jump_love.png);
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-}
-.clothes {
-  width: 130px;
-  height: 130px;
-  background-image: url(./Images/jump_clothes.png);
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-}
-.swiper-button-prev {
-  &::after {
-    content: '';
-    display: inline-block;
-    width: 20px;
-    height: 35px;
-    background-image: url('./Images/arrow-rl.svg');
-    background-repeat: no-repeat;
-    background-size: contain;
-    background-position: center;
-    transform: scaleX(-1);
-  }
+  transform: scaleX(-1);
 }
 
-.swiper-button-next {
-  &::after {
-    content: '';
-    display: inline-block;
-    width: 20px;
-    height: 35px;
-    background-image: url('./Images/arrow-rl.svg');
-    background-repeat: no-repeat;
-    background-size: contain;
-    background-position: center;
-  }
+.stage-swiper > .swiper-button-next::after {
+  content: '';
+  display: inline-block;
+  width: 20px;
+  height: 35px;
+  background-image: url('./Images/arrow-rl.svg');
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
 }
-.stage-description {
+
+.stage-detail > .stage-description {
   color: #737b82;
-  font-size: 20px;
+  font-size: clamp(16px, 4.6vw, 20px);
   font-weight: bold;
   text-align: center;
+}
+.stage-baseImg {
+  width: 130px;
+  height: 130px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+.boss {
+  background-image: url(./Images/jump_boss.png);
+}
+.pig {
+  background-image: url(./Images/jump_pig.png);
+}
+.weasel {
+  background-image: url(./Images/jump_weasel.png);
+}
+.money {
+  background-image: url(./Images/jump_money.png);
+}
+.invoice {
+  background-image: url(./Images/jump_invoice.png);
+}
+.goldfish {
+  background-image: url(./Images/jump_goldfish.png);
+}
+.ghost {
+  background-image: url(./Images/jump_ghost.png);
+}
+.love {
+  background-image: url(./Images/jump_love.png);
+}
+.clothes {
+  background-image: url(./Images/jump_clothes.png);
 }
