@@ -4,6 +4,15 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
+    <link rel="preload" href="./Images/550-red.webp" as="image" />
+    <link rel="preload" href="./Images/550-brown.webp" as="image" />
+    <link rel="preload" href="./Images/550-black.webp" as="image" />
+    <link rel="preload" href="./Images/1906-red.webp" as="image" />
+    <link rel="preload" href="./Images/1906-blue.webp" as="image" />
+    <link rel="preload" href="./Images/1906-gray.webp" as="image" />
+    <link rel="preload" href="./Images/1906-silver.webp" as="image" />
+    <link rel="preload" href="./Images/fail-modal-bg.webp" as="image" />
+    <link rel="preload" href="./Images/stage-modal-bg.webp" as="image" />
     <link rel="stylesheet" href="./initialize.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <link rel="stylesheet" href="./index.css" />
@@ -20,11 +29,11 @@
           <div class="shoes-container">
             <div class="shoes-series">
               <div id="series-550" class="series-550 choose">
-                550
+                <div class="text-550"></div>
                 <span class="shoes-color">酷帥紅</span>
               </div>
               <div id="series-1906" class="series-1906">
-                1906R
+                <div class="text-1906"></div>
                 <span class="shoes-color">酷帥紅</span>
               </div>
             </div>
@@ -48,7 +57,7 @@
           <div class="oops"></div>
           <p class="fail-text">沒能成功翻越那道過不去的坎... <br />沒關係!穿上NB再接再厲吧！</p>
           <div class="cheer-up"></div>
-          <button id="play-again" class="play-again">再玩一次<span class="icon-white-arrow"></span></button>
+          <button id="play-again" class="red-btn">再玩一次<span class="icon-white-arrow"></span></button>
         </div>
         <button class="yellow-btn fail-back-btn">回首頁<span class="icon-black-arrow"></span></button>
       </div>
@@ -75,7 +84,6 @@
             </div>
             <div class="stage-award">並獲得購物金</div>
           </div>
-
           <button class="red-btn">前往下一翻<span class="icon-white-arrow"></span></button>
         </div>
         <div class="success-btn-container">

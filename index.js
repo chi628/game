@@ -12,48 +12,48 @@ const stageList = [
   {
     id: 'boss',
     name: '慣老闆',
-    description: '成功遠離 前途一片光明'
+    description: '成功遠離 前途一片光明',
   },
   {
     id: 'pig',
     name: '雷隊友',
-    description: '神隊友降臨 天天都有神救援'
+    description: '神隊友降臨 天天都有神救援',
   },
   {
     id: 'weasel',
     name: '犯小人',
-    description: '完美防守 逢凶化吉迎貴人'
+    description: '完美防守 逢凶化吉迎貴人',
   },
   {
     id: 'money',
     name: '荷包空空',
-    description: '年終翻倍 投資有賺無賠'
+    description: '年終翻倍 投資有賺無賠',
   },
   {
     id: 'invoice',
     name: '發票摃龜',
-    description: '有對有驚喜 張張中大獎'
+    description: '有對有驚喜 張張中大獎',
   },
   {
     id: 'goldfish',
     name: '忘東忘西金魚腦',
-    description: '進化金頭腦 耳聰目明記憶好'
+    description: '進化金頭腦 耳聰目明記憶好',
   },
   {
     id: 'ghost',
     name: '水逆',
-    description: '變身破關小天才 凡事不再怪水逆'
+    description: '變身破關小天才 凡事不再怪水逆',
   },
   {
     id: 'love',
     name: '爛桃花',
-    description: '單身轉角遇到愛 脫單好人好事多'
+    description: '單身轉角遇到愛 脫單好人好事多',
   },
   {
     id: 'clothes',
     name: '新衣服秒髒',
-    description: '打破莫非定律魔咒 衰神退散吧'
-  }
+    description: '打破莫非定律魔咒 衰神退散吧',
+  },
 ]
 
 let shoeIndex = 0
@@ -68,10 +68,10 @@ const MID_CLOUD_INIT_XCOORD = -105
 const MINI_CLOUD_INIT_XCOORD = 70
 const TREE_INIT_XCOORD = 180
 
+// curr_frame
 class Object {
   x
   y
-  curr_frame
   width
   height
   frames = []
@@ -150,26 +150,26 @@ class myGame {
   isPlayingBrokenWood = false
   isJumpOnShoe = false
 
-  fpsTestCount = 0
-
-  displayStagesIndex = [] // 隨機3個障礙物的index
-  stageOnStairIndex = [2, 7, 12] // 障礙物在階梯上的 index
+  displayStagesIndex = [] // 隨機3個障礙物的 index list
+  stageOnStairIndex = [2, 7, 12] // 障礙物在階梯上的 index list
+  successStageIndex = [] // 已經成功翻越障礙物所在階梯的 index list
   shoeOnStairIndex = [1, 6, 11] // 鞋子道具在階梯上的 index
   bigCloudList = []
   midCloudList = []
   miniCloudList = []
   stairList = []
   propsShoeList = []
-  stagesOnStairList = []
+
+  fpsTestCount = 0
   playerOnStairIndex = -1 // player 站在哪一個階梯上
   brokenWoodIndex = 0
-  overStageIndex = -1
-
-  testOverStageIndexs = []
+  overStageStairIndex = -1 // 翻越障礙物所在的階梯 index
 
   camera = 0
 
   reqAnim
+
+  TREE_INIT_YCOORD
 
   constructor() {
     this.width = window.innerWidth
@@ -183,7 +183,8 @@ class myGame {
       this.ctx.mozBackingStorePixelRatio ||
       this.ctx.msBackingStorePixelRatio ||
       this.ctx.oBackingStorePixelRatio ||
-      this.ctx.backingStorePixelRatio
+      this.ctx.backingStorePixelRatio ||
+      1
     this.ratio = this.devicePixelRatio / this.backingStoreRatio || 3
 
     this.canvas.width = this.width * this.ratio
@@ -246,7 +247,7 @@ class myGame {
 
     this.brokenWoodIndex = 0
     this.playerOnStairIndex = -1
-    this.overStageIndex = -1
+    this.overStageStairIndex = -1
 
     this.displayStagesIndex = []
     this.bigCloudList = []
@@ -254,8 +255,7 @@ class myGame {
     this.miniCloudList = []
     this.stairList = []
     this.propsShoeList = []
-    this.stagesOnStairList = []
-    this.testOverStageIndexs = []
+    this.successStageIndex = []
 
     this.fpsTimer = 0
     this.fpscounter = 0
@@ -359,7 +359,7 @@ class myGame {
   }
 
   async log() {
-    await new Promise((resolve) => {
+    await new Promise(resolve => {
       setTimeout(resolve, 1500)
     })
   }
@@ -372,7 +372,7 @@ class myGame {
         x: 350 * i + BIG_CLOUD_INIT_XCOORD,
         y: yCoord + Math.random(),
         width: this.bigCloudObject.width,
-        height: this.bigCloudObject.height
+        height: this.bigCloudObject.height,
       })
     }
     this.bigCloudObject.xSpeed = 1.6
@@ -384,7 +384,7 @@ class myGame {
         x: 200 * i + MID_CLOUD_INIT_XCOORD,
         y: yCoord + Math.random(),
         width: this.midCloudObject.width,
-        height: this.midCloudObject.height
+        height: this.midCloudObject.height,
       })
     }
     this.midCloudObject.xSpeed = 1.2
@@ -396,7 +396,7 @@ class myGame {
         x: 220 * i + MINI_CLOUD_INIT_XCOORD,
         y: yCoord + Math.random(),
         width: this.miniCloudObject.width,
-        height: this.miniCloudObject.height
+        height: this.miniCloudObject.height,
       })
     }
     this.miniCloudObject.xSpeed = 0.8
@@ -433,7 +433,7 @@ class myGame {
         width,
         height,
         currFrame: frameIndex,
-        state: 0
+        state: 0,
       })
     }
     this.stairObject.xSpeed = 5
@@ -443,13 +443,8 @@ class myGame {
     for (let i = 0; i < this.shoeOnStairIndex.length; i++) {
       this.createPropsShoe({
         width: 55,
-        height: 26
+        height: 26,
       })
-    }
-
-    // 障礙物
-    for (let i = 0; i < this.displayStagesIndex.length; i++) {
-      this.createStage(this.displayStagesIndex[i])
     }
 
     this.winBoard.SetAnimChange(60)
@@ -467,6 +462,8 @@ class myGame {
 
     this.failPlayerObject.x = playerInitXcoord
     this.failPlayerObject.y = playerInitYCoord
+
+    this.TREE_INIT_YCOORD = this.height * 0.84 - this.treeObject.height * 0.7
   }
 
   createStair({ x, y, width, height, currFrame, state }) {
@@ -492,21 +489,10 @@ class myGame {
     this.propsShoeList.push(special)
   }
 
-  createStage(currFrame) {
-    let special = new SpecialObject()
-    special.x = 0
-    special.y = 0
-    special.width = 50
-    special.height = 50
-    special.currFrame = currFrame
-    special.alive = true
-    this.stagesOnStairList.push(special)
-  }
-
   async initGame() {
     this.loadImages()
     this.createRandomStages()
-    this.log()
+    // this.log()
     this.initObject()
     window.requestAnimationFrame(this.draw.bind(this))
   }
@@ -541,6 +527,8 @@ class myGame {
         this.treeObject.camera.x += 2
         this.treeObject.camera.y += 1.25
       }
+
+      console.log('camera', Math.floor(this.camera / 24))
 
       switch (Math.floor(this.camera / 24)) {
         case 0:
@@ -596,13 +584,13 @@ class myGame {
           this.mountL1Object.camera.y += 0.4
           this.mountL2Object.camera.x += 0
           this.mountL2Object.camera.y += 0
-          this.mountL3Object.camera.x += 3.4
+          this.mountL3Object.camera.x += 4
           this.mountL3Object.camera.y += 0
           break
         case 7:
           this.mountL1Object.camera.x += 3.75
           this.mountL1Object.camera.y += 1.25
-          this.mountL2Object.camera.x += 0
+          this.mountL2Object.camera.x += 1.5
           this.mountL2Object.camera.y += 0
           this.mountL3Object.camera.x += 6.25
           this.mountL3Object.camera.y += 0
@@ -611,11 +599,17 @@ class myGame {
           this.mountL1Object.camera.x += 0.4
           this.mountL1Object.camera.y += 2
           this.mountL2Object.camera.x += 6.25
-          this.mountL2Object.camera.y -= 2.5
+          this.mountL2Object.camera.y -= 2
           this.mountL3Object.camera.x += 2
           this.mountL3Object.camera.y += 0.8
           break
         default:
+          this.mountL1Object.camera.x += 0.1
+          this.mountL1Object.camera.y += 0.1
+          this.mountL2Object.camera.x += 0.1
+          this.mountL2Object.camera.y -= 0
+          this.mountL3Object.camera.x += 0.1
+          this.mountL3Object.camera.y += 0.1
           break
       }
     }
@@ -631,7 +625,6 @@ class myGame {
     this.clearScreen()
 
     if (this.isGameOver) {
-      console.log('gameover')
       window.cancelAnimationFrame(this.reqAnim)
       document.removeEventListener('touchstart', this.touchStart, { passive: false })
       document.removeEventListener('touchend', this.touchEnd)
@@ -649,7 +642,47 @@ class myGame {
       return
     }
 
-    this.gameMain()
+    this.checkPlayerStair()
+    this.drawGroundL2()
+    this.checkMiniClouds()
+    this.drawMiniClouds()
+    this.drawMount()
+    this.checkBigClouds()
+    this.drawBigClouds()
+    this.checkMidClouds()
+    this.drawMidClouds()
+    this.drawTree()
+    this.drawGroundL1()
+    this.drawEndPoint()
+    this.drawFlag()
+    this.updateStairs()
+    this.drawStair()
+
+    if (this.isPlayingBrokenWood) {
+      this.brokenWood.anim += 1
+      if (this.brokenWood.anim >= this.brokenWood.anim_change) {
+        this.brokenWood.anim = 0
+        this.isPlayingBrokenWood = false
+        this.isStayOnWood = false
+      }
+      this.drawBrokenWood()
+    }
+
+    this.checkStageStatus()
+    this.drawStages()
+    this.drawShoes()
+
+    this.updatePlayer()
+
+    if (this.isJumping && this.isStayOnWood) {
+      if (this.playerObject.anim - 10 >= 5 && this.stairList[this.brokenWoodIndex].alive) {
+        this.stairList[this.brokenWoodIndex].state = 1
+        this.stairList[this.brokenWoodIndex].alive = false
+
+        this.isPlayingBrokenWood = true
+      }
+    }
+    this.drawPropsBox()
     this.updateCamera()
 
     this.isJumping = this.playerObject.anim > 10
@@ -702,81 +735,13 @@ class myGame {
     this.reqAnim = window.requestAnimationFrame(this.draw.bind(this))
   }
 
-  gameMain() {
-    this.checkPlayerStair()
-    this.drawGroundL2()
-    this.checkMiniClouds()
-    this.drawMiniClouds()
-    this.drawMount()
-    this.checkBigClouds()
-    this.drawBigClouds()
-    this.checkMidClouds()
-    this.drawMidClouds()
-    this.drawTree()
-    this.drawGroundL1()
-    this.drawEndPoint()
-    this.drawFlag()
-    this.updateStairs()
-    this.drawStair()
-
-    if (this.isPlayingBrokenWood) {
-      this.brokenWood.currFrame = Math.floor(this.brokenWood.anim / 2)
-      this.brokenWood.x = this.stairList[this.brokenWoodIndex].x
-      this.brokenWood.y = this.stairList[this.brokenWoodIndex].y
-
-      this.brokenWood.anim += 1
-      if (this.brokenWood.anim >= this.brokenWood.anim_change) {
-        this.brokenWood.anim = 0
-        this.isPlayingBrokenWood = false
-        this.isStayOnWood = false
-      }
-      this.drawBrokenWood()
-    }
-
-    this.checkStageStatus()
-    this.drawStages()
-    this.drawShoes()
-
-    this.updatePlayer()
-
-    if (this.isJumping && this.isStayOnWood) {
-      if (this.playerObject.anim - 10 >= 5 && this.stairList[this.brokenWoodIndex].alive) {
-        this.stairList[this.brokenWoodIndex].state = 1
-        this.stairList[this.brokenWoodIndex].alive = false
-
-        this.isPlayingBrokenWood = true
-      }
-    }
-    this.drawPropsBox()
-  }
-
   checkBigClouds() {
-    const outOfBoundIndex = this.bigCloudList.findIndex((o) => o.x + o.width < 0)
+    const outOfBoundIndex = this.bigCloudList.findIndex(o => o.x + o.width < 0)
 
-    const lastCloudIndex = this.bigCloudList.findIndex((o) => o.x === Math.max(...this.bigCloudList.map((o) => o.x)))
+    const lastCloudIndex = this.bigCloudList.findIndex(o => o.x === Math.max(...this.bigCloudList.map(o => o.x)))
 
     if (lastCloudIndex > -1 && outOfBoundIndex > -1) {
       this.bigCloudList[outOfBoundIndex].x = this.bigCloudList[lastCloudIndex].x + 270
-    }
-  }
-
-  checkMidClouds() {
-    const outOfBoundIndex = this.midCloudList.findIndex((o) => o.x + o.width < 0)
-
-    const lastCloudIndex = this.midCloudList.findIndex((o) => o.x === Math.max(...this.midCloudList.map((o) => o.x)))
-
-    if (lastCloudIndex > -1 && outOfBoundIndex > -1) {
-      this.midCloudList[outOfBoundIndex].x = this.midCloudList[lastCloudIndex].x + 200
-    }
-  }
-
-  checkMiniClouds() {
-    const outOfBoundIndex = this.miniCloudList.findIndex((o) => o.x + o.width < 0)
-
-    const lastCloudIndex = this.miniCloudList.findIndex((o) => o.x === Math.max(...this.miniCloudList.map((o) => o.x)))
-
-    if (lastCloudIndex > -1 && outOfBoundIndex > -1) {
-      this.miniCloudList[outOfBoundIndex].x = this.miniCloudList[lastCloudIndex].x + 220
     }
   }
 
@@ -794,6 +759,16 @@ class myGame {
     }
   }
 
+  checkMidClouds() {
+    const outOfBoundIndex = this.midCloudList.findIndex(o => o.x + o.width < 0)
+
+    const lastCloudIndex = this.midCloudList.findIndex(o => o.x === Math.max(...this.midCloudList.map(o => o.x)))
+
+    if (lastCloudIndex > -1 && outOfBoundIndex > -1) {
+      this.midCloudList[outOfBoundIndex].x = this.midCloudList[lastCloudIndex].x + 200
+    }
+  }
+
   drawMidClouds() {
     for (let i = 0; i < this.midCloudList.length - 1; i++) {
       this.midCloudList[i].x -= this.midCloudObject.xSpeed
@@ -808,12 +783,22 @@ class myGame {
     }
   }
 
+  checkMiniClouds() {
+    const outOfBoundIndex = this.miniCloudList.findIndex(o => o.x + o.width < 0)
+
+    const lastCloudIndex = this.miniCloudList.findIndex(o => o.x === Math.max(...this.miniCloudList.map(o => o.x)))
+
+    if (lastCloudIndex > -1 && outOfBoundIndex > -1) {
+      this.miniCloudList[outOfBoundIndex].x = this.miniCloudList[lastCloudIndex].x + 220
+    }
+  }
+
   drawMiniClouds() {
     for (let i = 0; i < this.miniCloudList.length - 1; i++) {
       this.miniCloudList[i].x -= this.miniCloudObject.xSpeed
 
       this.ctx.drawImage(
-        this.midCloudObject.frames[0],
+        this.miniCloudObject.frames[0],
         this.miniCloudList[i].x,
         this.miniCloudList[i].y,
         this.miniCloudList[i].width,
@@ -827,6 +812,7 @@ class myGame {
     const colorYcoord = this.height * 0.9 + this.groundObject.camera.y
 
     this.ctx.drawImage(this.groundObject.frames[0], 0, imageYCoord, this.width, this.height * 0.07)
+
     this.ctx.fillStyle = GROUND_1_BGCOLOR
     this.ctx.fillRect(0, colorYcoord, this.width, this.height * 0.1)
   }
@@ -842,7 +828,7 @@ class myGame {
 
   drawTree() {
     this.treeObject.x = TREE_INIT_XCOORD - this.treeObject.camera.x
-    this.treeObject.y = this.height * 0.84 - this.treeObject.height * 0.7 + this.treeObject.camera.y
+    this.treeObject.y = this.TREE_INIT_YCOORD + this.treeObject.camera.y
 
     this.ctx.drawImage(
       this.treeObject.frames[0],
@@ -914,13 +900,11 @@ class myGame {
   }
 
   drawBrokenWood() {
-    this.ctx.drawImage(
-      this.brokenWood.frames[this.brokenWood.currFrame],
-      this.brokenWood.x,
-      this.brokenWood.y,
-      this.brokenWood.width,
-      this.brokenWood.height
-    )
+    const xCoord = this.stairList[this.brokenWoodIndex].x
+    const yCoord = this.stairList[this.brokenWoodIndex].y
+    const currFrame = Math.floor(this.brokenWood.anim / 2)
+
+    this.ctx.drawImage(this.brokenWood.frames[currFrame], xCoord, yCoord, this.brokenWood.width, this.brokenWood.height)
   }
 
   drawEndPoint() {
@@ -940,8 +924,9 @@ class myGame {
     this.flagObject.x = this.endPointObject.x + 180
     this.flagObject.y = this.endPointObject.y + 40
     this.flagObject.currFrame = Math.floor(this.flagObject.anim / 2) % 9
+    const currFrame = Math.floor(this.flagObject.anim / 2) % 9
     this.ctx.drawImage(
-      this.flagObject.frames[this.flagObject.currFrame],
+      this.flagObject.frames[currFrame],
       this.flagObject.x,
       this.flagObject.y,
       this.flagObject.width,
@@ -1029,17 +1014,15 @@ class myGame {
             (this.playerObject.y + this.playerObject.height - 45 > o.y - this.stageObject.height &&
               this.playerObject.y + this.playerObject.height - 45 <= o.y)
           ) {
-            const index = this.shoeOnStairIndex.findIndex((o) => o === i)
+            const index = this.shoeOnStairIndex.findIndex(o => o === i)
             if (index > -1) {
               if (this.propsShoeList[index].alive) {
-                console.log('hiii')
                 this.playerObject.anim = 11
                 this.playerObject.currFrame = 12
                 this.playerObject.SetAnimChange(120)
                 this.isJumpOnShoe = true
                 this.propsShoeList[index].alive = false
               } else {
-                console.log('v', this.playerObject.anim, this.playerObject.currFrame)
                 this.isJumpOnShoe = false
                 this.playerObject.SetAnimChange(70)
               }
@@ -1055,11 +1038,11 @@ class myGame {
         if (this.stageOnStairIndex.includes(i)) {
           // 有障礙物的階梯一半的寬度在 player 的左邊
           if (o.x + Math.floor(o.width / 2) <= this.playerObject.x) {
-            if (!this.testOverStageIndexs.includes(i)) {
-              this.testOverStageIndexs.push(i)
+            if (!this.successStageIndex.includes(i)) {
+              this.successStageIndex.push(i)
               this.isOverStage = true
-              this.overStageIndex = i
-              const index = this.stageOnStairIndex.findIndex((o) => o === i)
+              this.overStageStairIndex = i
+              const index = this.stageOnStairIndex.findIndex(o => o === i)
               if (index > -1) {
                 successStage.push(stageList[this.displayStagesIndex[index]])
               }
@@ -1075,7 +1058,7 @@ class myGame {
      * player 最右邊的x軸 > this.playerObject.x + this.playerObject.width - 21
      */
     this.playerOnStairIndex = this.stairList.findIndex(
-      (stair) =>
+      stair =>
         (stair.x <= this.playerObject.x + 30 && stair.x + stair.width >= this.playerObject.x + 30) ||
         (stair.x <= this.playerObject.x + this.playerObject.width - 21 &&
           stair.x + stair.width >= this.playerObject.x + this.playerObject.width - 21)
@@ -1112,25 +1095,6 @@ class myGame {
       }
     }
 
-    // 階梯上是否含有道具鞋
-    // if (this.shoeOnStairIndex.includes(this.playerOnStairIndex)) {
-    //   const index = this.shoeOnStairIndex.findIndex(o => o === this.playerOnStairIndex)
-
-    //   if (index > -1) {
-    //     if (this.propsShoeList[index].alive) {
-    //       this.playerObject.anim = 0
-    //       this.playerObject.SetAnimChange(120)
-    //       this.propsShoeList[index].alive = false
-    //       this.isJumpOnShoe = true
-    //     } else {
-    //       this.isJumpOnShoe = false
-    //       this.playerObject.SetAnimChange(70)
-    //     }
-    //   }
-    // } else {
-    //   this.playerObject.SetAnimChange(70)
-    // }
-
     if (!this.shoeOnStairIndex.includes(this.playerOnStairIndex)) {
       this.isJumpOnShoe = false
       this.playerObject.SetAnimChange(70)
@@ -1139,7 +1103,8 @@ class myGame {
 
   checkStageStatus() {
     if (this.isOverStage) {
-      const stageStair = this.stairList[this.overStageIndex]
+      // 障礙物所在的階梯
+      const stageStair = this.stairList[this.overStageStairIndex]
       this.winBoard.x = stageStair.x - Math.floor((this.winBoard.width - stageStair.width) / 2)
       this.winBoard.y = stageStair.y - this.stageObject.height - this.winBoard.height
       this.drawWinBoard()
@@ -1159,7 +1124,7 @@ class myGame {
 
       const restSpace = this.stairList[this.stageOnStairIndex[i]].width - width
       const xCoord = this.stairList[this.stageOnStairIndex[i]].x + Math.floor(restSpace / 2)
-      const yCoord = this.stairList[this.stageOnStairIndex[i]].y - this.stageObject.height
+      const yCoord = this.stairList[this.stageOnStairIndex[i]].y - this.stageObject.height + 3
 
       this.ctx.drawImage(this.stageObject.frames[this.displayStagesIndex[i]], xCoord, yCoord, width, height)
     }
@@ -1172,7 +1137,7 @@ class myGame {
 
       const restSpace = this.stairList[this.shoeOnStairIndex[i]].width - width
       const xcoord = this.stairList[this.shoeOnStairIndex[i]].x + Math.floor(restSpace / 2)
-      const ycoord = this.stairList[this.shoeOnStairIndex[i]].y - height
+      const ycoord = this.stairList[this.shoeOnStairIndex[i]].y - height + 2
 
       if (this.propsShoeList[i].alive) {
         this.ctx.drawImage(this.propsShoes.frames[shoeIndex], xcoord, ycoord, width, height)
@@ -1182,6 +1147,7 @@ class myGame {
 
   drawWinBoard() {
     this.ctx.globalAlpha = this.ctxAlpha
+
     this.ctx.drawImage(
       this.winBoard.frames[0],
       this.winBoard.x,
@@ -1189,12 +1155,14 @@ class myGame {
       this.winBoard.width,
       this.winBoard.height
     )
+
     this.ctx.font = 'bold 18px NotoSansCJKTC'
     this.ctx.fillStyle = '#000'
     this.ctx.textAlign = 'center'
+
     const textXcoord = this.winBoard.x + Math.floor((this.winBoard.width - 15) / 2)
     const textYcoord = this.winBoard.y + 55
-    const index = this.stageOnStairIndex.findIndex((i) => i === this.overStageIndex)
+    const index = this.stageOnStairIndex.findIndex(i => i === this.overStageStairIndex)
     this.ctx.fillText(successStage[index].name, textXcoord, textYcoord)
     this.ctx.globalAlpha = 1
   }
@@ -1221,7 +1189,7 @@ let baseIndex = 0
 const shoeSwiper = new Swiper('.shoes-swiper', {
   pagination: {
     el: '.swiper-pagination',
-    clickable: true
+    clickable: true,
   },
   on: {
     activeIndexChange: function (swiper) {
@@ -1232,14 +1200,14 @@ const shoeSwiper = new Swiper('.shoes-swiper', {
     },
     slidesLengthChange: function (swiper) {
       console.log('length change', swiper)
-    }
-  }
+    },
+  },
 })
 
 const stageSwiper = new Swiper('.stage-swiper', {
   navigation: {
     nextEl: '.swiper-button-next',
-    prevEl: '.swiper-button-prev'
+    prevEl: '.swiper-button-prev',
   },
   on: {
     activeIndexChange: function (swiper) {
@@ -1251,8 +1219,8 @@ const stageSwiper = new Swiper('.stage-swiper', {
     },
     init: function (swiper) {
       stageIndex = swiper.activeIndex
-    }
-  }
+    },
+  },
 })
 
 const shoes550List = ['red', 'brown', 'black']
@@ -1284,7 +1252,7 @@ document.addEventListener('DOMContentLoaded', () => {
     swiperPagination.classList.add('pagination-550')
   }
 
-  series550.addEventListener('click', (e) => {
+  series550.addEventListener('click', e => {
     series550.classList.add('choose')
     series1906.classList.remove('choose')
     shoeSwiper.removeAllSlides()
@@ -1298,7 +1266,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     baseIndex = 0
   })
-  series1906.addEventListener('click', (e) => {
+  series1906.addEventListener('click', e => {
     baseIndex = 3
     series1906.classList.add('choose')
     series550.classList.remove('choose')
