@@ -2,6 +2,10 @@
   font-family: ProximaNova;
   src: url('./Proxima Nova Font.woff') format('woff');
 }
+@font-face {
+  font-family: ProximaNova-Extrabold;
+  src: url('./Proxima-Nova-Xbold.woff') format('woff');
+}
 
 .container {
   width: 100vw;
@@ -566,7 +570,7 @@
 
 .success-modal-container > .success-modal-header > .title > .amount {
   font-size: clamp(35px, 9vw, 40px);
-  font-family: 'ProximaNova';
+  font-family: 'ProximaNova-Extrabold';
   font-weight: 800;
 }
 

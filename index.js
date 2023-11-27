@@ -1238,45 +1238,49 @@ document.addEventListener('DOMContentLoaded', () => {
   const series550 = document.getElementById('series-550')
   const series1906 = document.getElementById('series-1906')
 
-  const swiperPagination = document.getElementById('swiper-pagination')
-
   for (let i = 0; i < shoes550List.length; i++) {
     const shoes = document.createElement('div')
     shoes.classList.add('swiper-slide')
     shoes.classList.add('shoes-slide')
     shoes.classList.add(`${shoes550List[i]}-550`)
     shoeSwiper.appendSlide(shoes)
+  }
+
+  const swiperPagination = document.getElementById('swiper-pagination')
+  if (swiperPagination) {
     swiperPagination.classList.add('pagination-550')
   }
 
-  series550.addEventListener('click', e => {
-    series550.classList.add('choose')
-    series1906.classList.remove('choose')
-    shoeSwiper.removeAllSlides()
-    for (let i = 0; i < shoes550List.length; i++) {
-      const shoes = document.createElement('div')
-      shoes.classList.add('swiper-slide')
-      shoes.classList.add('shoes-slide')
-      shoes.classList.add(`${shoes550List[i]}-550`)
-      shoeSwiper.appendSlide(shoes)
+  if (series550 && series1906) {
+    series550.addEventListener('click', e => {
+      baseIndex = 0
+      series550.classList.add('choose')
+      series1906.classList.remove('choose')
+      shoeSwiper.removeAllSlides()
+      for (let i = 0; i < shoes550List.length; i++) {
+        const shoes = document.createElement('div')
+        shoes.classList.add('swiper-slide')
+        shoes.classList.add('shoes-slide')
+        shoes.classList.add(`${shoes550List[i]}-550`)
+        shoeSwiper.appendSlide(shoes)
+      }
       swiperPagination.classList.add('pagination-550')
-    }
-    baseIndex = 0
-  })
-  series1906.addEventListener('click', e => {
-    baseIndex = 3
-    series1906.classList.add('choose')
-    series550.classList.remove('choose')
-    shoeSwiper.removeAllSlides()
-    for (let i = 0; i < shoes1906List.length; i++) {
-      const shoes = document.createElement('div')
-      shoes.classList.add('swiper-slide')
-      shoes.classList.add('shoes-slide')
-      shoes.classList.add(`${shoes1906List[i]}-1906`)
-      shoeSwiper.appendSlide(shoes)
+    })
+    series1906.addEventListener('click', e => {
+      baseIndex = 3
+      series1906.classList.add('choose')
+      series550.classList.remove('choose')
+      shoeSwiper.removeAllSlides()
+      for (let i = 0; i < shoes1906List.length; i++) {
+        const shoes = document.createElement('div')
+        shoes.classList.add('swiper-slide')
+        shoes.classList.add('shoes-slide')
+        shoes.classList.add(`${shoes1906List[i]}-1906`)
+        shoeSwiper.appendSlide(shoes)
+      }
       swiperPagination.classList.add('pagination-1906')
-    }
-  })
+    })
+  }
 
   const playAgainBtn = document.getElementById('play-again')
   playAgainBtn.addEventListener('click', () => {
