@@ -416,65 +416,6 @@
   background-position: center;
 }
 
-.modal {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background-color: rgba(0, 0, 0, 0.6);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  z-index: 2;
-}
-
-.fail-modal-container {
-  position: relative;
-  width: 85vw;
-  height: 94vw;
-  background-image: url(./Images/fail-modal-bg.webp);
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-  container-type: size;
-}
-
-.oops {
-  width: 50%;
-  aspect-ratio: 13/10;
-  background-image: url(./Images/oops.webp);
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-  position: absolute;
-  top: -70px;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.fail-text {
-  font-size: clamp(16px, 5vw, 22px);
-  font-family: NotoSansCJKTC;
-  text-align: center;
-  color: #737b82;
-  padding-top: 27.6cqh;
-}
-
-.cheer-up {
-  width: 50%;
-  aspect-ratio: 11/10;
-  background-image: url(./Images/cheerup.webp);
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
 .red-btn {
   position: absolute;
   bottom: calc(-6.9cqw + 6px);
@@ -530,6 +471,72 @@
 
 .yellow-btn > .icon-black-arrow::before {
   position: absolute;
+}
+
+.modal {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 2;
+}
+
+.fail-modal-container {
+  position: relative;
+  width: 85vw;
+  height: 94vw;
+  background-image: url(./Images/fail-modal-bg.webp);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  container-type: size;
+}
+
+.fail-back-btn {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.oops {
+  width: 50%;
+  aspect-ratio: 13/10;
+  background-image: url(./Images/oops.webp);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  position: absolute;
+  top: -70px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.fail-text {
+  font-size: clamp(16px, 5vw, 22px);
+  font-family: NotoSansCJKTC;
+  text-align: center;
+  color: #737b82;
+  padding-top: 27.6cqh;
+}
+
+.cheer-up {
+  width: 50%;
+  aspect-ratio: 11/10;
+  background-image: url(./Images/cheerup.webp);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .success-modal-container {
