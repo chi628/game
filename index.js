@@ -225,7 +225,6 @@ class myGame {
     this.ratio = this.devicePixelRatio / this.backingStoreRatio || 3
 
     this.updateScreen()
-
     this.initGame()
   }
 
@@ -509,6 +508,44 @@ class myGame {
     this.TREE_INIT_YCOORD = this.height * 0.84 - this.treeObject.height * 0.7
   }
 
+  updateObject() {
+    this.stairList = []
+    for (let i = 0; i < stairLevel.length; i++) {
+      const startX = Math.floor(this.width * 0.6)
+      const startY = this.height * 0.75
+
+      let frameIndex = 0
+      let width = 0
+      let height = 23
+
+      switch (stairLevel[i]) {
+        case 'l':
+          frameIndex = 0
+          width = 85
+          break
+        case 's':
+          frameIndex = 1
+          width = 60
+          break
+        case 'w':
+          frameIndex = 2
+          width = 85
+          break
+        default:
+          break
+      }
+
+      this.createStair({
+        x: startX + 120 * i,
+        y: startY - 50 * i,
+        width,
+        height,
+        currFrame: frameIndex,
+        state: 0,
+      })
+    }
+    this.TREE_INIT_YCOORD = this.height * 0.84 - this.treeObject.height * 0.7
+  }
   createStair({ x, y, width, height, currFrame, state }) {
     let special = new SpecialObject()
     special.x = x
@@ -1279,8 +1316,9 @@ const shoes550List = ['red', 'brown', 'black', 'gray', 'white']
 const shoes1906List = ['red', 'blue', 'gray', 'silver']
 
 window.addEventListener('resize', () => {
-  if (window[myGame]) {
+  if (window['myGame']) {
     window['myGame'].updateScreen()
+    window['myGame'].updateObject()
   }
 })
 
