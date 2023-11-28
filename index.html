@@ -4,6 +4,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
+    <link rel="preload" href="./Images/stroke-550.webp" as="image" />
+    <link rel="preload" href="./Images/stroke-1906.webp" as="image" />
+    <link rel="preload" href="./Images/text-550.webp" as="image" />
+    <link rel="preload" href="./Images/text-1906.webp" as="image" />
     <link rel="preload" href="./Images/550-red.webp" as="image" />
     <link rel="preload" href="./Images/550-brown.webp" as="image" />
     <link rel="preload" href="./Images/550-black.webp" as="image" />
@@ -32,17 +36,17 @@
             <div class="shoes-series">
               <div id="series-550" class="series-550 choose">
                 <div class="text-550"></div>
-                <span class="shoes-color">酷帥紅</span>
+                <span id="550-shoes-color" class="shoes-color">摩登紅</span>
               </div>
               <div id="series-1906" class="series-1906">
                 <div class="text-1906"></div>
-                <span class="shoes-color">酷帥紅</span>
+                <span id="1906-shoes-color" class="shoes-color">酷帥紅</span>
               </div>
             </div>
             <div class="demo-shoes-container">
               <div class="shoes-bg-cloud"></div>
               <div class="shoes-swiper swiper">
-                <div id="swiper-wrapper" class="swiper-wrapper"></div>
+                <div class="swiper-wrapper"></div>
                 <div id="swiper-pagination" class="swiper-pagination"></div>
               </div>
             </div>
@@ -52,7 +56,8 @@
           </button>
         </div>
       </div>
-      <canvas class="canvas-fit" id="my-canvas"></canvas>
+
+      <canvas id="my-canvas"></canvas>
 
       <div id="fail-modal" class="modal" style="display: none">
         <div class="fail-modal-container">
@@ -75,10 +80,10 @@
             <div class="title">恭喜翻越 <span id="stage-amount" class="amount">3</span> 個坎</div>
           </div>
           <div class="stage-container">
-            <div id="stage-list" class="stage-detail">
+            <div class="stage-detail">
               <div id="stage-name" class="stage-name"></div>
               <div class="swiper stage-swiper">
-                <div id="swiper-wrapper" class="swiper-wrapper"></div>
+                <div class="swiper-wrapper"></div>
                 <div class="swiper-button-prev"></div>
                 <div class="swiper-button-next"></div>
               </div>

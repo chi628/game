@@ -56,6 +56,45 @@ const stageList = [
   },
 ]
 
+const shoesList = [
+  {
+    id: '550-red',
+    name: '摩登紅',
+  },
+  {
+    id: '550-brown',
+    name: '復古棕',
+  },
+  {
+    id: '550-black',
+    name: '洗鍊黑',
+  },
+  {
+    id: '550-gray',
+    name: '混搭灰',
+  },
+  {
+    id: '550-white',
+    name: '奶油白',
+  },
+  {
+    id: '1906-red',
+    name: '個性紅',
+  },
+  {
+    id: '1906-blue',
+    name: '前衛藍',
+  },
+  {
+    id: '1906-gray',
+    name: '流線銀',
+  },
+  {
+    id: '1906-silver',
+    name: '耀月銀',
+  },
+]
+
 let shoeIndex = 0
 let stageIndex = 0
 
@@ -172,8 +211,6 @@ class myGame {
   TREE_INIT_YCOORD
 
   constructor() {
-    this.width = window.innerWidth
-    this.height = window.innerHeight
     this.canvas = document.getElementById('my-canvas')
     this.ctx = this.canvas.getContext('2d')
 
@@ -187,15 +224,21 @@ class myGame {
       1
     this.ratio = this.devicePixelRatio / this.backingStoreRatio || 3
 
+    this.updateScreen()
+
+    this.initGame()
+  }
+
+  updateScreen() {
+    this.width = window.innerWidth
+    this.height = window.innerHeight
+
     this.canvas.width = this.width * this.ratio
     this.canvas.height = this.height * this.ratio
 
     this.canvas.style.width = `${this.width}px`
     this.canvas.style.height = `${this.height}px`
-
     this.ctx.scale(this.ratio, this.ratio)
-
-    this.initGame()
   }
 
   touchStart(e) {
@@ -307,6 +350,8 @@ class myGame {
     this.propsShoes.LoadFrame('Images/550-red.webp')
     this.propsShoes.LoadFrame('Images/550-brown.webp')
     this.propsShoes.LoadFrame('Images/550-black.webp')
+    this.propsShoes.LoadFrame('Images/550-gray.webp')
+    this.propsShoes.LoadFrame('Images/550-white.webp')
     this.propsShoes.LoadFrame('Images/1906-red.webp')
     this.propsShoes.LoadFrame('Images/1906-blue.webp')
     this.propsShoes.LoadFrame('Images/1906-gray.webp')
@@ -1178,7 +1223,9 @@ class myGame {
     this.ctx.font = 'bold 13px ProximaNova'
     this.ctx.fillStyle = '#151415'
     this.ctx.textAlign = 'center'
-    this.ctx.fillText('550酷帥紅', Math.floor((this.propsBoxObject.width + 25) / 2), this.propsBoxObject.height)
+    let prefix = shoeIndex < 5 ? '550' : '1906R'
+    const shoesName = `${prefix}${shoesList[shoeIndex].name}`
+    this.ctx.fillText(shoesName, Math.floor((this.propsBoxObject.width + 25) / 2), this.propsBoxObject.height)
   }
 }
 
@@ -1191,12 +1238,20 @@ const shoeSwiper = new Swiper('.shoes-swiper', {
   on: {
     activeIndexChange: function (swiper) {
       shoeIndex = swiper.activeIndex + baseIndex
+      if (shoeIndex < 5) {
+        const shoesColor550 = document.getElementById('550-shoes-color')
+        if (shoesColor550) {
+          shoesColor550.innerHTML = shoesList[shoeIndex].name
+        }
+      } else {
+        const shoesColor1906 = document.getElementById('1906-shoes-color')
+        if (shoesColor1906) {
+          shoesColor1906.innerHTML = shoesList[shoeIndex].name
+        }
+      }
     },
     init: function (swiper) {
       shoeIndex = swiper.activeIndex
-    },
-    slidesLengthChange: function (swiper) {
-      console.log('length change', swiper)
     },
   },
 })
@@ -1220,8 +1275,14 @@ const stageSwiper = new Swiper('.stage-swiper', {
   },
 })
 
-const shoes550List = ['red', 'brown', 'black']
+const shoes550List = ['red', 'brown', 'black', 'gray', 'white']
 const shoes1906List = ['red', 'blue', 'gray', 'silver']
+
+window.addEventListener('resize', () => {
+  if (window[myGame]) {
+    window['myGame'].updateScreen()
+  }
+})
 
 document.addEventListener('DOMContentLoaded', () => {
   window['myGame'] = new myGame()
@@ -1246,7 +1307,14 @@ document.addEventListener('DOMContentLoaded', () => {
     shoeSwiper.appendSlide(shoes)
   }
 
+  const shoesColor550 = document.getElementById('550-shoes-color')
+
+  if (shoesColor550) {
+    shoesColor550.innerHTML = shoesList[shoeIndex].name
+  }
+
   const swiperPagination = document.getElementById('swiper-pagination')
+
   if (swiperPagination) {
     swiperPagination.classList.add('pagination-550')
   }
@@ -1264,10 +1332,12 @@ document.addEventListener('DOMContentLoaded', () => {
         shoes.classList.add(`${shoes550List[i]}-550`)
         shoeSwiper.appendSlide(shoes)
       }
+      swiperPagination.classList.remove('pagination-1906')
       swiperPagination.classList.add('pagination-550')
     })
     series1906.addEventListener('click', e => {
-      baseIndex = 3
+      baseIndex = 5
+      shoeIndex = baseIndex
       series1906.classList.add('choose')
       series550.classList.remove('choose')
       shoeSwiper.removeAllSlides()
@@ -1278,6 +1348,7 @@ document.addEventListener('DOMContentLoaded', () => {
         shoes.classList.add(`${shoes1906List[i]}-1906`)
         shoeSwiper.appendSlide(shoes)
       }
+      swiperPagination.classList.remove('pagination-550')
       swiperPagination.classList.add('pagination-1906')
     })
   }

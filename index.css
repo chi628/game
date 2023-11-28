@@ -7,6 +7,11 @@
   src: url('./Proxima-Nova-Xbold.woff') format('woff');
 }
 
+@font-face {
+  font-family: NotoSansCJKtc-Bold;
+  src: url('./NotoSansCJKtc-Bold.woff2') format('woff2');
+}
+
 .container {
   width: 100vw;
   height: 100dvh;
@@ -110,6 +115,7 @@
   color: #ffcb27;
   font-size: clamp(26px, 7vw, 30px);
   font-weight: 800;
+  font-family: 'ProximaNova-Extrabold';
   text-align: center;
   line-height: 2;
 }
@@ -135,9 +141,10 @@
 
 .shoes-series {
   width: 100%;
-  height: 15%;
+  height: 70px;
   display: flex;
   justify-content: center;
+  position: relative;
   z-index: 2;
 }
 
@@ -148,13 +155,13 @@
 }
 
 .shoes-series > :nth-child(n) > .shoes-color {
-  font-family: 'NotoSansCJKTC';
+  font-family: 'NotoSansCJKtc-Bold';
   font-size: clamp(16px, 4.5vw, 20px);
   font-weight: bold;
   color: #fff;
   display: none;
   position: absolute;
-  left: 45%;
+  left: 50%;
   bottom: 20%;
 }
 
@@ -169,31 +176,34 @@
   background-repeat: no-repeat;
   background-size: contain;
   background-position: center;
+  position: relative;
+  bottom: -10%;
 }
 
 .shoes-series > .series-550.choose {
   position: relative;
-  width: 81.5%;
+  width: 75%;
 }
 
 .shoes-series > .series-550.choose::after {
   content: '';
   position: absolute;
   right: 20px;
-  top: 15px;
-  bottom: 15px;
+  bottom: 20%;
   width: 2px;
+  height: 30px;
   background-color: #fff;
-  transform: rotate(30deg);
+  transform: rotate(45deg);
 }
 
 .shoes-series > .series-550.choose > .text-550 {
-  width: 45%;
+  width: 50%;
   aspect-ratio: 3/2;
   background-image: url(./Images/stroke-550.webp);
   background-repeat: no-repeat;
   background-size: contain;
   background-position: center;
+  bottom: 0;
 }
 
 .shoes-series > .series-550.choose > .shoes-color {
@@ -201,7 +211,7 @@
 }
 
 .shoes-series > .series-1906 {
-  width: 18.5%;
+  width: 25%;
 }
 
 .shoes-series > .series-1906 > .text-1906 {
@@ -211,7 +221,8 @@
   background-repeat: no-repeat;
   background-size: contain;
   background-position: center;
-  margin-left: 10%;
+  position: relative;
+  bottom: -10%;
 }
 
 .shoes-series > .series-1906.choose {
@@ -223,11 +234,11 @@
   content: '';
   position: absolute;
   left: 10px;
-  top: 15px;
-  bottom: 15px;
+  bottom: 20%;
   width: 2px;
+  height: 30px;
   background-color: #fff;
-  transform: rotate(30deg);
+  transform: rotate(45deg);
 }
 
 .shoes-series > .series-1906.choose > .text-1906 {
@@ -237,6 +248,8 @@
   background-repeat: no-repeat;
   background-size: contain;
   background-position: center;
+  bottom: 0;
+  left: 30px;
 }
 
 .shoes-series > #series-1906.choose > .shoes-color {
@@ -299,6 +312,12 @@
 .black-550 {
   background-image: url(./Images/550-black.webp);
 }
+.gray-550 {
+  background-image: url(./Images/550-gray.webp);
+}
+.white-550 {
+  background-image: url(./Images/550-white.webp);
+}
 
 .red-1906 {
   background-image: url(./Images/1906-red.webp);
@@ -334,6 +353,22 @@
 }
 
 .pagination-550 > :nth-child(3) {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  opacity: 1;
+  border: solid 2px #151415;
+  background-color: #fff;
+}
+.pagination-550 > :nth-child(4) {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  opacity: 1;
+  border: solid 2px #151415;
+  background-color: #fff;
+}
+.pagination-550 > :nth-child(5) {
   display: inline-block;
   width: 16px;
   height: 16px;
@@ -433,6 +468,7 @@
   box-shadow: 6px 6px 0 0 #ffcb27;
   color: #fff;
   font-size: clamp(20px, 5.6vw, 24px);
+  font-family: 'ProximaNova-Extrabold';
   font-weight: bold;
   display: inline-flex;
   justify-content: center;
@@ -462,6 +498,7 @@
   background-color: #ffcb27;
   box-shadow: 3px 3px 0 0 #fff;
   font-size: clamp(14px, 4vw, 18px);
+  font-family: 'ProximaNova';
   font-weight: bold;
   color: #151415;
 }
@@ -659,6 +696,7 @@
   position: relative;
   color: #cf0a2c;
   font-size: clamp(35px, 9vw, 40px);
+  font-family: 'NotoSansCJKtc-Bold';
   font-weight: bold;
   margin-top: clamp(20px, 6cqh, 30px);
 }
@@ -722,6 +760,7 @@
 
 .stage-container > .stage-detail > .stage-description {
   color: #737b82;
+  font-family: 'NotoSansCJKtc-Bold';
   font-size: clamp(16px, 4.6vw, 20px);
   font-weight: bold;
   text-align: center;
