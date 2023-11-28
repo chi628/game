@@ -362,7 +362,8 @@ class myGame {
       this.stageObject.LoadFrame('Images/jump_' + stageList[i].id + '.png')
     }
 
-    this.winBoard = new AnimatorObject(180, 90)
+    // this.winBoard = new AnimatorObject(180, 90)
+    this.winBoard = new AnimatorObject(270, 135)
     this.winBoard.LoadFrame('Images/win-board.webp')
 
     this.flagObject = new AnimatorObject(50, 83)
@@ -1079,7 +1080,19 @@ class myGame {
       this.stairList.forEach((o, i) => {
         if (this.stageOnStairIndex.includes(i)) {
           // 有障礙物的階梯一半的寬度在 player 的左邊
-          if (o.x + Math.floor(o.width / 2) <= this.playerObject.x) {
+          // if (o.x + Math.floor(o.width / 2) <= this.playerObject.x) {
+          //   if (!this.successStageIndex.includes(i)) {
+          //     this.successStageIndex.push(i)
+          //     this.isOverStage = true
+          //     this.overStageStairIndex = i
+          //     const index = this.stageOnStairIndex.findIndex(o => o === i)
+          //     if (index > -1) {
+          //       successStage.push(stageList[this.displayStagesIndex[index]])
+          //     }
+          //   }
+          // }
+
+          if (o.x + o.width < this.playerObject.x + 21) {
             if (!this.successStageIndex.includes(i)) {
               this.successStageIndex.push(i)
               this.isOverStage = true
@@ -1147,8 +1160,11 @@ class myGame {
     if (this.isOverStage) {
       // 障礙物所在的階梯
       const stageStair = this.stairList[this.overStageStairIndex]
-      this.winBoard.x = stageStair.x - Math.floor((this.winBoard.width - stageStair.width) / 2)
-      this.winBoard.y = stageStair.y - this.stageObject.height - this.winBoard.height
+      // this.winBoard.x = stageStair.x - Math.floor((this.winBoard.width - stageStair.width) / 2)
+      // this.winBoard.y = stageStair.y - this.stageObject.height - this.winBoard.height
+
+      this.winBoard.x = Math.floor((this.width - this.winBoard.width) / 2)
+      this.winBoard.y = this.height * 0.3
       this.drawWinBoard()
     }
   }
@@ -1198,12 +1214,12 @@ class myGame {
       this.winBoard.height
     )
 
-    this.ctx.font = 'bold 18px NotoSansCJKTC'
+    this.ctx.font = 'bold 26px NotoSansCJKTC'
     this.ctx.fillStyle = '#000'
     this.ctx.textAlign = 'center'
 
     const textXcoord = this.winBoard.x + Math.floor((this.winBoard.width - 15) / 2)
-    const textYcoord = this.winBoard.y + 55
+    const textYcoord = this.winBoard.y + 80
     const index = this.stageOnStairIndex.findIndex(i => i === this.overStageStairIndex)
     this.ctx.fillText(successStage[index].name, textXcoord, textYcoord)
     this.ctx.globalAlpha = 1
