@@ -12,87 +12,87 @@ const stageList = [
   {
     id: 'boss',
     name: '慣老闆',
-    description: '成功遠離 前途一片光明'
+    description: '成功遠離 前途一片光明',
   },
   {
     id: 'pig',
     name: '雷隊友',
-    description: '神隊友降臨 天天都有神救援'
+    description: '神隊友降臨 天天都有神救援',
   },
   {
     id: 'weasel',
     name: '犯小人',
-    description: '完美防守 逢凶化吉迎貴人'
+    description: '完美防守 逢凶化吉迎貴人',
   },
   {
     id: 'money',
     name: '荷包空空',
-    description: '年終翻倍 投資有賺無賠'
+    description: '年終翻倍 投資有賺無賠',
   },
   {
     id: 'invoice',
     name: '發票摃龜',
-    description: '有對有驚喜 張張中大獎'
+    description: '有對有驚喜 張張中大獎',
   },
   {
     id: 'goldfish',
     name: '忘東忘西金魚腦',
-    description: '進化金頭腦 耳聰目明記憶好'
+    description: '進化金頭腦 耳聰目明記憶好',
   },
   {
     id: 'ghost',
     name: '水逆',
-    description: '變身破關小天才 凡事不再怪水逆'
+    description: '變身破關小天才 凡事不再怪水逆',
   },
   {
     id: 'love',
     name: '爛桃花',
-    description: '單身轉角遇到愛 脫單好人好事多'
+    description: '單身轉角遇到愛 脫單好人好事多',
   },
   {
     id: 'clothes',
     name: '新衣服秒髒',
-    description: '打破莫非定律魔咒 衰神退散吧'
-  }
+    description: '打破莫非定律魔咒 衰神退散吧',
+  },
 ]
 
 const shoesList = [
   {
     id: '550-red',
-    name: '摩登紅'
+    name: '摩登紅',
   },
   {
     id: '550-brown',
-    name: '復古棕'
+    name: '復古棕',
   },
   {
     id: '550-black',
-    name: '洗鍊黑'
+    name: '洗鍊黑',
   },
   {
     id: '550-gray',
-    name: '混搭灰'
+    name: '混搭灰',
   },
   {
     id: '550-white',
-    name: '奶油白'
+    name: '奶油白',
   },
   {
     id: '1906-red',
-    name: '個性紅'
+    name: '個性紅',
   },
   {
     id: '1906-blue',
-    name: '前衛藍'
+    name: '前衛藍',
   },
   {
     id: '1906-gray',
-    name: '流線銀'
+    name: '流線銀',
   },
   {
     id: '1906-silver',
-    name: '耀月銀'
-  }
+    name: '耀月銀',
+  },
 ]
 
 let shoeIndex = 0
@@ -201,6 +201,7 @@ class myGame {
 
   fpsTestCount = 0
   playerOnStairIndex = -1 // player 站在哪一個階梯上
+  preStairIndex = -1 // player 所在的前一個階梯
   brokenWoodIndex = 0
   overStageStairIndex = -1 // 翻越障礙物所在的階梯 index
 
@@ -209,6 +210,7 @@ class myGame {
   reqAnim
 
   TREE_INIT_YCOORD
+  PLAYER_PADDING
 
   constructor() {
     this.canvas = document.getElementById('my-canvas')
@@ -224,11 +226,10 @@ class myGame {
       1
     this.ratio = this.devicePixelRatio / this.backingStoreRatio || 3
 
-    this.updateScreen()
-    this.initGame()
+    this.initScreen()
   }
 
-  updateScreen() {
+  initScreen() {
     this.width = window.innerWidth
     this.height = window.innerHeight
 
@@ -238,6 +239,8 @@ class myGame {
     this.canvas.style.width = `${this.width}px`
     this.canvas.style.height = `${this.height}px`
     this.ctx.scale(this.ratio, this.ratio)
+
+    this.initGame()
   }
 
   touchStart(e) {
@@ -301,11 +304,6 @@ class myGame {
     this.fpsTimer = 0
     this.fpscounter = 0
     this.currentfps = 0
-
-    this.createRandomStages()
-    this.initObject()
-
-    window.requestAnimationFrame(this.draw.bind(this))
   }
 
   loadImages() {
@@ -346,17 +344,26 @@ class myGame {
     this.propsBoxObject.LoadFrame('Images/props-box.webp')
 
     this.propsShoes = new Object(0, 0, 90, 40.3)
+    // 1197 × 537
     this.propsShoes.LoadFrame('Images/550-red.webp')
+    // 1203 × 537
     this.propsShoes.LoadFrame('Images/550-brown.webp')
+    // 1191 × 567
     this.propsShoes.LoadFrame('Images/550-black.webp')
+    // 1206 × 576
     this.propsShoes.LoadFrame('Images/550-gray.webp')
+    // 1200 × 624
     this.propsShoes.LoadFrame('Images/550-white.webp')
+    // 1188 × 549
     this.propsShoes.LoadFrame('Images/1906-red.webp')
+    // 1188 × 579
     this.propsShoes.LoadFrame('Images/1906-blue.webp')
+    // 1188 × 558
     this.propsShoes.LoadFrame('Images/1906-gray.webp')
+    // 1182 × 555
     this.propsShoes.LoadFrame('Images/1906-silver.webp')
 
-    this.stageObject = new Object(0, 0, 50, 50)
+    this.stageObject = new Object(0, 0, 85, 85)
     for (let i = 0; i < stageList.length; i++) {
       this.stageObject.LoadFrame('Images/jump_' + stageList[i].id + '.png')
     }
@@ -369,7 +376,7 @@ class myGame {
       this.flagObject.LoadFrame('Images/flag' + i + '.webp')
     }
 
-    this.playerObject = new AnimatorObject(70, 100)
+    this.playerObject = new AnimatorObject(100, 140)
     this.playerObject.LoadFrame('Images/standby0.webp')
     for (let i = 0; i < 12; i++) {
       this.playerObject.LoadFrame('Images/roll' + i + '.webp')
@@ -378,11 +385,11 @@ class myGame {
       this.playerObject.LoadFrame('Images/jumper' + i + '.webp')
     }
 
-    this.winPlayerObject = new AnimatorObject(70, 100)
+    this.winPlayerObject = new AnimatorObject(100, 140)
     this.winPlayerObject.LoadFrame('Images/win0.webp')
     this.winPlayerObject.LoadFrame('Images/win1.webp')
 
-    this.failPlayerObject = new AnimatorObject(70, 100)
+    this.failPlayerObject = new AnimatorObject(100, 140)
     for (let i = 0; i < 6; i++) {
       this.failPlayerObject.LoadFrame('Images/fail' + i + '.webp')
     }
@@ -401,12 +408,6 @@ class myGame {
     }
   }
 
-  async log() {
-    await new Promise((resolve) => {
-      setTimeout(resolve, 1500)
-    })
-  }
-
   initObject() {
     // 大朵雲
     for (let i = 0; i < 10; i++) {
@@ -415,7 +416,7 @@ class myGame {
         x: 350 * i + BIG_CLOUD_INIT_XCOORD,
         y: yCoord + Math.random(),
         width: this.bigCloudObject.width,
-        height: this.bigCloudObject.height
+        height: this.bigCloudObject.height,
       })
     }
     this.bigCloudObject.xSpeed = 1.6
@@ -427,7 +428,7 @@ class myGame {
         x: 200 * i + MID_CLOUD_INIT_XCOORD,
         y: yCoord + Math.random(),
         width: this.midCloudObject.width,
-        height: this.midCloudObject.height
+        height: this.midCloudObject.height,
       })
     }
     this.midCloudObject.xSpeed = 1.2
@@ -439,7 +440,7 @@ class myGame {
         x: 220 * i + MINI_CLOUD_INIT_XCOORD,
         y: yCoord + Math.random(),
         width: this.miniCloudObject.width,
-        height: this.miniCloudObject.height
+        height: this.miniCloudObject.height,
       })
     }
     this.miniCloudObject.xSpeed = 0.8
@@ -476,7 +477,6 @@ class myGame {
         width,
         height,
         currFrame: frameIndex,
-        state: 0
       })
     }
     this.stairObject.xSpeed = 5
@@ -485,8 +485,8 @@ class myGame {
     // 選擇的鞋
     for (let i = 0; i < this.shoeOnStairIndex.length; i++) {
       this.createPropsShoe({
-        width: 55,
-        height: 26
+        width: this.propsShoes.width,
+        height: this.propsShoes.height,
       })
     }
 
@@ -497,10 +497,11 @@ class myGame {
     this.failPlayerObject.SetAnimChange(18)
     this.brokenWood.SetAnimChange(4)
 
-    const playerInitXcoord = Math.floor(this.width * 0.6) - 70
+    const playerInitXcoord = Math.floor(this.width * 0.6) - this.playerObject.width
     const playerInitYCoord = this.height * 0.84 - this.playerObject.height
     this.playerObject.x = playerInitXcoord
     this.playerObject.y = playerInitYCoord
+    this.PLAYER_PADDING = this.playerObject.width * 0.3
 
     this.failPlayerObject.x = playerInitXcoord
     this.failPlayerObject.y = playerInitYCoord
@@ -541,12 +542,11 @@ class myGame {
         width,
         height,
         currFrame: frameIndex,
-        state: 0
       })
     }
     this.TREE_INIT_YCOORD = this.height * 0.84 - this.treeObject.height * 0.7
   }
-  createStair({ x, y, width, height, currFrame, state }) {
+  createStair({ x, y, width, height, currFrame }) {
     let special = new SpecialObject()
     special.x = x
     special.y = y
@@ -554,7 +554,7 @@ class myGame {
     special.height = height
     special.currFrame = currFrame
     special.alive = true
-    special.state = state // 0: 正常階梯, 1: 斷裂階梯
+    special.state = 0 // 0: 正常階梯, 1: 斷裂階梯
     this.stairList.push(special)
   }
 
@@ -571,8 +571,8 @@ class myGame {
 
   async initGame() {
     this.loadImages()
+    this.resetGame()
     this.createRandomStages()
-    // this.log()
     this.initObject()
     window.requestAnimationFrame(this.draw.bind(this))
   }
@@ -607,8 +607,6 @@ class myGame {
         this.treeObject.camera.x += 2
         this.treeObject.camera.y += 1.25
       }
-
-      console.log('camera', Math.floor(this.camera / 24))
 
       switch (Math.floor(this.camera / 24)) {
         case 0:
@@ -701,7 +699,6 @@ class myGame {
   }
 
   draw() {
-    console.log('draw')
     this.clearScreen()
 
     if (this.isGameOver) {
@@ -748,12 +745,12 @@ class myGame {
       this.drawBrokenWood()
     }
 
-    this.checkStageStatus()
     this.drawStages()
     this.drawShoes()
 
     this.updatePlayer()
 
+    this.checkStageStatus()
     if (this.isJumping && this.isStayOnWood) {
       if (this.playerObject.anim - 10 >= 5 && this.stairList[this.brokenWoodIndex].alive) {
         this.stairList[this.brokenWoodIndex].state = 1
@@ -816,9 +813,9 @@ class myGame {
   }
 
   checkBigClouds() {
-    const outOfBoundIndex = this.bigCloudList.findIndex((o) => o.x + o.width < 0)
+    const outOfBoundIndex = this.bigCloudList.findIndex(o => o.x + o.width < 0)
 
-    const lastCloudIndex = this.bigCloudList.findIndex((o) => o.x === Math.max(...this.bigCloudList.map((o) => o.x)))
+    const lastCloudIndex = this.bigCloudList.findIndex(o => o.x === Math.max(...this.bigCloudList.map(o => o.x)))
 
     if (lastCloudIndex > -1 && outOfBoundIndex > -1) {
       this.bigCloudList[outOfBoundIndex].x = this.bigCloudList[lastCloudIndex].x + 270
@@ -840,9 +837,9 @@ class myGame {
   }
 
   checkMidClouds() {
-    const outOfBoundIndex = this.midCloudList.findIndex((o) => o.x + o.width < 0)
+    const outOfBoundIndex = this.midCloudList.findIndex(o => o.x + o.width < 0)
 
-    const lastCloudIndex = this.midCloudList.findIndex((o) => o.x === Math.max(...this.midCloudList.map((o) => o.x)))
+    const lastCloudIndex = this.midCloudList.findIndex(o => o.x === Math.max(...this.midCloudList.map(o => o.x)))
 
     if (lastCloudIndex > -1 && outOfBoundIndex > -1) {
       this.midCloudList[outOfBoundIndex].x = this.midCloudList[lastCloudIndex].x + 200
@@ -864,9 +861,9 @@ class myGame {
   }
 
   checkMiniClouds() {
-    const outOfBoundIndex = this.miniCloudList.findIndex((o) => o.x + o.width < 0)
+    const outOfBoundIndex = this.miniCloudList.findIndex(o => o.x + o.width < 0)
 
-    const lastCloudIndex = this.miniCloudList.findIndex((o) => o.x === Math.max(...this.miniCloudList.map((o) => o.x)))
+    const lastCloudIndex = this.miniCloudList.findIndex(o => o.x === Math.max(...this.miniCloudList.map(o => o.x)))
 
     if (lastCloudIndex > -1 && outOfBoundIndex > -1) {
       this.miniCloudList[outOfBoundIndex].x = this.miniCloudList[lastCloudIndex].x + 220
@@ -1017,6 +1014,9 @@ class myGame {
   updatePlayer() {
     if (this.isDying) {
       this.failPlayerObject.currFrame = Math.floor(this.failPlayerObject.anim / 3)
+      if (this.stageOnStairIndex.includes(this.preStairIndex)) {
+        this.failPlayerObject.y = this.stairList[this.preStairIndex].y - this.failPlayerObject.height + 15
+      }
       this.drawFailPlayer()
     } else if (this.isWin) {
       this.winPlayerObject.currFrame = Math.floor(this.winPlayerObject.anim / 6)
@@ -1041,9 +1041,9 @@ class myGame {
           this.playerObject.currFrame += 1
         }
         if (this.playerObject.anim - 10 < Math.floor(this.playerObject.anim_change - 10) / 2) {
-          this.playerObject.y -= 5
+          this.playerObject.y -= 10
         } else {
-          this.playerObject.y += 5
+          this.playerObject.y += 10
         }
       }
       this.drawPlayer()
@@ -1081,19 +1081,20 @@ class myGame {
   }
 
   checkPlayerStair() {
-    this.stairList.forEach((o, i) => {
+    this.stairList.forEach((stair, i) => {
       if (this.shoeOnStairIndex.includes(i)) {
         if (
-          (o.x <= this.playerObject.x + 30 && o.x + o.width >= this.playerObject.x + 30) ||
-          (o.x <= this.playerObject.x + this.playerObject.width - 21 &&
-            o.x + o.width >= this.playerObject.x + this.playerObject.width - 21)
+          (stair.x <= this.playerObject.x + this.PLAYER_PADDING &&
+            stair.x + stair.width >= this.playerObject.x + this.PLAYER_PADDING) ||
+          (stair.x <= this.playerObject.x + this.playerObject.width - this.PLAYER_PADDING &&
+            stair.x + stair.width >= this.playerObject.x + this.playerObject.width - this.PLAYER_PADDING)
         ) {
           if (
-            this.playerObject.y + this.playerObject.height - 45 === o.y - this.stageObject.height - 20 ||
-            (this.playerObject.y + this.playerObject.height - 45 > o.y - this.stageObject.height &&
-              this.playerObject.y + this.playerObject.height - 45 <= o.y)
+            this.playerObject.y + this.playerObject.height - 45 === stair.y - this.stageObject.height - 20 ||
+            (this.playerObject.y + this.playerObject.height - 45 > stair.y - this.stageObject.height &&
+              this.playerObject.y + this.playerObject.height - 45 <= stair.y)
           ) {
-            const index = this.shoeOnStairIndex.findIndex((o) => o === i)
+            const index = this.shoeOnStairIndex.findIndex(o => o === i)
             if (index > -1) {
               if (this.propsShoeList[index].alive) {
                 this.playerObject.anim = 11
@@ -1113,14 +1114,14 @@ class myGame {
 
     if (this.playerObject.anim < this.playerObject.anim_change - 5) {
       // 還在跳躍中
-      this.stairList.forEach((o, i) => {
+      this.stairList.forEach((stair, i) => {
         if (this.stageOnStairIndex.includes(i)) {
-          if (o.x + o.width < this.playerObject.x + 21) {
+          if (stair.x + stair.width < this.playerObject.x + this.PLAYER_PADDING) {
             if (!this.successStageIndex.includes(i)) {
               this.successStageIndex.push(i)
               this.isOverStage = true
               this.overStageStairIndex = i
-              const index = this.stageOnStairIndex.findIndex((o) => o === i)
+              const index = this.stageOnStairIndex.findIndex(o => o === i)
               if (index > -1) {
                 successStage.push(stageList[this.displayStagesIndex[index]])
               }
@@ -1130,24 +1131,25 @@ class myGame {
       })
       return
     }
-    /**
-     * 因 player 的圖左右有留白邊，判斷玩家是否在階梯上x軸需要調整
-     * player 最左邊的x軸 > player x軸+30
-     * player 最右邊的x軸 > this.playerObject.x + this.playerObject.width - 21
-     */
+
     this.playerOnStairIndex = this.stairList.findIndex(
-      (stair) =>
-        (stair.x <= this.playerObject.x + 30 && stair.x + stair.width >= this.playerObject.x + 30) ||
-        (stair.x <= this.playerObject.x + this.playerObject.width - 21 &&
-          stair.x + stair.width >= this.playerObject.x + this.playerObject.width - 21)
+      stair =>
+        (stair.x <= this.playerObject.x + this.PLAYER_PADDING &&
+          stair.x + stair.width > this.playerObject.x + this.PLAYER_PADDING) ||
+        (stair.x <= this.playerObject.x + this.playerObject.width - this.PLAYER_PADDING &&
+          stair.x + stair.width >= this.playerObject.x + this.playerObject.width - this.PLAYER_PADDING)
     )
+
+    if (this.playerOnStairIndex > -1) {
+      this.preStairIndex = this.playerOnStairIndex
+    }
 
     // 第一個階梯的 x 起點在 player 寬度一半的左邊視為遊戲開始
     const isStartGame = this.playerObject.width / 2 + this.playerObject.x >= this.stairList[0].x
 
     if (this.playerOnStairIndex === -1) {
       // 在終點平台上
-      if (this.endPointObject.x + 100 <= this.playerObject.x + 30) {
+      if (this.endPointObject.x + 100 <= this.playerObject.x + this.PLAYER_PADDING) {
         this.isWin = true
       } else {
         // 如果遊戲已開始，playerOnStairIndex 是 -1 代表 fail
@@ -1189,8 +1191,8 @@ class myGame {
 
   drawStages() {
     for (let i = 0; i < this.stageOnStairIndex.length; i++) {
-      let width = this.stairList[this.stageOnStairIndex[i]].width
-      let height = width
+      let width = this.stageObject.width
+      let height = this.stageObject.height
 
       // 障礙物是慣老闆 > 調整尺寸
       if (this.displayStagesIndex[i] === 0) {
@@ -1200,11 +1202,7 @@ class myGame {
 
       const restSpace = this.stairList[this.stageOnStairIndex[i]].width - width
       const xCoord = this.stairList[this.stageOnStairIndex[i]].x + Math.floor(restSpace / 2)
-      let yCoord = this.stairList[this.stageOnStairIndex[i]].y - height + 3
-
-      if (this.displayStagesIndex[i] === 0) {
-        yCoord = this.stairList[this.stageOnStairIndex[i]].y - height + 20
-      }
+      let yCoord = this.stairList[this.stageOnStairIndex[i]].y - this.stageObject.height + 3
 
       this.ctx.drawImage(this.stageObject.frames[this.displayStagesIndex[i]], xCoord, yCoord, width, height)
     }
@@ -1242,7 +1240,7 @@ class myGame {
 
     const textXcoord = this.winBoard.x + Math.floor((this.winBoard.width - 15) / 2)
     const textYcoord = this.winBoard.y + 100
-    const index = this.stageOnStairIndex.findIndex((i) => i === this.overStageStairIndex)
+    const index = this.stageOnStairIndex.findIndex(i => i === this.overStageStairIndex)
 
     const stageIndex = this.displayStagesIndex[index]
     const stageXcoord = this.winBoard.x + 175
@@ -1277,7 +1275,7 @@ let baseIndex = 0
 const shoeSwiper = new Swiper('.shoes-swiper', {
   pagination: {
     el: '.swiper-pagination',
-    clickable: true
+    clickable: true,
   },
   on: {
     activeIndexChange: function (swiper) {
@@ -1296,14 +1294,14 @@ const shoeSwiper = new Swiper('.shoes-swiper', {
     },
     init: function (swiper) {
       shoeIndex = swiper.activeIndex
-    }
-  }
+    },
+  },
 })
 
 const stageSwiper = new Swiper('.stage-swiper', {
   navigation: {
     nextEl: '.swiper-button-next',
-    prevEl: '.swiper-button-prev'
+    prevEl: '.swiper-button-prev',
   },
   on: {
     activeIndexChange: function (swiper) {
@@ -1315,8 +1313,8 @@ const stageSwiper = new Swiper('.stage-swiper', {
     },
     init: function (swiper) {
       stageIndex = swiper.activeIndex
-    }
-  }
+    },
+  },
 })
 
 let preGame
@@ -1331,8 +1329,7 @@ const shoes1906List = ['red', 'blue', 'gray', 'silver']
 
 window.addEventListener('resize', () => {
   if (window['myGame']) {
-    window['myGame'].updateScreen()
-    window['myGame'].updateObject()
+    window['myGame'].initScreen()
   }
 })
 
@@ -1350,14 +1347,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   append550Shoes()
 
-  // for (let i = 0; i < shoes550List.length; i++) {
-  //   const shoes = document.createElement('div')
-  //   shoes.classList.add('swiper-slide')
-  //   shoes.classList.add('shoes-slide')
-  //   shoes.classList.add(`${shoes550List[i]}-550`)
-  //   shoeSwiper.appendSlide(shoes)
-  // }
-
   shoesColor550 = document.getElementById('550-shoes-color')
 
   if (shoesColor550) {
@@ -1365,7 +1354,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   if (series550 && series1906) {
-    series550.addEventListener('click', (e) => {
+    series550.addEventListener('click', e => {
       baseIndex = 0
       series550.classList.add('choose')
       series1906.classList.remove('choose')
@@ -1375,7 +1364,7 @@ document.addEventListener('DOMContentLoaded', () => {
       append550Shoes()
     })
 
-    series1906.addEventListener('click', (e) => {
+    series1906.addEventListener('click', e => {
       baseIndex = 5
       shoeIndex = baseIndex
       series550.classList.remove('choose')
@@ -1393,7 +1382,7 @@ document.addEventListener('DOMContentLoaded', () => {
     playAgainBtn.addEventListener('click', () => {
       document.getElementById('fail-modal').style.display = 'none'
       document.getElementById('pre-game').style.display = 'flex'
-      window['myGame'].resetGame()
+      window['myGame'].initScreen()
     })
   }
 })
