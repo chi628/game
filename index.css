@@ -14,6 +14,7 @@
 
 .container {
   width: 100vw;
+  /* max-width: 428px; */
   height: 100dvh;
   overflow: hidden;
 }
@@ -90,7 +91,7 @@
   position: absolute;
   left: -33vw;
   bottom: 0;
-  width: 25vw;
+  width: clamp(80px, 25vw, 106px);
   height: 2px;
   background-image: url('./Images/line_short.webp');
   background-repeat: no-repeat;
@@ -103,7 +104,7 @@
   position: absolute;
   right: -33vw;
   bottom: 0;
-  width: 25vw;
+  width: clamp(80px, 25vw, 106px);
   height: 2px;
   background-image: url('./Images/line_short.webp');
   background-repeat: no-repeat;
@@ -266,15 +267,15 @@
 }
 
 .shoes-bg-cloud {
-  width: 96vw;
-  height: 45.7vw;
+  width: clamp(307px, 96vw, 410px);
+  aspect-ratio: 2/1;
   position: absolute;
   top: 50%;
-  left: 2vw;
+  left: clamp(6px, 2vw, 9px);
   transform: translateY(-50%);
   background-image: url(./Images/pre-game-cloud.webp);
   background-repeat: no-repeat;
-  background-size: cover;
+  background-size: contain;
   background-position: center;
 }
 
@@ -318,19 +319,15 @@
 .white-550 {
   background-image: url(./Images/550-white.webp);
 }
-
 .red-1906 {
   background-image: url(./Images/1906-red.webp);
 }
-
 .blue-1906 {
   background-image: url(./Images/1906-blue.webp);
 }
-
 .gray-1906 {
   background-image: url(./Images/1906-gray.webp);
 }
-
 .silver-1906 {
   background-image: url(./Images/1906-silver.webp);
 }
@@ -351,14 +348,13 @@
   border: solid 2px #151415;
   background-color: #78564c;
 }
-
 .pagination-550 > :nth-child(3) {
   display: inline-block;
   width: 16px;
   height: 16px;
   opacity: 1;
   border: solid 2px #151415;
-  background-color: #fff;
+  background-color: #000000;
 }
 .pagination-550 > :nth-child(4) {
   display: inline-block;
@@ -366,7 +362,7 @@
   height: 16px;
   opacity: 1;
   border: solid 2px #151415;
-  background-color: #fff;
+  background-color: #929290;
 }
 .pagination-550 > :nth-child(5) {
   display: inline-block;
@@ -374,7 +370,7 @@
   height: 16px;
   opacity: 1;
   border: solid 2px #151415;
-  background-color: #fff;
+  background-color: #fffaed;
 }
 
 .pagination-1906 > :nth-child(1) {
@@ -393,7 +389,6 @@
   border: solid 2px #151415;
   background-color: #0a5d89;
 }
-
 .pagination-1906 > :nth-child(3) {
   display: inline-block;
   width: 16px;
@@ -402,7 +397,6 @@
   border: solid 2px #151415;
   background-color: #919191;
 }
-
 .pagination-1906 > :nth-child(4) {
   display: inline-block;
   width: 16px;
@@ -460,8 +454,8 @@
   bottom: calc(-6.9cqw + 6px);
   left: 50%;
   transform: translateX(-50%);
-  width: 64cqw;
-  height: 13.8cqw;
+  width: clamp(175px, 64cqw, 233px);
+  height: clamp(37.5px, 13.8cqw, 50px);
   border-radius: 35px;
   background-color: #cf0a2c;
   border: 2.5px solid #000000;
@@ -530,7 +524,7 @@
 
 .fail-modal-container {
   position: relative;
-  width: 85vw;
+  width: clamp(270px, 85vw, 365px);
   height: 94vw;
   background-image: url(./Images/fail-modal-bg.webp);
   background-size: contain;
