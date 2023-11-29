@@ -289,6 +289,7 @@ class myGame {
     this.ctxAlpha = 0.5
 
     this.brokenWoodIndex = 0
+    this.preStairIndex = -1
     this.playerOnStairIndex = -1
     this.overStageStairIndex = -1
 
@@ -471,14 +472,14 @@ class myGame {
       }
 
       this.createStair({
-        x: startX + 120 * i,
+        x: startX + 150 * i,
         y: startY - 50 * i,
         width,
         height,
         currFrame: frameIndex,
       })
     }
-    this.stairObject.xSpeed = 5
+    this.stairObject.xSpeed = 7
     this.stairObject.ySpeed = 2
 
     // 選擇的鞋
@@ -500,7 +501,7 @@ class myGame {
     const playerInitYCoord = this.height * 0.84 - this.playerObject.height
     this.playerObject.x = playerInitXcoord
     this.playerObject.y = playerInitYCoord
-    this.PLAYER_PADDING = this.playerObject.width * 0.3
+    this.PLAYER_PADDING = this.playerObject.width * 0.25
 
     this.failPlayerObject.x = playerInitXcoord
     this.failPlayerObject.y = playerInitYCoord
@@ -545,6 +546,7 @@ class myGame {
     }
     this.TREE_INIT_YCOORD = this.height * 0.84 - this.treeObject.height * 0.7
   }
+
   createStair({ x, y, width, height, currFrame }) {
     let special = new SpecialObject()
     special.x = x
@@ -584,7 +586,6 @@ class myGame {
     this.fpscounter += 1
     let delta = (new Date().getTime() - this.lastCalledTime.getTime()) / 1000
     if (delta > 1) {
-      console.log('fpsTestCount', this.fpscounter)
       this.fpsTimer += 1
       this.fpscounter = 0
       this.lastCalledTime = new Date()
@@ -1083,17 +1084,24 @@ class myGame {
   }
 
   checkPlayerStair() {
-    this.stairList.forEach((stair, i) => {
-      if (this.shoeOnStairIndex.includes(i)) {
-        if (
-          (stair.x <= this.playerObject.x + this.PLAYER_PADDING &&
-            stair.x + stair.width >= this.playerObject.x + this.PLAYER_PADDING) ||
-          (stair.x <= this.playerObject.x + this.playerObject.width - this.PLAYER_PADDING &&
-            stair.x + stair.width >= this.playerObject.x + this.playerObject.width - this.PLAYER_PADDING)
-        ) {
+    const isStartGame =
+      this.playerObject.x + this.playerObject.width - this.PLAYER_PADDING - this.playerObject.width * 0.2 >=
+      this.stairList[0].x
+
+    this.playerOnStairIndex = this.stairList.findIndex((stair, i) => {
+      if (
+        (stair.x <= this.playerObject.x + this.PLAYER_PADDING &&
+          stair.x + stair.width >= this.playerObject.x + this.PLAYER_PADDING + this.playerObject.width * 0.15) ||
+        (stair.x <= this.playerObject.x + this.playerObject.width - this.PLAYER_PADDING &&
+          stair.x + stair.width >= this.playerObject.x + this.playerObject.width - this.PLAYER_PADDING)
+      ) {
+        if (this.playerObject.y + this.playerObject.height - 5 > stair.y) {
+          this.playerObject.anim = 0
+        }
+        if (this.shoeOnStairIndex.includes(i)) {
           if (
-            this.playerObject.y + this.playerObject.height - 45 === stair.y - this.stageObject.height - 20 ||
-            (this.playerObject.y + this.playerObject.height - 45 > stair.y - this.stageObject.height &&
+            this.playerObject.y + this.playerObject.height - 45 === stair.y - this.propsShoes.height - 20 ||
+            (this.playerObject.y + this.playerObject.height - 45 > stair.y - this.propsShoes.height &&
               this.playerObject.y + this.playerObject.height - 45 <= stair.y)
           ) {
             const index = this.shoeOnStairIndex.findIndex(o => o === i)
@@ -1111,75 +1119,68 @@ class myGame {
             }
           }
         }
+        return true
       }
     })
-
-    if (this.playerObject.anim < this.playerObject.anim_change - 10) {
-      // 還在跳躍中
-      this.stairList.forEach((stair, i) => {
-        if (this.stageOnStairIndex.includes(i)) {
-          if (stair.x + stair.width < this.playerObject.x + this.PLAYER_PADDING) {
-            if (!this.successStageIndex.includes(i)) {
-              this.successStageIndex.push(i)
-              this.isOverStage = true
-              this.overStageStairIndex = i
-              const index = this.stageOnStairIndex.findIndex(o => o === i)
-              if (index > -1) {
-                successStage.push(stageList[this.displayStagesIndex[index]])
-              }
-            }
-          }
-        }
-      })
-      return
-    }
-
-    this.playerOnStairIndex = this.stairList.findIndex(
-      stair =>
-        (stair.x <= this.playerObject.x + this.PLAYER_PADDING &&
-          stair.x + stair.width > this.playerObject.x + this.PLAYER_PADDING) ||
-        (stair.x <= this.playerObject.x + this.playerObject.width - this.PLAYER_PADDING &&
-          stair.x + stair.width >= this.playerObject.x + this.playerObject.width - this.PLAYER_PADDING)
-    )
 
     if (this.playerOnStairIndex > -1) {
       this.preStairIndex = this.playerOnStairIndex
     }
 
-    // 第一個階梯的 x 起點在 player 寬度一半的左邊視為遊戲開始
-    const isStartGame = this.playerObject.width / 2 + this.playerObject.x >= this.stairList[0].x
-
-    if (this.playerOnStairIndex === -1) {
-      // 在終點平台上
-      if (this.endPointObject.x + 100 <= this.playerObject.x + this.PLAYER_PADDING) {
-        this.isWin = true
+    if (this.playerOnStairIndex === -1 && isStartGame) {
+      if (this.playerObject.y + this.playerObject.height - 5 < this.stairList[this.preStairIndex].y) {
       } else {
-        // 如果遊戲已開始，playerOnStairIndex 是 -1 代表 fail
-        if (isStartGame) {
+        if (this.endPointObject.x + 100 <= this.playerObject.x + this.PLAYER_PADDING) {
+          this.isWin = true
+        } else {
+          this.isDying = true
+        }
+      }
+    }
+    if (this.stageOnStairIndex.includes(this.preStairIndex)) {
+      if (
+        this.playerObject.x + this.PLAYER_PADDING >
+        this.stairList[this.preStairIndex].x + this.stairList[this.preStairIndex].width
+      ) {
+        if (!this.successStageIndex.includes(this.preStairIndex)) {
+          this.successStageIndex.push(this.preStairIndex)
+          this.isOverStage = true
+          this.overStageStairIndex = this.preStairIndex
+          const index = this.stageOnStairIndex.findIndex(o => o === this.preStairIndex)
+          if (index > -1) {
+            successStage.push(stageList[this.displayStagesIndex[index]])
+          }
+        }
+      } else {
+        if (
+          this.playerObject.y + this.playerObject.height - 5 >=
+          this.stairList[this.preStairIndex].y - this.stageObject.height
+        ) {
           this.isDying = true
         }
       }
     }
 
-    // 如果 playerOnStairIndex 有障礙物，代表 fail
-    if (this.stageOnStairIndex.includes(this.playerOnStairIndex)) {
-      this.isDying = true
-    }
-
-    // 是不是在木頭階梯上
+    // // 是不是在木頭階梯上
     if (stairLevel[this.playerOnStairIndex] === 'w') {
-      if (this.stairList[this.playerOnStairIndex].state === 0) {
-        this.playerObject.anim = 0
-        this.isStayOnWood = true
-        this.brokenWoodIndex = this.playerOnStairIndex
+      if (this.playerObject.y + this.playerObject.height - 5 < this.stairList[this.preStairIndex].y) {
       } else {
-        this.isDying = !this.isPlayingBrokenWood
+        if (this.stairList[this.playerOnStairIndex].state === 0) {
+          this.playerObject.anim = 0
+          this.isStayOnWood = true
+          this.brokenWoodIndex = this.playerOnStairIndex
+        } else {
+          this.isDying = !this.isPlayingBrokenWood
+        }
       }
     }
 
-    if (!this.shoeOnStairIndex.includes(this.playerOnStairIndex)) {
-      this.isJumpOnShoe = false
-      this.playerObject.SetAnimChange(70)
+    if (!this.shoeOnStairIndex.includes(this.playerOnStairIndex) && this.playerOnStairIndex > -1) {
+      if (this.playerObject.y + this.playerObject.height - 5 < this.stairList[this.preStairIndex].y) {
+      } else {
+        this.isJumpOnShoe = false
+        this.playerObject.SetAnimChange(70)
+      }
     }
   }
 
