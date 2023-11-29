@@ -1040,7 +1040,10 @@ class myGame {
         } else {
           this.playerObject.currFrame += 1
         }
-        if (this.playerObject.anim - 10 < Math.floor(this.playerObject.anim_change - 10) / 2) {
+        if (
+          this.playerObject.anim - 10 < Math.floor(this.playerObject.anim_change - 10) / 2 &&
+          this.playerObject.y > 2
+        ) {
           this.playerObject.y -= 10
         } else {
           this.playerObject.y += 10
