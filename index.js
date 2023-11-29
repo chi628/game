@@ -1100,9 +1100,8 @@ class myGame {
         }
         if (this.shoeOnStairIndex.includes(i)) {
           if (
-            this.playerObject.y + this.playerObject.height - 45 === stair.y - this.propsShoes.height - 20 ||
-            (this.playerObject.y + this.playerObject.height - 45 > stair.y - this.propsShoes.height &&
-              this.playerObject.y + this.playerObject.height - 45 <= stair.y)
+            this.playerObject.y + this.playerObject.height - 5 >= stair.y - this.propsShoes.height &&
+            this.playerObject.y + this.playerObject.height - 5 <= stair.y
           ) {
             const index = this.shoeOnStairIndex.findIndex(o => o === i)
             if (index > -1) {
