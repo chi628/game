@@ -1127,10 +1127,11 @@ class myGame {
     }
 
     if (this.playerOnStairIndex === -1 && isStartGame) {
-      if (this.playerObject.y + this.playerObject.height - 5 < this.stairList[this.preStairIndex].y) {
+      if (this.endPointObject.x + 100 <= this.playerObject.x + this.PLAYER_PADDING) {
+        console.log('win')
+        this.isWin = true
       } else {
-        if (this.endPointObject.x + 100 <= this.playerObject.x + this.PLAYER_PADDING) {
-          this.isWin = true
+        if (this.playerObject.y + this.playerObject.height - 5 < this.stairList[this.preStairIndex].y) {
         } else {
           this.isDying = true
         }
