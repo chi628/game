@@ -12,87 +12,87 @@ const stageList = [
   {
     id: 'boss',
     name: '慣老闆',
-    description: '成功遠離 前途一片光明',
+    description: '成功遠離 前途一片光明'
   },
   {
     id: 'pig',
     name: '雷隊友',
-    description: '神隊友降臨 天天都有神救援',
+    description: '神隊友降臨 天天都有神救援'
   },
   {
     id: 'weasel',
     name: '犯小人',
-    description: '完美防守 逢凶化吉迎貴人',
+    description: '完美防守 逢凶化吉迎貴人'
   },
   {
     id: 'money',
     name: '荷包空空',
-    description: '年終翻倍 投資有賺無賠',
+    description: '年終翻倍 投資有賺無賠'
   },
   {
     id: 'invoice',
     name: '發票摃龜',
-    description: '有對有驚喜 張張中大獎',
+    description: '有對有驚喜 張張中大獎'
   },
   {
     id: 'goldfish',
     name: '忘東忘西金魚腦',
-    description: '進化金頭腦 耳聰目明記憶好',
+    description: '進化金頭腦 耳聰目明記憶好'
   },
   {
     id: 'ghost',
     name: '水逆',
-    description: '變身破關小天才 凡事不再怪水逆',
+    description: '變身破關小天才 凡事不再怪水逆'
   },
   {
     id: 'love',
     name: '爛桃花',
-    description: '單身轉角遇到愛 脫單好人好事多',
+    description: '單身轉角遇到愛 脫單好人好事多'
   },
   {
     id: 'clothes',
     name: '新衣服秒髒',
-    description: '打破莫非定律魔咒 衰神退散吧',
-  },
+    description: '打破莫非定律魔咒 衰神退散吧'
+  }
 ]
 
 const shoesList = [
   {
     id: '550-red',
-    name: '摩登紅',
+    name: '摩登紅'
   },
   {
     id: '550-brown',
-    name: '復古棕',
+    name: '復古棕'
   },
   {
     id: '550-black',
-    name: '洗鍊黑',
+    name: '洗鍊黑'
   },
   {
     id: '550-gray',
-    name: '混搭灰',
+    name: '混搭灰'
   },
   {
     id: '550-white',
-    name: '奶油白',
+    name: '奶油白'
   },
   {
     id: '1906-red',
-    name: '個性紅',
+    name: '個性紅'
   },
   {
     id: '1906-blue',
-    name: '前衛藍',
+    name: '前衛藍'
   },
   {
     id: '1906-gray',
-    name: '流線銀',
+    name: '流線銀'
   },
   {
     id: '1906-silver',
-    name: '耀月銀',
-  },
+    name: '耀月銀'
+  }
 ]
 
 let shoeIndex = 0
@@ -361,7 +361,7 @@ class myGame {
       this.stageObject.LoadFrame('Images/jump_' + stageList[i].id + '.png')
     }
 
-    this.winBoard = new AnimatorObject(180, 90)
+    this.winBoard = new AnimatorObject(270, 135)
     this.winBoard.LoadFrame('Images/win-board.webp')
 
     this.flagObject = new AnimatorObject(50, 83)
@@ -402,7 +402,7 @@ class myGame {
   }
 
   async log() {
-    await new Promise(resolve => {
+    await new Promise((resolve) => {
       setTimeout(resolve, 1500)
     })
   }
@@ -415,7 +415,7 @@ class myGame {
         x: 350 * i + BIG_CLOUD_INIT_XCOORD,
         y: yCoord + Math.random(),
         width: this.bigCloudObject.width,
-        height: this.bigCloudObject.height,
+        height: this.bigCloudObject.height
       })
     }
     this.bigCloudObject.xSpeed = 1.6
@@ -427,7 +427,7 @@ class myGame {
         x: 200 * i + MID_CLOUD_INIT_XCOORD,
         y: yCoord + Math.random(),
         width: this.midCloudObject.width,
-        height: this.midCloudObject.height,
+        height: this.midCloudObject.height
       })
     }
     this.midCloudObject.xSpeed = 1.2
@@ -439,7 +439,7 @@ class myGame {
         x: 220 * i + MINI_CLOUD_INIT_XCOORD,
         y: yCoord + Math.random(),
         width: this.miniCloudObject.width,
-        height: this.miniCloudObject.height,
+        height: this.miniCloudObject.height
       })
     }
     this.miniCloudObject.xSpeed = 0.8
@@ -476,7 +476,7 @@ class myGame {
         width,
         height,
         currFrame: frameIndex,
-        state: 0,
+        state: 0
       })
     }
     this.stairObject.xSpeed = 5
@@ -486,7 +486,7 @@ class myGame {
     for (let i = 0; i < this.shoeOnStairIndex.length; i++) {
       this.createPropsShoe({
         width: 55,
-        height: 26,
+        height: 26
       })
     }
 
@@ -541,7 +541,7 @@ class myGame {
         width,
         height,
         currFrame: frameIndex,
-        state: 0,
+        state: 0
       })
     }
     this.TREE_INIT_YCOORD = this.height * 0.84 - this.treeObject.height * 0.7
@@ -816,9 +816,9 @@ class myGame {
   }
 
   checkBigClouds() {
-    const outOfBoundIndex = this.bigCloudList.findIndex(o => o.x + o.width < 0)
+    const outOfBoundIndex = this.bigCloudList.findIndex((o) => o.x + o.width < 0)
 
-    const lastCloudIndex = this.bigCloudList.findIndex(o => o.x === Math.max(...this.bigCloudList.map(o => o.x)))
+    const lastCloudIndex = this.bigCloudList.findIndex((o) => o.x === Math.max(...this.bigCloudList.map((o) => o.x)))
 
     if (lastCloudIndex > -1 && outOfBoundIndex > -1) {
       this.bigCloudList[outOfBoundIndex].x = this.bigCloudList[lastCloudIndex].x + 270
@@ -840,9 +840,9 @@ class myGame {
   }
 
   checkMidClouds() {
-    const outOfBoundIndex = this.midCloudList.findIndex(o => o.x + o.width < 0)
+    const outOfBoundIndex = this.midCloudList.findIndex((o) => o.x + o.width < 0)
 
-    const lastCloudIndex = this.midCloudList.findIndex(o => o.x === Math.max(...this.midCloudList.map(o => o.x)))
+    const lastCloudIndex = this.midCloudList.findIndex((o) => o.x === Math.max(...this.midCloudList.map((o) => o.x)))
 
     if (lastCloudIndex > -1 && outOfBoundIndex > -1) {
       this.midCloudList[outOfBoundIndex].x = this.midCloudList[lastCloudIndex].x + 200
@@ -864,9 +864,9 @@ class myGame {
   }
 
   checkMiniClouds() {
-    const outOfBoundIndex = this.miniCloudList.findIndex(o => o.x + o.width < 0)
+    const outOfBoundIndex = this.miniCloudList.findIndex((o) => o.x + o.width < 0)
 
-    const lastCloudIndex = this.miniCloudList.findIndex(o => o.x === Math.max(...this.miniCloudList.map(o => o.x)))
+    const lastCloudIndex = this.miniCloudList.findIndex((o) => o.x === Math.max(...this.miniCloudList.map((o) => o.x)))
 
     if (lastCloudIndex > -1 && outOfBoundIndex > -1) {
       this.miniCloudList[outOfBoundIndex].x = this.miniCloudList[lastCloudIndex].x + 220
@@ -1093,7 +1093,7 @@ class myGame {
             (this.playerObject.y + this.playerObject.height - 45 > o.y - this.stageObject.height &&
               this.playerObject.y + this.playerObject.height - 45 <= o.y)
           ) {
-            const index = this.shoeOnStairIndex.findIndex(o => o === i)
+            const index = this.shoeOnStairIndex.findIndex((o) => o === i)
             if (index > -1) {
               if (this.propsShoeList[index].alive) {
                 this.playerObject.anim = 11
@@ -1115,13 +1115,12 @@ class myGame {
       // 還在跳躍中
       this.stairList.forEach((o, i) => {
         if (this.stageOnStairIndex.includes(i)) {
-          // 有障礙物的階梯一半的寬度在 player 的左邊
-          if (o.x + Math.floor(o.width / 2) <= this.playerObject.x) {
+          if (o.x + o.width < this.playerObject.x + 21) {
             if (!this.successStageIndex.includes(i)) {
               this.successStageIndex.push(i)
               this.isOverStage = true
               this.overStageStairIndex = i
-              const index = this.stageOnStairIndex.findIndex(o => o === i)
+              const index = this.stageOnStairIndex.findIndex((o) => o === i)
               if (index > -1) {
                 successStage.push(stageList[this.displayStagesIndex[index]])
               }
@@ -1137,7 +1136,7 @@ class myGame {
      * player 最右邊的x軸 > this.playerObject.x + this.playerObject.width - 21
      */
     this.playerOnStairIndex = this.stairList.findIndex(
-      stair =>
+      (stair) =>
         (stair.x <= this.playerObject.x + 30 && stair.x + stair.width >= this.playerObject.x + 30) ||
         (stair.x <= this.playerObject.x + this.playerObject.width - 21 &&
           stair.x + stair.width >= this.playerObject.x + this.playerObject.width - 21)
@@ -1182,18 +1181,16 @@ class myGame {
 
   checkStageStatus() {
     if (this.isOverStage) {
-      // 障礙物所在的階梯
-      const stageStair = this.stairList[this.overStageStairIndex]
-      this.winBoard.x = stageStair.x - Math.floor((this.winBoard.width - stageStair.width) / 2)
-      this.winBoard.y = stageStair.y - this.stageObject.height - this.winBoard.height
+      this.winBoard.x = Math.floor((this.width - this.winBoard.width) / 2)
+      this.winBoard.y = this.height * 0.16
       this.drawWinBoard()
     }
   }
 
   drawStages() {
     for (let i = 0; i < this.stageOnStairIndex.length; i++) {
-      let width = this.stageObject.width
-      let height = this.stageObject.height
+      let width = this.stairList[this.stageOnStairIndex[i]].width
+      let height = width
 
       // 障礙物是慣老闆 > 調整尺寸
       if (this.displayStagesIndex[i] === 0) {
@@ -1203,7 +1200,11 @@ class myGame {
 
       const restSpace = this.stairList[this.stageOnStairIndex[i]].width - width
       const xCoord = this.stairList[this.stageOnStairIndex[i]].x + Math.floor(restSpace / 2)
-      const yCoord = this.stairList[this.stageOnStairIndex[i]].y - this.stageObject.height + 3
+      let yCoord = this.stairList[this.stageOnStairIndex[i]].y - height + 3
+
+      if (this.displayStagesIndex[i] === 0) {
+        yCoord = this.stairList[this.stageOnStairIndex[i]].y - height + 20
+      }
 
       this.ctx.drawImage(this.stageObject.frames[this.displayStagesIndex[i]], xCoord, yCoord, width, height)
     }
@@ -1235,13 +1236,19 @@ class myGame {
       this.winBoard.height
     )
 
-    this.ctx.font = 'bold 18px NotoSansCJKTC'
+    this.ctx.font = 'bold 22px NotoSansCJKTC'
     this.ctx.fillStyle = '#000'
     this.ctx.textAlign = 'center'
 
     const textXcoord = this.winBoard.x + Math.floor((this.winBoard.width - 15) / 2)
-    const textYcoord = this.winBoard.y + 55
-    const index = this.stageOnStairIndex.findIndex(i => i === this.overStageStairIndex)
+    const textYcoord = this.winBoard.y + 100
+    const index = this.stageOnStairIndex.findIndex((i) => i === this.overStageStairIndex)
+
+    const stageIndex = this.displayStagesIndex[index]
+    const stageXcoord = this.winBoard.x + 175
+    const stageYcoord = this.winBoard.y + 15
+    this.ctx.drawImage(this.stageObject.frames[stageIndex], stageXcoord, stageYcoord, 50, 50)
+
     this.ctx.fillText(successStage[index].name, textXcoord, textYcoord)
     this.ctx.globalAlpha = 1
   }
@@ -1270,7 +1277,7 @@ let baseIndex = 0
 const shoeSwiper = new Swiper('.shoes-swiper', {
   pagination: {
     el: '.swiper-pagination',
-    clickable: true,
+    clickable: true
   },
   on: {
     activeIndexChange: function (swiper) {
@@ -1289,14 +1296,14 @@ const shoeSwiper = new Swiper('.shoes-swiper', {
     },
     init: function (swiper) {
       shoeIndex = swiper.activeIndex
-    },
-  },
+    }
+  }
 })
 
 const stageSwiper = new Swiper('.stage-swiper', {
   navigation: {
     nextEl: '.swiper-button-next',
-    prevEl: '.swiper-button-prev',
+    prevEl: '.swiper-button-prev'
   },
   on: {
     activeIndexChange: function (swiper) {
@@ -1308,9 +1315,16 @@ const stageSwiper = new Swiper('.stage-swiper', {
     },
     init: function (swiper) {
       stageIndex = swiper.activeIndex
-    },
-  },
+    }
+  }
 })
+
+let preGame
+let preGameBtn
+let series550
+let series1906
+let shoesColor550
+let swiperPagination
 
 const shoes550List = ['red', 'brown', 'black', 'gray', 'white']
 const shoes1906List = ['red', 'blue', 'gray', 'silver']
@@ -1324,19 +1338,76 @@ window.addEventListener('resize', () => {
 
 document.addEventListener('DOMContentLoaded', () => {
   window['myGame'] = new myGame()
-  const preGame = document.getElementById('pre-game')
-  const preGameBtn = document.getElementById('pre-game-btn')
 
+  preGame = document.getElementById('pre-game')
+  preGameBtn = document.getElementById('pre-game-btn')
+
+  series550 = document.getElementById('series-550')
+  series1906 = document.getElementById('series-1906')
+  swiperPagination = document.getElementById('swiper-pagination')
+
+  startGame()
+
+  append550Shoes()
+
+  // for (let i = 0; i < shoes550List.length; i++) {
+  //   const shoes = document.createElement('div')
+  //   shoes.classList.add('swiper-slide')
+  //   shoes.classList.add('shoes-slide')
+  //   shoes.classList.add(`${shoes550List[i]}-550`)
+  //   shoeSwiper.appendSlide(shoes)
+  // }
+
+  shoesColor550 = document.getElementById('550-shoes-color')
+
+  if (shoesColor550) {
+    shoesColor550.innerHTML = shoesList[shoeIndex].name
+  }
+
+  if (series550 && series1906) {
+    series550.addEventListener('click', (e) => {
+      baseIndex = 0
+      series550.classList.add('choose')
+      series1906.classList.remove('choose')
+      swiperPagination.classList.remove('pagination-1906')
+      shoeSwiper.removeAllSlides()
+
+      append550Shoes()
+    })
+
+    series1906.addEventListener('click', (e) => {
+      baseIndex = 5
+      shoeIndex = baseIndex
+      series550.classList.remove('choose')
+      series1906.classList.add('choose')
+      swiperPagination.classList.remove('pagination-550')
+      shoeSwiper.removeAllSlides()
+
+      append1906Shoes()
+    })
+  }
+
+  const playAgainBtn = document.getElementById('play-again')
+
+  if (playAgainBtn) {
+    playAgainBtn.addEventListener('click', () => {
+      document.getElementById('fail-modal').style.display = 'none'
+      document.getElementById('pre-game').style.display = 'flex'
+      window['myGame'].resetGame()
+    })
+  }
+})
+
+function startGame() {
   if (preGameBtn && preGame) {
     preGameBtn.addEventListener('click', () => {
       preGame.style.display = 'none'
       window['myGame'].startGame()
     })
   }
+}
 
-  const series550 = document.getElementById('series-550')
-  const series1906 = document.getElementById('series-1906')
-
+function append550Shoes() {
   for (let i = 0; i < shoes550List.length; i++) {
     const shoes = document.createElement('div')
     shoes.classList.add('swiper-slide')
@@ -1344,60 +1415,24 @@ document.addEventListener('DOMContentLoaded', () => {
     shoes.classList.add(`${shoes550List[i]}-550`)
     shoeSwiper.appendSlide(shoes)
   }
-
-  const shoesColor550 = document.getElementById('550-shoes-color')
-
-  if (shoesColor550) {
-    shoesColor550.innerHTML = shoesList[shoeIndex].name
-  }
-
-  const swiperPagination = document.getElementById('swiper-pagination')
-
   if (swiperPagination) {
     swiperPagination.classList.add('pagination-550')
   }
+}
 
-  if (series550 && series1906) {
-    series550.addEventListener('click', e => {
-      baseIndex = 0
-      series550.classList.add('choose')
-      series1906.classList.remove('choose')
-      shoeSwiper.removeAllSlides()
-      for (let i = 0; i < shoes550List.length; i++) {
-        const shoes = document.createElement('div')
-        shoes.classList.add('swiper-slide')
-        shoes.classList.add('shoes-slide')
-        shoes.classList.add(`${shoes550List[i]}-550`)
-        shoeSwiper.appendSlide(shoes)
-      }
-      swiperPagination.classList.remove('pagination-1906')
-      swiperPagination.classList.add('pagination-550')
-    })
-    series1906.addEventListener('click', e => {
-      baseIndex = 5
-      shoeIndex = baseIndex
-      series1906.classList.add('choose')
-      series550.classList.remove('choose')
-      shoeSwiper.removeAllSlides()
-      for (let i = 0; i < shoes1906List.length; i++) {
-        const shoes = document.createElement('div')
-        shoes.classList.add('swiper-slide')
-        shoes.classList.add('shoes-slide')
-        shoes.classList.add(`${shoes1906List[i]}-1906`)
-        shoeSwiper.appendSlide(shoes)
-      }
-      swiperPagination.classList.remove('pagination-550')
-      swiperPagination.classList.add('pagination-1906')
-    })
+function append1906Shoes() {
+  for (let i = 0; i < shoes1906List.length; i++) {
+    const shoes = document.createElement('div')
+    shoes.classList.add('swiper-slide')
+    shoes.classList.add('shoes-slide')
+    shoes.classList.add(`${shoes1906List[i]}-1906`)
+    shoeSwiper.appendSlide(shoes)
   }
 
-  const playAgainBtn = document.getElementById('play-again')
-  playAgainBtn.addEventListener('click', () => {
-    document.getElementById('fail-modal').style.display = 'none'
-    document.getElementById('pre-game').style.display = 'flex'
-    window['myGame'].resetGame()
-  })
-})
+  if (swiperPagination) {
+    swiperPagination.classList.add('pagination-1906')
+  }
+}
 
 function showStageList() {
   if (successStage.length) {
