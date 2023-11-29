@@ -227,6 +227,7 @@ class myGame {
     this.ratio = this.devicePixelRatio / this.backingStoreRatio || 3
 
     this.initScreen()
+    this.initGame()
   }
 
   initScreen() {
@@ -239,8 +240,6 @@ class myGame {
     this.canvas.style.width = `${this.width}px`
     this.canvas.style.height = `${this.height}px`
     this.ctx.scale(this.ratio, this.ratio)
-
-    this.initGame()
   }
 
   touchStart(e) {
@@ -1115,7 +1114,7 @@ class myGame {
       }
     })
 
-    if (this.playerObject.anim < this.playerObject.anim_change - 5) {
+    if (this.playerObject.anim < this.playerObject.anim_change - 10) {
       // 還在跳躍中
       this.stairList.forEach((stair, i) => {
         if (this.stageOnStairIndex.includes(i)) {
@@ -1333,6 +1332,7 @@ const shoes1906List = ['red', 'blue', 'gray', 'silver']
 window.addEventListener('resize', () => {
   if (window['myGame']) {
     window['myGame'].initScreen()
+    window['myGame'].updateObject()
   }
 })
 
@@ -1385,7 +1385,7 @@ document.addEventListener('DOMContentLoaded', () => {
     playAgainBtn.addEventListener('click', () => {
       document.getElementById('fail-modal').style.display = 'none'
       document.getElementById('pre-game').style.display = 'flex'
-      window['myGame'].initScreen()
+      window['myGame'].initGame()
     })
   }
 })
