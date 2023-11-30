@@ -1142,22 +1142,7 @@ class myGame {
     if (this.playerOnStairIndex > -1) {
       this.preStairIndex = this.playerOnStairIndex
 
-      // 如果降落的階梯不含有鞋子，更改動畫
-      if (!this.shoeOnStairIndex.includes(this.playerOnStairIndex) && !this.isRolling) {
-        this.isJumpOnShoe = false
-        this.playerObject.SetAnimChange(70)
-      }
-
-      // 檢查是否落在木頭階梯上
-      if (stairLevel[this.playerOnStairIndex] === 'w' && !this.isRolling) {
-        if (this.stairList[this.playerOnStairIndex].state === 0) {
-          this.playerObject.anim = 0
-          this.isStayOnWood = true
-          this.brokenWoodIndex = this.playerOnStairIndex
-        } else {
-          this.isDying = !this.isPlayingBrokenWood
-        }
-      }
+     
     }
 
     if (this.playerOnStairIndex === -1 && isStartGame) {
@@ -1171,6 +1156,23 @@ class myGame {
         }
       }
     }
+     // 如果降落的階梯不含有鞋子，更改動畫
+     if (!this.shoeOnStairIndex.includes(this.playerOnStairIndex) && !this.isRolling) {
+      this.isJumpOnShoe = false
+      this.playerObject.SetAnimChange(70)
+    }
+
+    // 檢查是否落在木頭階梯上
+    if (stairLevel[this.playerOnStairIndex] === 'w' && !this.isRolling) {
+      if (this.stairList[this.playerOnStairIndex].state === 0) {
+        this.playerObject.anim = 0
+        this.isStayOnWood = true
+        this.brokenWoodIndex = this.playerOnStairIndex
+      } else {
+        this.isDying = !this.isPlayingBrokenWood
+      }
+    }
+    
     //
     if (this.stageOnStairIndex.includes(this.playerOnStairIndex) && (!this.isRolling || this.playerObject.anim <= 10)) {
       this.isDying = true
