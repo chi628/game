@@ -561,9 +561,29 @@
   padding-top: 27.6cqh;
 }
 
+.cheer-up-container {
+  width: 60%;
+  height: 48cqh;
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  overflow: hidden;
+}
+
+.cheer-up-container::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  aspect-ratio: 4/5;
+  background-image: url(./Images/cheerup.webp);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
 .cheer-up {
   width: 50%;
-  aspect-ratio: 11/10;
   background-image: url(./Images/cheerup.webp);
   background-size: contain;
   background-repeat: no-repeat;
