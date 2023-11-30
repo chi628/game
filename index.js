@@ -12,87 +12,87 @@ const stageList = [
   {
     id: 'boss',
     name: '慣老闆',
-    description: '成功遠離 前途一片光明'
+    description: '成功遠離 前途一片光明',
   },
   {
     id: 'pig',
     name: '雷隊友',
-    description: '神隊友降臨 天天都有神救援'
+    description: '神隊友降臨 天天都有神救援',
   },
   {
     id: 'weasel',
     name: '犯小人',
-    description: '完美防守 逢凶化吉迎貴人'
+    description: '完美防守 逢凶化吉迎貴人',
   },
   {
     id: 'money',
     name: '荷包空空',
-    description: '年終翻倍 投資有賺無賠'
+    description: '年終翻倍 投資有賺無賠',
   },
   {
     id: 'invoice',
     name: '發票摃龜',
-    description: '有對有驚喜 張張中大獎'
+    description: '有對有驚喜 張張中大獎',
   },
   {
     id: 'goldfish',
     name: '忘東忘西金魚腦',
-    description: '進化金頭腦 耳聰目明記憶好'
+    description: '進化金頭腦 耳聰目明記憶好',
   },
   {
     id: 'ghost',
     name: '水逆',
-    description: '變身破關小天才 凡事不再怪水逆'
+    description: '變身破關小天才 凡事不再怪水逆',
   },
   {
     id: 'love',
     name: '爛桃花',
-    description: '單身轉角遇到愛 脫單好人好事多'
+    description: '單身轉角遇到愛 脫單好人好事多',
   },
   {
     id: 'clothes',
     name: '新衣服秒髒',
-    description: '打破莫非定律魔咒 衰神退散吧'
-  }
+    description: '打破莫非定律魔咒 衰神退散吧',
+  },
 ]
 
 const shoesList = [
   {
     id: '550-red',
-    name: '摩登紅'
+    name: '摩登紅',
   },
   {
     id: '550-brown',
-    name: '復古棕'
+    name: '復古棕',
   },
   {
     id: '550-black',
-    name: '洗鍊黑'
+    name: '洗鍊黑',
   },
   {
     id: '550-gray',
-    name: '混搭灰'
+    name: '混搭灰',
   },
   {
     id: '550-white',
-    name: '奶油白'
+    name: '奶油白',
   },
   {
     id: '1906-red',
-    name: '個性紅'
+    name: '個性紅',
   },
   {
     id: '1906-blue',
-    name: '前衛藍'
+    name: '前衛藍',
   },
   {
     id: '1906-gray',
-    name: '流線銀'
+    name: '流線銀',
   },
   {
     id: '1906-silver',
-    name: '耀月銀'
-  }
+    name: '耀月銀',
+  },
 ]
 
 let shoeIndex = 0
@@ -419,7 +419,7 @@ class myGame {
         x: 350 * i + BIG_CLOUD_INIT_XCOORD,
         y: yCoord + Math.random(),
         width: this.bigCloudObject.width,
-        height: this.bigCloudObject.height
+        height: this.bigCloudObject.height,
       })
     }
     this.bigCloudObject.xSpeed = 1.6
@@ -431,7 +431,7 @@ class myGame {
         x: 200 * i + MID_CLOUD_INIT_XCOORD,
         y: yCoord + Math.random(),
         width: this.midCloudObject.width,
-        height: this.midCloudObject.height
+        height: this.midCloudObject.height,
       })
     }
     this.midCloudObject.xSpeed = 1.2
@@ -443,7 +443,7 @@ class myGame {
         x: 220 * i + MINI_CLOUD_INIT_XCOORD,
         y: yCoord + Math.random(),
         width: this.miniCloudObject.width,
-        height: this.miniCloudObject.height
+        height: this.miniCloudObject.height,
       })
     }
     this.miniCloudObject.xSpeed = 0.8
@@ -479,7 +479,7 @@ class myGame {
         y: startY - 50 * i,
         width,
         height,
-        currFrame: frameIndex
+        currFrame: frameIndex,
       })
     }
     this.stairObject.xSpeed = 7
@@ -489,7 +489,7 @@ class myGame {
     for (let i = 0; i < this.shoeOnStairIndex.length; i++) {
       this.createPropsShoe({
         width: this.propsShoes.width,
-        height: this.propsShoes.height
+        height: this.propsShoes.height,
       })
     }
 
@@ -544,7 +544,7 @@ class myGame {
         y: startY - 50 * i,
         width,
         height,
-        currFrame: frameIndex
+        currFrame: frameIndex,
       })
     }
     this.TREE_INIT_YCOORD = this.height * 0.84 - this.treeObject.height * 0.7
@@ -835,7 +835,7 @@ class myGame {
         this.bigCloudList[i].x,
         this.bigCloudList[i].y,
         this.bigCloudList[i].width,
-        this.bigCloudList[i].height
+        this.bigCloudList[i].height,
       )
     }
   }
@@ -859,7 +859,7 @@ class myGame {
         this.midCloudList[i].x,
         this.midCloudList[i].y,
         this.midCloudList[i].width,
-        this.midCloudList[i].height
+        this.midCloudList[i].height,
       )
     }
   }
@@ -883,7 +883,7 @@ class myGame {
         this.miniCloudList[i].x,
         this.miniCloudList[i].y,
         this.miniCloudList[i].width,
-        this.miniCloudList[i].height
+        this.miniCloudList[i].height,
       )
     }
   }
@@ -916,7 +916,7 @@ class myGame {
       this.treeObject.x,
       this.treeObject.y,
       this.treeObject.width,
-      this.treeObject.height
+      this.treeObject.height,
     )
   }
 
@@ -935,21 +935,21 @@ class myGame {
       this.mountL3Object.x,
       this.mountL3Object.y,
       this.mountL3Object.width,
-      this.mountL3Object.height
+      this.mountL3Object.height,
     )
     this.ctx.drawImage(
       this.mountL2Object.frames[0],
       this.mountL2Object.x,
       this.mountL2Object.y,
       this.mountL2Object.width,
-      this.mountL2Object.height
+      this.mountL2Object.height,
     )
     this.ctx.drawImage(
       this.mountL1Object.frames[0],
       this.mountL1Object.x,
       this.mountL1Object.y,
       this.mountL1Object.width,
-      this.mountL1Object.height
+      this.mountL1Object.height,
     )
   }
 
@@ -974,7 +974,7 @@ class myGame {
           this.stairList[i].x,
           this.stairList[i].y,
           this.stairList[i].width,
-          this.stairList[i].height
+          this.stairList[i].height,
         )
       }
     }
@@ -997,7 +997,7 @@ class myGame {
       this.endPointObject.x,
       this.endPointObject.y,
       this.endPointObject.width,
-      this.endPointObject.height
+      this.endPointObject.height,
     )
   }
 
@@ -1011,7 +1011,7 @@ class myGame {
       this.flagObject.x,
       this.flagObject.y,
       this.flagObject.width,
-      this.flagObject.height
+      this.flagObject.height,
     )
   }
 
@@ -1071,7 +1071,7 @@ class myGame {
       this.playerObject.x,
       this.playerObject.y,
       this.playerObject.width,
-      this.playerObject.height
+      this.playerObject.height,
     )
   }
 
@@ -1081,7 +1081,7 @@ class myGame {
       this.failPlayerObject.x,
       this.failPlayerObject.y,
       this.failPlayerObject.width,
-      this.failPlayerObject.height
+      this.failPlayerObject.height,
     )
   }
 
@@ -1091,7 +1091,7 @@ class myGame {
       this.winPlayerObject.x,
       this.winPlayerObject.y,
       this.winPlayerObject.width,
-      this.winPlayerObject.height
+      this.winPlayerObject.height,
     )
   }
 
@@ -1243,7 +1243,7 @@ class myGame {
       this.winBoard.x,
       this.winBoard.y,
       this.winBoard.width,
-      this.winBoard.height
+      this.winBoard.height,
     )
 
     this.ctx.font = 'bold 22px NotoSansCJKTC'
@@ -1272,7 +1272,7 @@ class myGame {
       shoeXcoord,
       shoeYcoord,
       this.propsShoes.width,
-      this.propsShoes.height
+      this.propsShoes.height,
     )
     this.ctx.font = 'bold 13px ProximaNova'
     this.ctx.fillStyle = '#151415'
@@ -1287,7 +1287,7 @@ let baseIndex = 0
 const shoeSwiper = new Swiper('.shoes-swiper', {
   pagination: {
     el: '.swiper-pagination',
-    clickable: true
+    clickable: true,
   },
   on: {
     activeIndexChange: function (swiper) {
@@ -1306,14 +1306,14 @@ const shoeSwiper = new Swiper('.shoes-swiper', {
     },
     init: function (swiper) {
       shoeIndex = swiper.activeIndex
-    }
-  }
+    },
+  },
 })
 
 const stageSwiper = new Swiper('.stage-swiper', {
   navigation: {
     nextEl: '.swiper-button-next',
-    prevEl: '.swiper-button-prev'
+    prevEl: '.swiper-button-prev',
   },
   on: {
     activeIndexChange: function (swiper) {
@@ -1325,8 +1325,8 @@ const stageSwiper = new Swiper('.stage-swiper', {
     },
     init: function (swiper) {
       stageIndex = swiper.activeIndex
-    }
-  }
+    },
+  },
 })
 
 let preGame
