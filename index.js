@@ -216,6 +216,8 @@ class myGame {
 
   isSixtyFPS = true
   resultAnim = 0
+  isFallingDown = false
+  isCollStage = false
 
   constructor() {
     this.canvas = document.getElementById('my-canvas')
@@ -274,6 +276,8 @@ class myGame {
     this.isStayOnWood = false
     this.isJumpOnShoe = false
     this.isRolling = false
+    this.isFallingDown = false
+    this.isCollStage = false
 
     this.camera = 0
     this.groundObject.camera.y = 0
@@ -310,6 +314,7 @@ class myGame {
     this.fpsTimer = 0
     this.fpscounter = 0
     this.currentfps = 0
+    this.resultAnim = 0
   }
 
   loadImages() {
@@ -598,7 +603,7 @@ class myGame {
   }
 
   updateCamera() {
-    if (this.isMovingX && this.isJumping && !this.isDying && !this.isWin) {
+    if (this.isMovingX && this.isJumping && !this.isDying && !this.isWin && !this.isFallingDown && !this.isCollStage) {
       this.camera += 1
       this.groundObject.camera.y += 1.6
 
@@ -713,6 +718,8 @@ class myGame {
       document.removeEventListener('touchend', this.touchEnd)
 
       this.fpsTimer = 0
+      this.isFallingDown = false
+      this.isCollStage = false
 
       const successModal = document.getElementById('success-modal')
       const failModal = document.getElementById('fail-modal')
@@ -766,19 +773,19 @@ class myGame {
     this.updatePlayer()
 
     this.checkStageStatus()
-    // this.isJumping &&this.playerObject.anim === 5 &&
+
     if (this.isStayOnWood) {
       if (this.stairList[this.brokenWoodIndex].alive) {
         this.stairList[this.brokenWoodIndex].state = 1
         this.stairList[this.brokenWoodIndex].alive = false
-        this.playerObject.anim = 11
+        this.playerObject.anim = 3
         this.isPlayingBrokenWood = true
       }
     }
     this.drawPropsBox()
     this.updateCamera()
 
-    this.isJumping = this.playerObject.anim > 10
+    this.isJumping = this.playerObject.anim > 2
 
     if (this.isTouched) {
       this.isMovingX = this.stairList[this.stairList.length - 1].x > 35
@@ -796,9 +803,11 @@ class myGame {
       this.playerObject.anim = 0
     }
 
-    this.failPlayerObject.anim += 1
-    if (this.failPlayerObject.anim >= this.failPlayerObject.anim_change) {
-      this.failPlayerObject.anim = 0
+    if (this.isCollStage) {
+      this.failPlayerObject.anim += 1
+      if (this.failPlayerObject.anim >= this.failPlayerObject.anim_change) {
+        this.failPlayerObject.anim = this.failPlayerObject.anim_change - 1
+      }
     }
 
     this.winPlayerObject.anim += 1
@@ -829,9 +838,9 @@ class myGame {
   }
 
   checkBigClouds() {
-    const outOfBoundIndex = this.bigCloudList.findIndex((o) => o.x + o.width < 0)
+    const outOfBoundIndex = this.bigCloudList.findIndex(o => o.x + o.width < 0)
 
-    const lastCloudIndex = this.bigCloudList.findIndex((o) => o.x === Math.max(...this.bigCloudList.map((o) => o.x)))
+    const lastCloudIndex = this.bigCloudList.findIndex(o => o.x === Math.max(...this.bigCloudList.map(o => o.x)))
 
     if (lastCloudIndex > -1 && outOfBoundIndex > -1) {
       this.bigCloudList[outOfBoundIndex].x = this.bigCloudList[lastCloudIndex].x + 270
@@ -847,15 +856,15 @@ class myGame {
         this.bigCloudList[i].x,
         this.bigCloudList[i].y,
         this.bigCloudList[i].width,
-        this.bigCloudList[i].height,
+        this.bigCloudList[i].height
       )
     }
   }
 
   checkMidClouds() {
-    const outOfBoundIndex = this.midCloudList.findIndex((o) => o.x + o.width < 0)
+    const outOfBoundIndex = this.midCloudList.findIndex(o => o.x + o.width < 0)
 
-    const lastCloudIndex = this.midCloudList.findIndex((o) => o.x === Math.max(...this.midCloudList.map((o) => o.x)))
+    const lastCloudIndex = this.midCloudList.findIndex(o => o.x === Math.max(...this.midCloudList.map(o => o.x)))
 
     if (lastCloudIndex > -1 && outOfBoundIndex > -1) {
       this.midCloudList[outOfBoundIndex].x = this.midCloudList[lastCloudIndex].x + 200
@@ -871,15 +880,15 @@ class myGame {
         this.midCloudList[i].x,
         this.midCloudList[i].y,
         this.midCloudList[i].width,
-        this.midCloudList[i].height,
+        this.midCloudList[i].height
       )
     }
   }
 
   checkMiniClouds() {
-    const outOfBoundIndex = this.miniCloudList.findIndex((o) => o.x + o.width < 0)
+    const outOfBoundIndex = this.miniCloudList.findIndex(o => o.x + o.width < 0)
 
-    const lastCloudIndex = this.miniCloudList.findIndex((o) => o.x === Math.max(...this.miniCloudList.map((o) => o.x)))
+    const lastCloudIndex = this.miniCloudList.findIndex(o => o.x === Math.max(...this.miniCloudList.map(o => o.x)))
 
     if (lastCloudIndex > -1 && outOfBoundIndex > -1) {
       this.miniCloudList[outOfBoundIndex].x = this.miniCloudList[lastCloudIndex].x + 220
@@ -895,7 +904,7 @@ class myGame {
         this.miniCloudList[i].x,
         this.miniCloudList[i].y,
         this.miniCloudList[i].width,
-        this.miniCloudList[i].height,
+        this.miniCloudList[i].height
       )
     }
   }
@@ -928,7 +937,7 @@ class myGame {
       this.treeObject.x,
       this.treeObject.y,
       this.treeObject.width,
-      this.treeObject.height,
+      this.treeObject.height
     )
   }
 
@@ -947,26 +956,26 @@ class myGame {
       this.mountL3Object.x,
       this.mountL3Object.y,
       this.mountL3Object.width,
-      this.mountL3Object.height,
+      this.mountL3Object.height
     )
     this.ctx.drawImage(
       this.mountL2Object.frames[0],
       this.mountL2Object.x,
       this.mountL2Object.y,
       this.mountL2Object.width,
-      this.mountL2Object.height,
+      this.mountL2Object.height
     )
     this.ctx.drawImage(
       this.mountL1Object.frames[0],
       this.mountL1Object.x,
       this.mountL1Object.y,
       this.mountL1Object.width,
-      this.mountL1Object.height,
+      this.mountL1Object.height
     )
   }
 
   updateStairs() {
-    if (this.isMovingX && this.isJumping && !this.isDying && !this.isWin) {
+    if (this.isMovingX && this.isJumping && !this.isDying && !this.isWin && !this.isCollStage && !this.isFallingDown) {
       for (let i = 0; i < this.stairList.length; i++) {
         this.stairList[i].x -= this.stairObject.xSpeed
         this.stairList[i].y += this.stairObject.ySpeed
@@ -986,7 +995,7 @@ class myGame {
           this.stairList[i].x,
           this.stairList[i].y,
           this.stairList[i].width,
-          this.stairList[i].height,
+          this.stairList[i].height
         )
       }
     }
@@ -1015,7 +1024,7 @@ class myGame {
       this.endPointObject.x,
       this.endPointObject.y,
       this.endPointObject.width,
-      this.endPointObject.height,
+      this.endPointObject.height
     )
   }
 
@@ -1029,32 +1038,36 @@ class myGame {
       this.flagObject.x,
       this.flagObject.y,
       this.flagObject.width,
-      this.flagObject.height,
+      this.flagObject.height
     )
   }
 
   updatePlayer() {
-    if (this.isDying) {
+    if (this.isCollStage) {
       this.failPlayerObject.currFrame = Math.floor(this.failPlayerObject.anim / 3)
-      if (this.preStairIndex > -1) {
-        if (this.stageOnStairIndex.includes(this.preStairIndex)) {
-          this.failPlayerObject.y = this.stairList[this.preStairIndex].y - this.failPlayerObject.height + 15
-        } else if (stairLevel[this.preStairIndex] === 'w') {
-        } else {
-          const failStairEndXcoord = this.stairList[this.preStairIndex].x + this.stairList[this.preStairIndex].width
-          if (this.failPlayerObject.x + 3 < failStairEndXcoord) {
-            this.failPlayerObject.x = failStairEndXcoord + 3
-          }
-        }
+
+      this.failPlayerObject.y += 5
+      if (this.failPlayerObject.y > this.height) {
+        this.isDying = true
       }
       this.drawFailPlayer()
+    } else if (this.isFallingDown) {
+      if (this.playerObject.currFrame >= 12) {
+        this.playerObject.currFrame = 1
+      }
+      this.playerObject.currFrame += 1
+      this.playerObject.y += 5
+      if (this.playerObject.y > this.height) {
+        this.isDying = true
+      }
+      this.drawPlayer()
     } else if (this.isWin) {
       this.winPlayerObject.currFrame = Math.floor(this.winPlayerObject.anim / 6)
       this.winPlayerObject.x = this.playerObject.x
       this.winPlayerObject.y = this.endPointObject.y + 120 - this.winPlayerObject.height + 2
       this.drawWinPlayer()
     } else {
-      if (this.playerObject.anim <= 10) {
+      if (this.playerObject.anim <= 2) {
         // stand
         this.playerObject.currFrame = 0
         this.playerObject.y = this.height * 0.84 - this.playerObject.height + 2
@@ -1070,10 +1083,7 @@ class myGame {
         } else {
           this.playerObject.currFrame += 1
         }
-        if (
-          this.playerObject.anim - 10 < Math.floor(this.playerObject.anim_change - 10) / 2 &&
-          this.playerObject.y > 2
-        ) {
+        if (this.playerObject.anim - 2 < Math.floor(this.playerObject.anim_change - 2) / 2 && this.playerObject.y > 2) {
           if (this.currentfps > 65) {
             this.playerObject.y -= 600 / this.currentfps
           } else {
@@ -1097,7 +1107,7 @@ class myGame {
       this.playerObject.x,
       this.playerObject.y,
       this.playerObject.width,
-      this.playerObject.height,
+      this.playerObject.height
     )
   }
 
@@ -1107,7 +1117,7 @@ class myGame {
       this.failPlayerObject.x,
       this.failPlayerObject.y,
       this.failPlayerObject.width,
-      this.failPlayerObject.height,
+      this.failPlayerObject.height
     )
   }
 
@@ -1117,7 +1127,7 @@ class myGame {
       this.winPlayerObject.x,
       this.winPlayerObject.y,
       this.winPlayerObject.width,
-      this.winPlayerObject.height,
+      this.winPlayerObject.height
     )
   }
 
@@ -1144,11 +1154,11 @@ class myGame {
             this.playerObject.y + this.playerObject.height - 5 <= stair.y
           ) {
             // 一碰到鞋子，就跳躍
-            const index = this.shoeOnStairIndex.findIndex((o) => o === i)
+            const index = this.shoeOnStairIndex.findIndex(o => o === i)
 
             if (index > -1) {
               if (this.propsShoeList[index].alive) {
-                this.playerObject.anim = 11
+                this.playerObject.anim = 3
                 this.playerObject.currFrame = 12
                 this.playerObject.SetAnimChange(120)
                 this.isJumpOnShoe = true
@@ -1165,23 +1175,22 @@ class myGame {
     })
 
     this.isRolling = this.playerObject.anim < this.playerObject.anim_change - 5
-    // console.log('playerOnStairIndex', this.playerOnStairIndex, this.isRolling, this.playerObject.anim)
     if (this.playerOnStairIndex > -1) {
       this.preStairIndex = this.playerOnStairIndex
       // 如果降落的階梯不含有鞋子，更改動畫
-      if (!this.shoeOnStairIndex.includes(this.playerOnStairIndex) && this.playerObject.anim <= 10) {
+      if (!this.shoeOnStairIndex.includes(this.playerOnStairIndex) && this.playerObject.anim <= 2) {
         this.isJumpOnShoe = false
         this.playerObject.SetAnimChange(70)
       }
 
       // 檢查是否落在木頭階梯上
-      if (stairLevel[this.playerOnStairIndex] === 'w' && this.playerObject.anim <= 10) {
+      if (stairLevel[this.playerOnStairIndex] === 'w' && this.playerObject.anim <= 2) {
         if (this.stairList[this.playerOnStairIndex].state === 0) {
           this.playerObject.anim = 0
           this.isStayOnWood = true
           this.brokenWoodIndex = this.playerOnStairIndex
         } else {
-          this.isDying = !this.isPlayingBrokenWood
+          this.isFallingDown = !this.isPlayingBrokenWood
         }
       }
     }
@@ -1192,15 +1201,14 @@ class myGame {
           this.isWin = true
         }
       } else {
-        if (this.playerObject.anim > this.playerObject.anim_change - 5) {
-          this.isDying = true
+        if (this.playerObject.anim > this.playerObject.anim_change - 2) {
+          this.isFallingDown = true
         }
       }
     }
 
-    //
-    if (this.stageOnStairIndex.includes(this.playerOnStairIndex) && (!this.isRolling || this.playerObject.anim <= 10)) {
-      this.isDying = true
+    if (this.stageOnStairIndex.includes(this.playerOnStairIndex) && (!this.isRolling || this.playerObject.anim <= 2)) {
+      this.isCollStage = true
     }
 
     if (
@@ -1212,7 +1220,7 @@ class myGame {
         this.successStageIndex.push(this.preStairIndex)
         this.isOverStage = true
         this.overStageStairIndex = this.preStairIndex
-        const index = this.stageOnStairIndex.findIndex((o) => o === this.preStairIndex)
+        const index = this.stageOnStairIndex.findIndex(o => o === this.preStairIndex)
         if (index > -1) {
           successStage.push(stageList[this.displayStagesIndex[index]])
         }
@@ -1270,7 +1278,7 @@ class myGame {
       this.winBoard.x,
       this.winBoard.y,
       this.winBoard.width,
-      this.winBoard.height,
+      this.winBoard.height
     )
 
     this.ctx.font = 'bold 22px NotoSansCJKTC'
@@ -1279,7 +1287,7 @@ class myGame {
 
     const textXcoord = this.winBoard.x + Math.floor((this.winBoard.width - 15) / 2)
     const textYcoord = this.winBoard.y + 100
-    const index = this.stageOnStairIndex.findIndex((i) => i === this.overStageStairIndex)
+    const index = this.stageOnStairIndex.findIndex(i => i === this.overStageStairIndex)
 
     const stageIndex = this.displayStagesIndex[index]
     const stageXcoord = this.winBoard.x + 175
@@ -1299,7 +1307,7 @@ class myGame {
       shoeXcoord,
       shoeYcoord,
       this.propsShoes.width,
-      this.propsShoes.height,
+      this.propsShoes.height
     )
     this.ctx.font = 'bold 13px ProximaNova'
     this.ctx.fillStyle = '#151415'
@@ -1319,15 +1327,24 @@ const shoeSwiper = new Swiper('.shoes-swiper', {
   on: {
     activeIndexChange: function (swiper) {
       shoeIndex = swiper.activeIndex + baseIndex
+
       if (shoeIndex < 5) {
         const shoesColor550 = document.getElementById('550-shoes-color')
         if (shoesColor550) {
           shoesColor550.innerHTML = shoesList[shoeIndex].name
         }
+        if (swiper.slides.length === 5) {
+          document.getElementById('swiper-pagination').childNodes[swiper.previousIndex].style.borderColor = '#151415'
+          document.getElementById('swiper-pagination').childNodes[swiper.activeIndex].style.borderColor = '#fff'
+        }
       } else {
         const shoesColor1906 = document.getElementById('1906-shoes-color')
         if (shoesColor1906) {
           shoesColor1906.innerHTML = shoesList[shoeIndex].name
+        }
+        if (swiper.slides.length === 4) {
+          document.getElementById('swiper-pagination').childNodes[swiper.previousIndex].style.borderColor = '#151415'
+          document.getElementById('swiper-pagination').childNodes[swiper.activeIndex].style.borderColor = '#fff'
         }
       }
     },
@@ -1393,8 +1410,10 @@ document.addEventListener('DOMContentLoaded', () => {
     shoesColor550.innerHTML = shoesList[shoeIndex].name
   }
 
+  swiperPagination.childNodes[shoeIndex].style.borderColor = '#fff'
+
   if (series550 && series1906) {
-    series550.addEventListener('click', (e) => {
+    series550.addEventListener('click', e => {
       baseIndex = 0
       series550.classList.add('choose')
       series1906.classList.remove('choose')
@@ -1402,9 +1421,10 @@ document.addEventListener('DOMContentLoaded', () => {
       shoeSwiper.removeAllSlides()
 
       append550Shoes()
+      swiperPagination.childNodes[0].style.borderColor = '#fff'
     })
 
-    series1906.addEventListener('click', (e) => {
+    series1906.addEventListener('click', e => {
       baseIndex = 5
       shoeIndex = baseIndex
       series550.classList.remove('choose')
@@ -1413,6 +1433,7 @@ document.addEventListener('DOMContentLoaded', () => {
       shoeSwiper.removeAllSlides()
 
       append1906Shoes()
+      swiperPagination.childNodes[0].style.borderColor = '#fff'
     })
   }
 
@@ -1473,7 +1494,11 @@ function showStageList() {
       const stage = document.createElement('div')
       stage.classList.add('swiper-slide')
       stage.classList.add('stage-baseImg')
-      stage.classList.add(successStage[i].id)
+      if (successStage[i].id === 'boss') {
+        stage.classList.add('boss-site')
+      } else {
+        stage.classList.add(successStage[i].id)
+      }
       stageSwiper.appendSlide(stage)
     }
   }

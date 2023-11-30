@@ -800,6 +800,9 @@
 .boss {
   background-image: url(./Images/jump_boss.png);
 }
+.boss-site {
+  background-image: url(./Images/boss-site.webp);
+}
 .pig {
   background-image: url(./Images/jump_pig.png);
 }
