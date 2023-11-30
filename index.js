@@ -215,6 +215,7 @@ class myGame {
   isRolling = false
 
   isSixtyFPS = true
+  resultAnim = 0
 
   constructor() {
     this.canvas = document.getElementById('my-canvas')
@@ -586,12 +587,11 @@ class myGame {
   lastCalledTime = new Date()
   fpscounter = 0
   currentfps = 0
-  fpsTimer = 0
   countFPS() {
     this.fpscounter += 1
     let delta = (new Date().getTime() - this.lastCalledTime.getTime()) / 1000
     if (delta > 1) {
-      this.fpsTimer += 1
+      this.currentfps = this.fpscounter
       this.fpscounter = 0
       this.lastCalledTime = new Date()
     }
@@ -704,6 +704,7 @@ class myGame {
   }
 
   draw() {
+    this.countFPS()
     this.clearScreen()
 
     if (this.isGameOver) {
@@ -737,6 +738,14 @@ class myGame {
     this.drawGroundL1()
     this.drawEndPoint()
     this.drawFlag()
+
+    if (this.currentfps > 65 || this.currFrame < 40) {
+      this.stairObject.xSpeed = (60 / this.currentfps) * 7
+      this.stairObject.ySpeed = (60 / this.currentfps) * 2
+    } else {
+      this.stairObject.xSpeed = 7
+      this.stairObject.ySpeed = 2
+    }
     this.updateStairs()
     this.drawStair()
 
@@ -812,8 +821,8 @@ class myGame {
     }
 
     if (this.isWin || this.isDying) {
-      this.countFPS()
-      this.isGameOver = this.fpsTimer === 2
+      this.resultAnim += 1
+      this.isGameOver = this.resultAnim === this.currentfps
     }
 
     this.reqAnim = window.requestAnimationFrame(this.draw.bind(this))
@@ -1065,9 +1074,17 @@ class myGame {
           this.playerObject.anim - 10 < Math.floor(this.playerObject.anim_change - 10) / 2 &&
           this.playerObject.y > 2
         ) {
-          this.playerObject.y -= 10
+          if (this.currentfps > 65) {
+            this.playerObject.y -= 600 / this.currentfps
+          } else {
+            this.playerObject.y -= 10
+          }
         } else {
-          this.playerObject.y += 10
+          if (this.currentfps > 65) {
+            this.playerObject.y += 600 / this.currentfps
+          } else {
+            this.playerObject.y += 10
+          }
         }
       }
       this.drawPlayer()
