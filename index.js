@@ -214,6 +214,8 @@ class myGame {
 
   isRolling = false
 
+  isSixtyFPS = true
+
   constructor() {
     this.canvas = document.getElementById('my-canvas')
     this.ctx = this.canvas.getContext('2d')
@@ -498,7 +500,7 @@ class myGame {
     this.playerObject.SetAnimChange(70)
     this.winPlayerObject.SetAnimChange(12)
     this.failPlayerObject.SetAnimChange(18)
-    this.brokenWood.SetAnimChange(8)
+    this.brokenWood.SetAnimChange(15)
 
     const playerInitXcoord = Math.floor(this.width * 0.6) - this.playerObject.width
     const playerInitYCoord = this.height * 0.84 - this.playerObject.height
@@ -744,8 +746,9 @@ class myGame {
         this.brokenWood.anim = 0
         this.isPlayingBrokenWood = false
         this.isStayOnWood = false
+      } else {
+        this.drawBrokenWood()
       }
-      this.drawBrokenWood()
     }
 
     this.drawStages()
@@ -982,8 +985,14 @@ class myGame {
 
   drawBrokenWood() {
     const xCoord = this.stairList[this.brokenWoodIndex].x
-    const yCoord = this.stairList[this.brokenWoodIndex].y
-    const currFrame = Math.floor(this.brokenWood.anim / 4)
+    const yCoord = this.stairList[this.brokenWoodIndex].y + this.brokenWood.anim * 5
+
+    let currFrame
+    if (Math.floor(this.brokenWood.anim / 4) < 2) {
+      currFrame = Math.floor(this.brokenWood.anim / 4)
+    } else {
+      currFrame = 1
+    }
 
     this.ctx.drawImage(this.brokenWood.frames[currFrame], xCoord, yCoord, this.brokenWood.width, this.brokenWood.height)
   }
