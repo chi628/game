@@ -754,9 +754,9 @@ class myGame {
     this.updatePlayer()
 
     this.checkStageStatus()
-    // this.isJumping &&
+    // this.isJumping &&this.playerObject.anim === 5 &&
     if (this.isStayOnWood) {
-      if (this.playerObject.anim === 5 && this.stairList[this.brokenWoodIndex].alive) {
+      if (this.stairList[this.brokenWoodIndex].alive) {
         this.stairList[this.brokenWoodIndex].state = 1
         this.stairList[this.brokenWoodIndex].alive = false
         this.playerObject.anim = 11
@@ -1139,19 +1139,17 @@ class myGame {
     })
 
     this.isRolling = this.playerObject.anim < this.playerObject.anim_change - 5
-    console.log('playerOnStairIndex', this.playerOnStairIndex, this.isRolling,this.playerObject.anim)
+    // console.log('playerOnStairIndex', this.playerOnStairIndex, this.isRolling, this.playerObject.anim)
     if (this.playerOnStairIndex > -1) {
       this.preStairIndex = this.playerOnStairIndex
       // 如果降落的階梯不含有鞋子，更改動畫
-      if (!this.shoeOnStairIndex.includes(this.playerOnStairIndex) && this.playerObject.anim <=5) {
-        console.log('not stair')
+      if (!this.shoeOnStairIndex.includes(this.playerOnStairIndex) && this.playerObject.anim <= 10) {
         this.isJumpOnShoe = false
         this.playerObject.SetAnimChange(70)
       }
 
       // 檢查是否落在木頭階梯上
-      if (stairLevel[this.playerOnStairIndex] === 'w' && !this.isRolling) {
-        console.log('on wood')
+      if (stairLevel[this.playerOnStairIndex] === 'w' && this.playerObject.anim <= 10) {
         if (this.stairList[this.playerOnStairIndex].state === 0) {
           this.playerObject.anim = 0
           this.isStayOnWood = true
@@ -1173,8 +1171,7 @@ class myGame {
         }
       }
     }
-    
-    
+
     //
     if (this.stageOnStairIndex.includes(this.playerOnStairIndex) && (!this.isRolling || this.playerObject.anim <= 10)) {
       this.isDying = true
