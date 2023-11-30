@@ -498,7 +498,7 @@ class myGame {
     this.playerObject.SetAnimChange(70)
     this.winPlayerObject.SetAnimChange(12)
     this.failPlayerObject.SetAnimChange(18)
-    this.brokenWood.SetAnimChange(4)
+    this.brokenWood.SetAnimChange(8)
 
     const playerInitXcoord = Math.floor(this.width * 0.6) - this.playerObject.width
     const playerInitYCoord = this.height * 0.84 - this.playerObject.height
@@ -983,7 +983,7 @@ class myGame {
   drawBrokenWood() {
     const xCoord = this.stairList[this.brokenWoodIndex].x
     const yCoord = this.stairList[this.brokenWoodIndex].y
-    const currFrame = Math.floor(this.brokenWood.anim / 2)
+    const currFrame = Math.floor(this.brokenWood.anim / 4)
 
     this.ctx.drawImage(this.brokenWood.frames[currFrame], xCoord, yCoord, this.brokenWood.width, this.brokenWood.height)
   }
