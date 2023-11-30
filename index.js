@@ -1139,11 +1139,11 @@ class myGame {
     })
 
     this.isRolling = this.playerObject.anim < this.playerObject.anim_change - 5
-    console.log('playerOnStairIndex', this.playerOnStairIndex)
+    console.log('playerOnStairIndex', this.playerOnStairIndex, this.isRolling,this.playerObject.anim)
     if (this.playerOnStairIndex > -1) {
       this.preStairIndex = this.playerOnStairIndex
       // 如果降落的階梯不含有鞋子，更改動畫
-      if (!this.shoeOnStairIndex.includes(this.playerOnStairIndex) && !this.isRolling) {
+      if (!this.shoeOnStairIndex.includes(this.playerOnStairIndex) && this.playerObject.anim <=5) {
         console.log('not stair')
         this.isJumpOnShoe = false
         this.playerObject.SetAnimChange(70)
