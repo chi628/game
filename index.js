@@ -831,7 +831,7 @@ class myGame {
 
     if (this.isWin || this.isDying) {
       this.resultAnim += 1
-      this.isGameOver = this.resultAnim === this.currentfps
+      this.isGameOver = this.resultAnim >= Math.floor(this.currentfps / 2)
     }
 
     this.reqAnim = window.requestAnimationFrame(this.draw.bind(this))
@@ -1047,7 +1047,7 @@ class myGame {
       this.failPlayerObject.currFrame = Math.floor(this.failPlayerObject.anim / 3)
 
       this.failPlayerObject.y += 5
-      if (this.failPlayerObject.y > this.height) {
+      if (this.failPlayerObject.y > this.height - 15) {
         this.isDying = true
       }
       this.drawFailPlayer()
@@ -1057,7 +1057,7 @@ class myGame {
       }
       this.playerObject.currFrame += 1
       this.playerObject.y += 5
-      if (this.playerObject.y > this.height) {
+      if (this.playerObject.y > this.height - 15) {
         this.isDying = true
       }
       this.drawPlayer()
