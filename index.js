@@ -483,7 +483,7 @@ class myGame {
       }
 
       this.createStair({
-        x: startX + 150 * i,
+        x: startX + 195 * i,
         y: startY - 50 * i,
         width,
         height,
@@ -753,6 +753,8 @@ class myGame {
       this.stairObject.xSpeed = 7
       this.stairObject.ySpeed = 2
     }
+
+    console.log('fps', this.currentfps, this.stairObject.xSpeed)
     this.updateStairs()
     this.drawStair()
 
