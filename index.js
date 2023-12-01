@@ -483,7 +483,7 @@ class myGame {
       }
 
       this.createStair({
-        x: startX + 195 * i,
+        x: startX + 150 * i,
         y: startY - 50 * i,
         width,
         height,
@@ -746,14 +746,13 @@ class myGame {
     this.drawEndPoint()
     this.drawFlag()
 
-    if (this.currentfps > 65 || this.currentfps < 40) {
-      this.stairObject.xSpeed = (60 / this.currentfps) * 10
-      this.stairObject.ySpeed = (60 / this.currentfps) * 2.5
+    if (this.currentfps > 65 || this.currFrame < 40) {
+      this.stairObject.xSpeed = (60 / this.currentfps) * 7
+      this.stairObject.ySpeed = (60 / this.currentfps) * 2
     } else {
-      this.stairObject.xSpeed = 10
-      this.stairObject.ySpeed = 2.5
+      this.stairObject.xSpeed = 7
+      this.stairObject.ySpeed = 2
     }
-
     this.updateStairs()
     this.drawStair()
 
@@ -1097,7 +1096,6 @@ class myGame {
             this.playerObject.y += 10
           }
         }
-
       }
       this.drawPlayer()
     }
@@ -1135,8 +1133,8 @@ class myGame {
 
   checkPlayerStair() {
     const isStartGame =
-    this.playerObject.x + this.playerObject.width - this.PLAYER_PADDING - this.playerObject.width * 0.2 >=
-    this.stairList[0].x
+      this.playerObject.x + this.playerObject.width - this.PLAYER_PADDING - this.playerObject.width * 0.2 >=
+      this.stairList[0].x
 
     this.playerOnStairIndex = this.stairList.findIndex((stair, i) => {
       if (
@@ -1203,7 +1201,7 @@ class myGame {
           this.isWin = true
         }
       } else {
-        if (this.playerObject.y + this.playerObject.height - 2 > this.stairList[this.preStairIndex].y) {
+        if (this.playerObject.y + this.playerObject.height - 3 > this.stairList[this.preStairIndex].y) {
           this.isFallingDown = true
         }
       }
