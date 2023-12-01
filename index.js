@@ -1086,15 +1086,17 @@ class myGame {
         }
         if (this.playerObject.anim - 2 < Math.floor(this.playerObject.anim_change - 2) / 2 && this.playerObject.y > 2) {
           if (this.currentfps > 65  || this.currentfps < 40) {
-            this.playerObject.y -= 550 / this.currentfps
+            this.playerObject.y -= 500 / this.currentfps
           } else {
             this.playerObject.y -= 10
           }
         } else {
-          if (this.currentfps > 65  || this.currentfps < 40) {
-            this.playerObject.y += 550 / this.currentfps
-          } else {
-            this.playerObject.y += 10
+          if(this.playerObject.y < this.height * 0.84 - this.playerObject.height ) {
+            if (this.currentfps > 65 ) {
+              this.playerObject.y += 500 / this.currentfps
+            } else {
+              this.playerObject.y += 10
+            }
           }
         }
       }
