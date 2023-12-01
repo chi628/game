@@ -602,102 +602,106 @@ class myGame {
     }
   }
 
+  initByFPS(number) {
+    return (number / 16) * (1000 / this.currentfps)
+  }
+
   updateCamera() {
     if (this.isMovingX && this.isJumping && !this.isDying && !this.isWin && !this.isFallingDown && !this.isCollStage) {
-      this.camera += 1
-      this.groundObject.camera.y += 1.6
+      this.camera += this.initByFPS(1)
+      this.groundObject.camera.y += this.initByFPS(1.6)
 
       if (this.camera <= 25) {
-        this.treeObject.camera.x += 0.4
-        this.treeObject.camera.y += 0.4
+        this.treeObject.camera.x += this.initByFPS(0.4)
+        this.treeObject.camera.y += this.initByFPS(0.4)
       } else if (this.camera < 50) {
-        this.treeObject.camera.x += 1.25
-        this.treeObject.camera.y += 0.8
+        this.treeObject.camera.x += this.initByFPS(1.25)
+        this.treeObject.camera.y += this.initByFPS(0.8)
       } else {
-        this.treeObject.camera.x += 2
-        this.treeObject.camera.y += 1.25
+        this.treeObject.camera.x += this.initByFPS(2)
+        this.treeObject.camera.y += this.initByFPS(1.25)
       }
 
       switch (Math.floor(this.camera / 24)) {
         case 0:
-          this.mountL1Object.camera.x += 0.4
-          this.mountL1Object.camera.y += 0.625
-          this.mountL2Object.camera.x += 0.4
-          this.mountL2Object.camera.y += 0.2
-          this.mountL3Object.camera.x += 0.125
-          this.mountL3Object.camera.y -= 0.125
+          this.mountL1Object.camera.x += this.initByFPS(0.4)
+          this.mountL1Object.camera.y += this.initByFPS(0.625)
+          this.mountL2Object.camera.x += this.initByFPS(0.4)
+          this.mountL2Object.camera.y += this.initByFPS(0.2)
+          this.mountL3Object.camera.x += this.initByFPS(0.125)
+          this.mountL3Object.camera.y -= this.initByFPS(0.125)
           break
         case 1:
-          this.mountL1Object.camera.x += 1.25
-          this.mountL1Object.camera.y += 0.4
-          this.mountL2Object.camera.x += 1.25
-          this.mountL2Object.camera.y += 0.2
-          this.mountL3Object.camera.x += 1.25
-          this.mountL3Object.camera.y -= 0.25
+          this.mountL1Object.camera.x += this.initByFPS(1.25)
+          this.mountL1Object.camera.y += this.initByFPS(0.4)
+          this.mountL2Object.camera.x += this.initByFPS(1.25)
+          this.mountL2Object.camera.y += this.initByFPS(0.2)
+          this.mountL3Object.camera.x += this.initByFPS(1.25)
+          this.mountL3Object.camera.y -= this.initByFPS(0.25)
           break
         case 2:
-          this.mountL1Object.camera.x += 1.25
-          this.mountL1Object.camera.y += 0.4
-          this.mountL2Object.camera.x += 2
-          this.mountL2Object.camera.y += 0.4
-          this.mountL3Object.camera.x += 2
-          this.mountL3Object.camera.y += 0
+          this.mountL1Object.camera.x += this.initByFPS(1.25)
+          this.mountL1Object.camera.y += this.initByFPS(0.4)
+          this.mountL2Object.camera.x += this.initByFPS(2)
+          this.mountL2Object.camera.y += this.initByFPS(0.4)
+          this.mountL3Object.camera.x += this.initByFPS(2)
+          this.mountL3Object.camera.y += this.initByFPS(0)
           break
         case 3:
-          this.mountL1Object.camera.x += 4
-          this.mountL1Object.camera.y += 2
-          this.mountL2Object.camera.x += 3
-          this.mountL2Object.camera.y += 0.8
-          this.mountL3Object.camera.x += 2
-          this.mountL3Object.camera.y += 0
+          this.mountL1Object.camera.x += this.initByFPS(4)
+          this.mountL1Object.camera.y += this.initByFPS(2)
+          this.mountL2Object.camera.x += this.initByFPS(3)
+          this.mountL2Object.camera.y += this.initByFPS(0.8)
+          this.mountL3Object.camera.x += this.initByFPS(2)
+          this.mountL3Object.camera.y += this.initByFPS(0)
           break
         case 4:
-          this.mountL1Object.camera.x += 4
-          this.mountL1Object.camera.y += 0.8
-          this.mountL2Object.camera.x += 3
-          this.mountL2Object.camera.y += 1.25
-          this.mountL3Object.camera.x += 2
-          this.mountL3Object.camera.y += 0.8
+          this.mountL1Object.camera.x += this.initByFPS(4)
+          this.mountL1Object.camera.y += this.initByFPS(0.8)
+          this.mountL2Object.camera.x += this.initByFPS(3)
+          this.mountL2Object.camera.y += this.initByFPS(1.25)
+          this.mountL3Object.camera.x += this.initByFPS(2)
+          this.mountL3Object.camera.y += this.initByFPS(0.8)
           break
         case 5:
-          this.mountL1Object.camera.x += 3
-          this.mountL1Object.camera.y += 1.25
-          this.mountL2Object.camera.x += 3
-          this.mountL2Object.camera.y += 1.67
-          this.mountL3Object.camera.x += 4.2
-          this.mountL3Object.camera.y += 1.67
+          this.mountL1Object.camera.x += this.initByFPS(3)
+          this.mountL1Object.camera.y += this.initByFPS(1.25)
+          this.mountL2Object.camera.x += this.initByFPS(3)
+          this.mountL2Object.camera.y += this.initByFPS(1.67)
+          this.mountL3Object.camera.x += this.initByFPS(4.2)
+          this.mountL3Object.camera.y += this.initByFPS(1.67)
           break
         case 6:
-          this.mountL1Object.camera.x += 3
-          this.mountL1Object.camera.y += 0.4
-          this.mountL2Object.camera.x += 0
-          this.mountL2Object.camera.y += 0
-          this.mountL3Object.camera.x += 4
-          this.mountL3Object.camera.y += 0
+          this.mountL1Object.camera.x += this.initByFPS(3)
+          this.mountL1Object.camera.y += this.initByFPS(0.4)
+          this.mountL2Object.camera.x += this.initByFPS(0)
+          this.mountL2Object.camera.y += this.initByFPS(0)
+          this.mountL3Object.camera.x += this.initByFPS(4)
+          this.mountL3Object.camera.y += this.initByFPS(0)
           break
         case 7:
-          this.mountL1Object.camera.x += 3.75
-          this.mountL1Object.camera.y += 1.25
-          this.mountL2Object.camera.x += 1.5
-          this.mountL2Object.camera.y += 0
-          this.mountL3Object.camera.x += 6.25
-          this.mountL3Object.camera.y += 0
+          this.mountL1Object.camera.x += this.initByFPS(3.75)
+          this.mountL1Object.camera.y += this.initByFPS(1.25)
+          this.mountL2Object.camera.x += this.initByFPS(1.5)
+          this.mountL2Object.camera.y += this.initByFPS(0)
+          this.mountL3Object.camera.x += this.initByFPS(6.25)
+          this.mountL3Object.camera.y += this.initByFPS(0)
           break
         case 8:
-          this.mountL1Object.camera.x += 0.4
-          this.mountL1Object.camera.y += 2
-          this.mountL2Object.camera.x += 6.25
-          this.mountL2Object.camera.y -= 2
-          this.mountL3Object.camera.x += 2
-          this.mountL3Object.camera.y += 0.8
+          this.mountL1Object.camera.x += this.initByFPS(0.4)
+          this.mountL1Object.camera.y += this.initByFPS(2)
+          this.mountL2Object.camera.x += this.initByFPS(6.25)
+          this.mountL2Object.camera.y -= this.initByFPS(2)
+          this.mountL3Object.camera.x += this.initByFPS(2)
+          this.mountL3Object.camera.y += this.initByFPS(0.8)
           break
         default:
-          this.mountL1Object.camera.x += 1
-          this.mountL1Object.camera.y += 0.1
-          this.mountL2Object.camera.x += 1
-          this.mountL2Object.camera.y += 0.2
-          this.mountL3Object.camera.x += 1
-          this.mountL3Object.camera.y += 0.1
+          this.mountL1Object.camera.x += this.initByFPS(1)
+          this.mountL1Object.camera.y += this.initByFPS(0.1)
+          this.mountL2Object.camera.x += this.initByFPS(1)
+          this.mountL2Object.camera.y += this.initByFPS(0.2)
+          this.mountL3Object.camera.x += this.initByFPS(1)
+          this.mountL3Object.camera.y += this.initByFPS(0.1)
           break
       }
     }
@@ -746,18 +750,13 @@ class myGame {
     this.drawEndPoint()
     this.drawFlag()
 
-    if (this.currentfps > 65 || this.currentfps < 40) {
-      this.stairObject.xSpeed = (60 / this.currentfps) * 7
-      this.stairObject.ySpeed = (60 / this.currentfps) * 2
-    } else {
-      this.stairObject.xSpeed = 7
-      this.stairObject.ySpeed = 2
-    }
+    this.stairObject.xSpeed = this.initByFPS(7)
+    this.stairObject.ySpeed = this.initByFPS(2)
     this.updateStairs()
     this.drawStair()
 
     if (this.isPlayingBrokenWood) {
-      this.brokenWood.anim += 1
+      this.brokenWood.anim += this.initByFPS(1)
       if (this.brokenWood.anim >= this.brokenWood.anim_change) {
         this.brokenWood.anim = 0
         this.isPlayingBrokenWood = false
@@ -793,45 +792,45 @@ class myGame {
       this.isMovingX = false
     }
 
-    this.flagObject.anim += 1
+    this.flagObject.anim += this.initByFPS(1)
     if (this.flagObject.anim >= this.flagObject.anim_change) {
       this.flagObject.anim = 0
     }
 
-    this.playerObject.anim += (1 / 16) * (1000 / this.currentfps)
-    console.log('anim', (1 / 16) * (1000 / this.currentfps))
+    this.playerObject.anim += this.initByFPS(1)
+    console.log('anim', this.initByFPS(1))
     if (this.playerObject.anim >= this.playerObject.anim_change) {
       this.playerObject.anim = 0
     }
 
     if (this.isCollStage) {
-      this.failPlayerObject.anim += 1
+      this.failPlayerObject.anim += this.initByFPS(1)
       if (this.failPlayerObject.anim >= this.failPlayerObject.anim_change) {
         this.failPlayerObject.anim = this.failPlayerObject.anim_change - 1
       }
     }
 
-    this.winPlayerObject.anim += 1
+    this.winPlayerObject.anim += this.initByFPS(1)
     if (this.winPlayerObject.anim >= this.winPlayerObject.anim_change) {
       this.winPlayerObject.anim = 0
     }
 
     if (this.isOverStage) {
-      this.winBoard.anim += 1
+      this.winBoard.anim += this.initByFPS(1)
       if (this.winBoard.anim >= this.winBoard.anim_change) {
         this.winBoard.anim = 0
         this.ctxAlpha = 0.5
         this.isOverStage = false
       }
       if (this.winBoard.anim <= 10) {
-        this.ctxAlpha += 0.05
+        this.ctxAlpha += this.initByFPS(0.05)
       } else if (this.winBoard.anim > 50) {
-        this.ctxAlpha -= 0.1
+        this.ctxAlpha -= this.initByFPS(0.1)
       }
     }
 
     if (this.isWin || this.isDying) {
-      this.resultAnim += 1
+      this.resultAnim += this.initByFPS(1)
       this.isGameOver = this.resultAnim >= Math.floor(this.currentfps / 2)
     }
 
@@ -1047,7 +1046,8 @@ class myGame {
     if (this.isCollStage) {
       this.failPlayerObject.currFrame = Math.floor(this.failPlayerObject.anim / 3)
 
-      this.failPlayerObject.y += 5
+      this.failPlayerObject.y += this.initByFPS(5)
+
       if (this.failPlayerObject.y > this.height - 15) {
         this.isDying = true
       }
@@ -1057,7 +1057,8 @@ class myGame {
         this.playerObject.currFrame = 1
       }
       this.playerObject.currFrame += 1
-      this.playerObject.y += 5
+      this.playerObject.y += this.initByFPS(5)
+
       if (this.playerObject.y > this.height - 15) {
         this.isDying = true
       }
@@ -1085,11 +1086,11 @@ class myGame {
         }
 
         if (this.playerObject.anim - 2 < Math.floor(this.playerObject.anim_change - 2) / 2 && this.playerObject.y > 2) {
-          this.playerObject.y -= (10 / 16) * (1000 / this.currentfps)
+          this.playerObject.y -= this.initByFPS(10)
         } else {
-          this.playerObject.y += (10 / 16) * (1000 / this.currentfps)
+          this.playerObject.y += this.initByFPS(10)
         }
-        console.log('player y', (10 / 16) * (1000 / this.currentfps))
+        console.log('player y', this.initByFPS(10))
       }
       this.drawPlayer()
     }
