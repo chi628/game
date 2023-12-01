@@ -747,10 +747,10 @@ class myGame {
     this.drawFlag()
 
     if (this.currentfps > 65 || this.currFrame < 40) {
-      this.stairObject.xSpeed = (60 / this.currentfps) * 7
+      this.stairObject.xSpeed = (60 / this.currentfps) * 10
       this.stairObject.ySpeed = (60 / this.currentfps) * 2
     } else {
-      this.stairObject.xSpeed = 7
+      this.stairObject.xSpeed = 10
       this.stairObject.ySpeed = 2
     }
 
