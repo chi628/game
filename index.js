@@ -748,13 +748,12 @@ class myGame {
 
     if (this.currentfps > 65 || this.currentfps < 40) {
       this.stairObject.xSpeed = (60 / this.currentfps) * 10
-      this.stairObject.ySpeed = (60 / this.currentfps) * 2
+      this.stairObject.ySpeed = (60 / this.currentfps) * 2.5
     } else {
       this.stairObject.xSpeed = 10
-      this.stairObject.ySpeed = 2
+      this.stairObject.ySpeed = 2.5
     }
 
-    console.log('fps', this.currentfps, this.stairObject.xSpeed)
     this.updateStairs()
     this.drawStair()
 
