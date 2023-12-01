@@ -107,7 +107,6 @@ const MID_CLOUD_INIT_XCOORD = -105
 const MINI_CLOUD_INIT_XCOORD = 70
 const TREE_INIT_XCOORD = 180
 
-// curr_frame
 class Object {
   x
   y
@@ -177,6 +176,7 @@ class myGame {
   devicePixelRatio
   backingStoreRatio
   ratio
+  reqAnim
 
   isMovingX = false
   isGameOver = false
@@ -188,6 +188,9 @@ class myGame {
   isTouched = false
   isPlayingBrokenWood = false
   isJumpOnShoe = false
+  isRolling = false
+  isFallingDown = false
+  isCollideStage = false
 
   displayStagesIndex = [] // 隨機3個障礙物的 index list
   stageOnStairIndex = [2, 7, 12] // 障礙物在階梯上的 index list
@@ -199,25 +202,16 @@ class myGame {
   stairList = []
   propsShoeList = []
 
-  fpsTestCount = 0
   playerOnStairIndex = -1 // player 站在哪一個階梯上
   preStairIndex = -1 // player 所在的前一個階梯
-  brokenWoodIndex = 0
   overStageStairIndex = -1 // 翻越障礙物所在的階梯 index
+  brokenWoodIndex = 0
 
   camera = 0
-
-  reqAnim
+  resultAnim = 0
 
   TREE_INIT_YCOORD
   PLAYER_PADDING
-
-  isRolling = false
-
-  isSixtyFPS = true
-  resultAnim = 0
-  isFallingDown = false
-  isCollStage = false
 
   constructor() {
     this.canvas = document.getElementById('my-canvas')
@@ -277,7 +271,7 @@ class myGame {
     this.isJumpOnShoe = false
     this.isRolling = false
     this.isFallingDown = false
-    this.isCollStage = false
+    this.isCollideStage = false
 
     this.camera = 0
     this.groundObject.camera.y = 0
@@ -356,23 +350,23 @@ class myGame {
 
     this.propsShoes = new Object(0, 0, 90, 40.3)
     // 1197 × 537
-    this.propsShoes.LoadFrame('Images/550-red.webp')
+    this.propsShoes.LoadFrame('Images/bb550vga.webp')
     // 1203 × 537
-    this.propsShoes.LoadFrame('Images/550-brown.webp')
+    this.propsShoes.LoadFrame('Images/bb550vgc.webp')
     // 1191 × 567
-    this.propsShoes.LoadFrame('Images/550-black.webp')
+    this.propsShoes.LoadFrame('Images/bbw550bh.webp')
     // 1206 × 576
-    this.propsShoes.LoadFrame('Images/550-gray.webp')
+    this.propsShoes.LoadFrame('Images/bb550vgb.webp')
     // 1200 × 624
-    this.propsShoes.LoadFrame('Images/550-white.webp')
+    this.propsShoes.LoadFrame('Images/bb550bk.webp')
     // 1188 × 549
-    this.propsShoes.LoadFrame('Images/1906-red.webp')
+    this.propsShoes.LoadFrame('Images/m1906rea.webp')
     // 1188 × 579
-    this.propsShoes.LoadFrame('Images/1906-blue.webp')
+    this.propsShoes.LoadFrame('Images/m1906reb.webp')
     // 1188 × 558
-    this.propsShoes.LoadFrame('Images/1906-gray.webp')
+    this.propsShoes.LoadFrame('Images/m1906reh.webp')
     // 1182 × 555
-    this.propsShoes.LoadFrame('Images/1906-silver.webp')
+    this.propsShoes.LoadFrame('Images/m1906ree.webp')
 
     this.stageObject = new Object(0, 0, 85, 85)
     for (let i = 0; i < stageList.length; i++) {
@@ -490,8 +484,6 @@ class myGame {
         currFrame: frameIndex,
       })
     }
-    this.stairObject.xSpeed = 7
-    this.stairObject.ySpeed = 2
 
     // 選擇的鞋
     for (let i = 0; i < this.shoeOnStairIndex.length; i++) {
@@ -510,6 +502,7 @@ class myGame {
 
     const playerInitXcoord = Math.floor(this.width * 0.6) - this.playerObject.width
     const playerInitYCoord = this.height * 0.84 - this.playerObject.height
+
     this.playerObject.x = playerInitXcoord
     this.playerObject.y = playerInitYCoord
     this.PLAYER_PADDING = this.playerObject.width * 0.25
@@ -603,11 +596,21 @@ class myGame {
   }
 
   initByFPS(number) {
-    return (number / 16) * (1000 / this.currentfps)
+    if (this.currentfps > 0) {
+      return (number / 16) * (1000 / this.currentfps)
+    }
+    return number
   }
 
   updateCamera() {
-    if (this.isMovingX && this.isJumping && !this.isDying && !this.isWin && !this.isFallingDown && !this.isCollStage) {
+    if (
+      this.isMovingX &&
+      this.isJumping &&
+      !this.isDying &&
+      !this.isWin &&
+      !this.isFallingDown &&
+      !this.isCollideStage
+    ) {
       this.camera += this.initByFPS(1)
       this.groundObject.camera.y += this.initByFPS(1.6)
 
@@ -721,18 +724,7 @@ class myGame {
       document.removeEventListener('touchstart', this.touchStart, { passive: false })
       document.removeEventListener('touchend', this.touchEnd)
 
-      this.fpsTimer = 0
-      this.isFallingDown = false
-      this.isCollStage = false
-
-      const successModal = document.getElementById('success-modal')
-      const failModal = document.getElementById('fail-modal')
-      if (successStage.length > 0) {
-        successModal.style.display = 'flex'
-        showStageList()
-      } else {
-        failModal.style.display = 'flex'
-      }
+      showModal()
       return
     }
 
@@ -749,12 +741,16 @@ class myGame {
     this.drawGroundL1()
     this.drawEndPoint()
     this.drawFlag()
-
     this.stairObject.xSpeed = this.initByFPS(7)
     this.stairObject.ySpeed = this.initByFPS(2)
-    this.updateStairs()
-    this.drawStair()
-
+    if (this.isStayOnWood) {
+      if (this.stairList[this.brokenWoodIndex].alive) {
+        this.stairList[this.brokenWoodIndex].state = 1
+        this.stairList[this.brokenWoodIndex].alive = false
+        this.playerObject.anim = 3
+        this.isPlayingBrokenWood = true
+      }
+    }
     if (this.isPlayingBrokenWood) {
       this.brokenWood.anim += this.initByFPS(1)
       if (this.brokenWood.anim >= this.brokenWood.anim_change) {
@@ -765,28 +761,22 @@ class myGame {
         this.drawBrokenWood()
       }
     }
+    this.updateStairs()
+    this.drawStair()
 
     this.drawStages()
+    this.checkStageStatus()
     this.drawShoes()
 
     this.updatePlayer()
 
-    this.checkStageStatus()
-
-    if (this.isStayOnWood) {
-      if (this.stairList[this.brokenWoodIndex].alive) {
-        this.stairList[this.brokenWoodIndex].state = 1
-        this.stairList[this.brokenWoodIndex].alive = false
-        this.playerObject.anim = 3
-        this.isPlayingBrokenWood = true
-      }
-    }
     this.drawPropsBox()
     this.updateCamera()
 
     this.isJumping = this.playerObject.anim > 2
 
     if (this.isTouched) {
+      // 最後一個階梯的 x (階梯左側)
       this.isMovingX = this.stairList[this.stairList.length - 1].x > 35
     } else {
       this.isMovingX = false
@@ -798,12 +788,12 @@ class myGame {
     }
 
     this.playerObject.anim += this.initByFPS(1)
-    console.log('anim', this.initByFPS(1))
+    console.log('anim', this.initByFPS(1), this.currentfps)
     if (this.playerObject.anim >= this.playerObject.anim_change) {
       this.playerObject.anim = 0
     }
 
-    if (this.isCollStage) {
+    if (this.isCollideStage) {
       this.failPlayerObject.anim += this.initByFPS(1)
       if (this.failPlayerObject.anim >= this.failPlayerObject.anim_change) {
         this.failPlayerObject.anim = this.failPlayerObject.anim_change - 1
@@ -975,7 +965,14 @@ class myGame {
   }
 
   updateStairs() {
-    if (this.isMovingX && this.isJumping && !this.isDying && !this.isWin && !this.isCollStage && !this.isFallingDown) {
+    if (
+      this.isMovingX &&
+      this.isJumping &&
+      !this.isDying &&
+      !this.isWin &&
+      !this.isCollideStage &&
+      !this.isFallingDown
+    ) {
       for (let i = 0; i < this.stairList.length; i++) {
         this.stairList[i].x -= this.stairObject.xSpeed
         this.stairList[i].y += this.stairObject.ySpeed
@@ -1043,7 +1040,7 @@ class myGame {
   }
 
   updatePlayer() {
-    if (this.isCollStage) {
+    if (this.isCollideStage) {
       this.failPlayerObject.currFrame = Math.floor(this.failPlayerObject.anim / 3)
 
       this.failPlayerObject.y += this.initByFPS(5)
@@ -1085,12 +1082,23 @@ class myGame {
           this.playerObject.currFrame += 1
         }
 
-        if (this.playerObject.anim - 2 < Math.floor(this.playerObject.anim_change - 2) / 2 && this.playerObject.y > 2) {
-          this.playerObject.y -= this.initByFPS(10)
-        } else {
-          this.playerObject.y += this.initByFPS(10)
+        let distance = this.height * 0.4
+        if (this.isJumpOnShoe) {
+          distance = this.height * 0.4 + this.playerObject.height - 25
         }
-        console.log('player y', this.initByFPS(10))
+        const halfAnimChange = Math.floor((this.playerObject.anim_change - 2) / 2)
+        if (this.playerObject.anim - 2 < halfAnimChange) {
+          this.playerObject.y -= this.initByFPS(Math.floor(distance) / halfAnimChange)
+        } else {
+          this.playerObject.y += this.initByFPS(Math.floor(distance) / halfAnimChange)
+        }
+        console.log(
+          'player y',
+          halfAnimChange,
+          Math.floor(distance) / halfAnimChange,
+          this.initByFPS(Math.floor(distance) / halfAnimChange),
+          distance
+        )
       }
       this.drawPlayer()
     }
@@ -1127,9 +1135,7 @@ class myGame {
   }
 
   checkPlayerStair() {
-    const isStartGame =
-      this.playerObject.x + this.playerObject.width - this.PLAYER_PADDING - this.playerObject.width * 0.2 >=
-      this.stairList[0].x
+    const isStartGame = this.playerObject.x + this.playerObject.width - this.PLAYER_PADDING >= this.stairList[0].x + 10
 
     this.playerOnStairIndex = this.stairList.findIndex((stair, i) => {
       if (
@@ -1138,27 +1144,29 @@ class myGame {
         (stair.x <= this.playerObject.x + this.PLAYER_PADDING &&
           stair.x + stair.width > this.playerObject.x + this.playerObject.width * 0.35)
       ) {
-        if (this.playerObject.y + this.playerObject.height - 5 > stair.y) {
+        // 修正跳到下一階時閃動問題
+        if (this.playerObject.y + this.playerObject.height - 3 > stair.y) {
           this.playerObject.anim = 0
         }
 
         // 現在所在的 x 範圍在有鞋子
         if (this.shoeOnStairIndex.includes(i)) {
           if (
-            this.playerObject.y + this.playerObject.height - 5 >= stair.y - this.propsShoes.height &&
-            this.playerObject.y + this.playerObject.height - 5 <= stair.y
+            this.playerObject.y + this.playerObject.height - 3 >= stair.y - this.propsShoes.height &&
+            this.playerObject.y + this.playerObject.height - 3 <= stair.y
           ) {
-            // 一碰到鞋子，就跳躍
             const index = this.shoeOnStairIndex.findIndex(o => o === i)
 
             if (index > -1) {
               if (this.propsShoeList[index].alive) {
+                // 一碰到鞋子，就跳躍
                 this.playerObject.anim = 3
                 this.playerObject.currFrame = 12
                 this.playerObject.SetAnimChange(120)
                 this.isJumpOnShoe = true
                 this.propsShoeList[index].alive = false
               } else if (this.isJumpOnShoe && this.playerObject.anim >= 70) {
+                // 完成吃掉鞋子動畫後，還在原階梯上，恢復原本動畫
                 this.isJumpOnShoe = false
                 this.playerObject.SetAnimChange(70)
               }
@@ -1170,21 +1178,24 @@ class myGame {
     })
 
     this.isRolling = this.playerObject.anim < this.playerObject.anim_change - 5
+
     if (this.playerOnStairIndex > -1) {
       this.preStairIndex = this.playerOnStairIndex
       // 如果降落的階梯不含有鞋子，更改動畫
-      if (!this.shoeOnStairIndex.includes(this.playerOnStairIndex) && this.playerObject.anim <= 2) {
+      if (!this.shoeOnStairIndex.includes(this.playerOnStairIndex) && !this.isJumping) {
         this.isJumpOnShoe = false
         this.playerObject.SetAnimChange(70)
       }
 
       // 檢查是否落在木頭階梯上
-      if (stairLevel[this.playerOnStairIndex] === 'w' && this.playerObject.anim <= 2) {
+      if (stairLevel[this.playerOnStairIndex] === 'w' && !this.isJumping) {
+        // 還在正常階梯時
         if (this.stairList[this.playerOnStairIndex].state === 0) {
           this.playerObject.anim = 0
           this.isStayOnWood = true
           this.brokenWoodIndex = this.playerOnStairIndex
         } else {
+          // 階梯已斷裂，且沒在播動畫
           this.isFallingDown = !this.isPlayingBrokenWood
         }
       }
@@ -1196,14 +1207,15 @@ class myGame {
           this.isWin = true
         }
       } else {
-        if (this.playerObject.y + this.playerObject.height - 3 > this.stairList[this.preStairIndex].y) {
+        const index = this.preStairIndex === -1 ? 0 : this.preStairIndex
+        if (this.playerObject.y + this.playerObject.height - 3 > this.stairList[index].y) {
           this.isFallingDown = true
         }
       }
     }
 
-    if (this.stageOnStairIndex.includes(this.playerOnStairIndex) && (!this.isRolling || this.playerObject.anim <= 2)) {
-      this.isCollStage = true
+    if (this.stageOnStairIndex.includes(this.playerOnStairIndex) && !this.isJumping) {
+      this.isCollideStage = true
     }
 
     if (
@@ -1370,22 +1382,24 @@ const stageSwiper = new Swiper('.stage-swiper', {
   },
 })
 
-let preGame
-let preGameBtn
-let series550
-let series1906
-let shoesColor550
-let swiperPagination
-
-const shoes550List = ['red', 'brown', 'black', 'gray', 'white']
-const shoes1906List = ['red', 'blue', 'gray', 'silver']
-
 window.addEventListener('resize', () => {
   if (window['myGame']) {
     window['myGame'].initScreen()
     window['myGame'].updateObject()
   }
 })
+
+let preGame
+let preGameBtn
+let series550
+let series1906
+let shoesColor550
+let swiperPagination
+let successModal
+let failModal
+
+const shoes550List = ['red', 'brown', 'black', 'gray', 'white']
+const shoes1906List = ['red', 'blue', 'gray', 'silver']
 
 document.addEventListener('DOMContentLoaded', () => {
   window['myGame'] = new myGame()
@@ -1396,6 +1410,8 @@ document.addEventListener('DOMContentLoaded', () => {
   series550 = document.getElementById('series-550')
   series1906 = document.getElementById('series-1906')
   swiperPagination = document.getElementById('swiper-pagination')
+  successModal = document.getElementById('success-modal')
+  failModal = document.getElementById('fail-modal')
 
   startGame()
 
@@ -1438,8 +1454,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (playAgainBtn) {
     playAgainBtn.addEventListener('click', () => {
-      document.getElementById('fail-modal').style.display = 'none'
-      document.getElementById('pre-game').style.display = 'flex'
+      failModal.style.display = 'none'
+      preGame.style.display = 'flex'
       window['myGame'].initGame()
     })
   }
@@ -1498,5 +1514,14 @@ function showStageList() {
       }
       stageSwiper.appendSlide(stage)
     }
+  }
+}
+
+function showModal() {
+  if (successStage.length > 0) {
+    successModal.style.display = 'flex'
+    showStageList()
+  } else {
+    failModal.style.display = 'flex'
   }
 }

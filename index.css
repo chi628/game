@@ -305,31 +305,31 @@
 }
 
 .red-550 {
-  background-image: url(./Images/550-red.webp);
+  background-image: url(./Images/bb550vga.webp);
 }
 .brown-550 {
-  background-image: url(./Images/550-brown.webp);
+  background-image: url(./Images/bb550vgc.webp);
 }
 .black-550 {
-  background-image: url(./Images/550-black.webp);
+  background-image: url(./Images/bbw550bh.webp);
 }
 .gray-550 {
-  background-image: url(./Images/550-gray.webp);
+  background-image: url(./Images/bb550vgb.webp);
 }
 .white-550 {
-  background-image: url(./Images/550-white.webp);
+  background-image: url(./Images/bb550bk.webp);
 }
 .red-1906 {
-  background-image: url(./Images/1906-red.webp);
+  background-image: url(./Images/m1906rea.webp);
 }
 .blue-1906 {
-  background-image: url(./Images/1906-blue.webp);
+  background-image: url(./Images/m1906reb.webp);
 }
 .gray-1906 {
-  background-image: url(./Images/1906-gray.webp);
+  background-image: url(./Images/m1906reh.webp);
 }
 .silver-1906 {
-  background-image: url(./Images/1906-silver.webp);
+  background-image: url(./Images/m1906ree.webp);
 }
 
 .pagination-550 > :nth-child(1) {
