@@ -1134,8 +1134,8 @@ class myGame {
 
   checkPlayerStair() {
     const isStartGame =
-      this.playerObject.x + this.playerObject.width - this.PLAYER_PADDING - this.playerObject.width * 0.2 >=
-      this.stairList[0].x
+    this.playerObject.x + this.playerObject.width - this.PLAYER_PADDING - this.playerObject.width * 0.2 >=
+    this.stairList[0].x
 
     this.playerOnStairIndex = this.stairList.findIndex((stair, i) => {
       if (
@@ -1202,7 +1202,7 @@ class myGame {
           this.isWin = true
         }
       } else {
-        if (this.playerObject.anim > this.playerObject.anim_change - 2) {
+        if (this.playerObject.y + this.playerObject.height - 2 > this.stairList[this.preStairIndex].y) {
           this.isFallingDown = true
         }
       }
