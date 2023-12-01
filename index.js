@@ -746,14 +746,12 @@ class myGame {
     this.drawEndPoint()
     this.drawFlag()
 
-    if (this.currentfps > 65 || this.currFrame < 40) {
+    if (this.currentfps > 65 || this.currentfps < 40) {
       this.stairObject.xSpeed = (60 / this.currentfps) * 10
       this.stairObject.ySpeed = (60 / this.currentfps) * 2
-      console.log('if',this.currentfps, this.stairObject.xSpeed ,this.stairObject.ySpeed)
     } else {
       this.stairObject.xSpeed = 10
       this.stairObject.ySpeed = 2
-      console.log('else',this.currentfps, this.stairObject.xSpeed ,this.stairObject.ySpeed)
     }
 
     console.log('fps', this.currentfps, this.stairObject.xSpeed)
