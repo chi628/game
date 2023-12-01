@@ -746,10 +746,10 @@ class myGame {
     this.drawEndPoint()
     this.drawFlag()
 
-    if (this.currentfps > 65 || this.currFrame < 40) {
+    if (this.currentfps > 65 || this.currentfps < 40) {
       this.stairObject.xSpeed = (60 / this.currentfps) * 7
       this.stairObject.ySpeed = (60 / this.currentfps) * 2
-      console.log('if',  this.stairObject.xSpeed, this.stairObject.ySpeed,this.currentfps)
+      console.log('if', this.stairObject.xSpeed, this.stairObject.ySpeed, this.currentfps)
     } else {
       this.stairObject.xSpeed = 7
       this.stairObject.ySpeed = 2
@@ -1087,17 +1087,19 @@ class myGame {
         }
         if (this.playerObject.anim - 2 < Math.floor(this.playerObject.anim_change - 2) / 2 && this.playerObject.y > 2) {
           if (this.currentfps > 65) {
-            this.playerObject.y -= 600 / this.currentfps
+            this.playerObject.y -= 500 / this.currentfps
           } else {
-            this.playerObject.y -= 10
+            this.playerObject.y -= (this.height*.34)/Math.floor(this.playerObject.anim_change - 2) / 2
           }
         } else {
           if (this.currentfps > 65) {
-            this.playerObject.y += 600 / this.currentfps
+            this.playerObject.y += 500 / this.currentfps
           } else {
-            this.playerObject.y += 10
+            this.playerObject.y += (this.height*.34)/Math.floor(this.playerObject.anim_change - 2) / 2
           }
         }
+
+        console.log('player y',this.playerObject.y)
       }
       this.drawPlayer()
     }
@@ -1320,7 +1322,7 @@ class myGame {
   }
 }
 
-var vConsole = new window.VConsole();
+var vConsole = new window.VConsole()
 
 let baseIndex = 0
 const shoeSwiper = new Swiper('.shoes-swiper', {
