@@ -1089,17 +1089,17 @@ class myGame {
           if (this.currentfps > 65) {
             this.playerObject.y -= 500 / this.currentfps
           } else {
-            this.playerObject.y -= (this.height*.34)/Math.floor(this.playerObject.anim_change - 2) / 2
+            this.playerObject.y -= 10
           }
         } else {
           if (this.currentfps > 65) {
             this.playerObject.y += 500 / this.currentfps
           } else {
-            this.playerObject.y += (this.height*.34)/Math.floor(this.playerObject.anim_change - 2) / 2
+            this.playerObject.y += 10
           }
         }
 
-        console.log('player y',this.playerObject.y)
+        console.log('player y',(this.height*.34)/Math.floor(this.playerObject.anim_change - 2) / 2)
       }
       this.drawPlayer()
     }
