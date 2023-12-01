@@ -1,4 +1,9 @@
 {
   "prettier.singleQuote": true,
-  "editor.defaultFormatter": "esbenp.prettier-vscode"
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.matchBrackets": "always",
+  "prettier.arrowParens": "avoid",
+  "prettier.endOfLine": "auto",
+  "prettier.semi": false,
+  "prettier.trailingComma": "es5"
 }
