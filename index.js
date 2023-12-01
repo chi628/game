@@ -1085,14 +1085,14 @@ class myGame {
           this.playerObject.currFrame += 1
         }
         if (this.playerObject.anim - 2 < Math.floor(this.playerObject.anim_change - 2) / 2 && this.playerObject.y > 2) {
-          if (this.currentfps > 65) {
-            this.playerObject.y -= 600 / this.currentfps
+          if (this.currentfps > 65  || this.currentfps < 40) {
+            this.playerObject.y -= 550 / this.currentfps
           } else {
             this.playerObject.y -= 10
           }
         } else {
-          if (this.currentfps > 65) {
-            this.playerObject.y += 600 / this.currentfps
+          if (this.currentfps > 65  || this.currentfps < 40) {
+            this.playerObject.y += 550 / this.currentfps
           } else {
             this.playerObject.y += 10
           }
