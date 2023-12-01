@@ -1086,19 +1086,20 @@ class myGame {
         }
         if (this.playerObject.anim - 2 < Math.floor(this.playerObject.anim_change - 2) / 2 && this.playerObject.y > 2) {
           if (this.currentfps > 65  || this.currentfps < 40) {
-            this.playerObject.y -= 500 / this.currentfps
+            this.playerObject.y -= (this.height * .34 /  Math.floor(this.playerObject.anim_change - 2)) / this.currentfps
           } else {
-            this.playerObject.y -= 10
+            this.playerObject.y -= this.height * .34 /  Math.floor(this.playerObject.anim_change - 2)
           }
         } else {
           if(this.playerObject.y < this.height * 0.84 - this.playerObject.height ) {
-            if (this.currentfps > 65 ) {
-              this.playerObject.y += 500 / this.currentfps
+            if (this.currentfps > 65  || this.currentfps < 40 ) {
+              this.playerObject.y += (this.height * .34 /  Math.floor(this.playerObject.anim_change - 2)) / this.currentfps
             } else {
-              this.playerObject.y += 10
+              this.playerObject.y += this.height * .34 /  Math.floor(this.playerObject.anim_change - 2)
             }
           }
         }
+
       }
       this.drawPlayer()
     }
