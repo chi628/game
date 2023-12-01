@@ -754,6 +754,7 @@ class myGame {
       this.stairObject.xSpeed = 7
       this.stairObject.ySpeed = 2
     }
+    console.log('fps', this.currentfps)
     this.updateStairs()
     this.drawStair()
 
@@ -1318,6 +1319,8 @@ class myGame {
     this.ctx.fillText(shoesName, Math.floor((this.propsBoxObject.width + 25) / 2), this.propsBoxObject.height)
   }
 }
+
+var vConsole = new window.VConsole();
 
 let baseIndex = 0
 const shoeSwiper = new Swiper('.shoes-swiper', {
