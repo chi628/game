@@ -842,7 +842,9 @@ class myGame {
       this.flagObject.anim = 0
     }
 
-    this.playerObject.anim += this.initByFPS(1)
+    if (this.currentfps > 25) {
+      this.playerObject.anim += this.initByFPS(1)
+    }
     console.log('anim', this.initByFPS(1), this.currentfps)
     if (this.playerObject.anim >= this.playerObject.anim_change) {
       this.playerObject.anim = 0
