@@ -117,6 +117,7 @@ class Object {
   xSpeed = 0
   ySpeed = 0
   alive = true
+  imgLoaded = 0
 
   constructor(x, y, width, height) {
     this.x = x
@@ -129,6 +130,13 @@ class Object {
     let frame = new Image()
     frame.src = filename
     this.frames.push(frame)
+    if (frame.complete) {
+      this.imgLoaded += 1
+    } else {
+      frame.onload = () => {
+        this.imgLoaded += 1
+      }
+    }
   }
 }
 
@@ -151,6 +159,7 @@ class AnimatorObject {
   anim = 0
   anim_change = 0
   frames = []
+  imgLoaded = 0
 
   constructor(width, height) {
     this.width = width
@@ -161,6 +170,13 @@ class AnimatorObject {
     let frame = new Image()
     frame.src = filename
     this.frames.push(frame)
+    if (frame.complete) {
+      this.imgLoaded += 1
+    } else {
+      frame.onload = () => {
+        this.imgLoaded += 1
+      }
+    }
   }
 
   SetAnimChange(limit) {
@@ -191,6 +207,7 @@ class myGame {
   isRolling = false
   isFallingDown = false
   isCollideStage = false
+  isStart = false
 
   displayStagesIndex = [] // 隨機3個障礙物的 index list
   stageOnStairIndex = [2, 7, 12] // 障礙物在階梯上的 index list
@@ -212,6 +229,9 @@ class myGame {
 
   TREE_INIT_YCOORD
   PLAYER_PADDING
+  LOADED_COUNT = 78
+  loadCounter = 0
+  isLoaded = false
 
   constructor() {
     this.canvas = document.getElementById('my-canvas')
@@ -253,8 +273,36 @@ class myGame {
   }
 
   startGame() {
+    if (!this.isLoaded) {
+      document.getElementById('loading').style.display = 'block'
+    }
+    this.isStart = true
     document.addEventListener('touchstart', this.touchStart, { passive: false })
     document.addEventListener('touchend', this.touchEnd)
+  }
+
+  checkImgLoaded() {
+    this.loadCounter += this.bigCloudObject.imgLoaded
+    this.loadCounter += this.midCloudObject.imgLoaded
+    this.loadCounter += this.miniCloudObject.imgLoaded
+    this.loadCounter += this.groundObject.imgLoaded
+    this.loadCounter += this.treeObject.imgLoaded
+    this.loadCounter += this.mountL1Object.imgLoaded
+    this.loadCounter += this.mountL2Object.imgLoaded
+    this.loadCounter += this.mountL3Object.imgLoaded
+    this.loadCounter += this.stairObject.imgLoaded
+    this.loadCounter += this.endPointObject.imgLoaded
+    this.loadCounter += this.propsBoxObject.imgLoaded
+    this.loadCounter += this.propsShoes.imgLoaded
+    this.loadCounter += this.stageObject.imgLoaded
+    this.loadCounter += this.winBoard.imgLoaded
+    this.loadCounter += this.flagObject.imgLoaded
+    this.loadCounter += this.playerObject.imgLoaded
+    this.loadCounter += this.winPlayerObject.imgLoaded
+    this.loadCounter += this.failPlayerObject.imgLoaded
+    this.loadCounter += this.brokenWood.imgLoaded
+    console.log('counter', this.loadCounter)
+    this.isLoaded = this.loadCounter === this.LOADED_COUNT
   }
 
   resetGame() {
@@ -716,6 +764,14 @@ class myGame {
   }
 
   draw() {
+    if (!this.isLoaded) {
+      this.loadCounter = 0
+      this.checkImgLoaded()
+    } else {
+      if (this.isStart) {
+        document.getElementById('loading').style.display = 'none'
+      }
+    }
     this.countFPS()
     this.clearScreen()
 
