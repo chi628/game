@@ -845,7 +845,6 @@ class myGame {
     if (this.currentfps > 25) {
       this.playerObject.anim += this.initByFPS(1)
     }
-    console.log('anim', this.initByFPS(1), this.currentfps)
     if (this.playerObject.anim >= this.playerObject.anim_change) {
       this.playerObject.anim = 0
     }
@@ -864,7 +863,7 @@ class myGame {
 
     if (this.isOverStage) {
       this.winBoard.anim += this.initByFPS(1)
-      if (Math.round(this.winBoard.anim) >= this.winBoard.anim_change) {
+      if (Math.round(this.winBoard.anim) >= this.winBoard.anim_change || this.ctxAlpha < 0) {
         this.winBoard.anim = 0
         this.ctxAlpha = 0.5
         this.isOverStage = false
@@ -1072,7 +1071,6 @@ class myGame {
   drawEndPoint() {
     this.endPointObject.x = this.stairList[this.stairList.length - 1].x - 10
     this.endPointObject.y = this.stairList[this.stairList.length - 1].y - 160
-
     this.ctx.drawImage(
       this.endPointObject.frames[0],
       this.endPointObject.x,
@@ -1107,10 +1105,10 @@ class myGame {
       }
       this.drawFailPlayer()
     } else if (this.isFallingDown) {
-      if (this.playerObject.currFrame >= 12) {
+      this.playerObject.currFrame += 1
+      if (this.playerObject.currFrame >= 12 || this.playerObject.currFrame === 0) {
         this.playerObject.currFrame = 1
       }
-      this.playerObject.currFrame += 1
       this.playerObject.y += this.initByFPS(5)
 
       if (this.playerObject.y > this.height - 15) {
@@ -1150,13 +1148,6 @@ class myGame {
         } else {
           this.playerObject.y += this.initByFPS(Math.floor(distance) / halfAnimChange)
         }
-        console.log(
-          'player y',
-          halfAnimChange,
-          Math.floor(distance) / halfAnimChange,
-          this.initByFPS(Math.floor(distance) / halfAnimChange),
-          distance
-        )
       }
       this.drawPlayer()
     }
@@ -1260,14 +1251,22 @@ class myGame {
     }
 
     if (this.playerOnStairIndex === -1 && isStartGame) {
-      if (this.endPointObject.x + 100 <= this.playerObject.x + this.PLAYER_PADDING) {
-        if (this.playerObject.y + this.playerObject.height + 3 >= this.endPointObject.y + 120) {
+      if (
+        Math.floor(this.endPointObject.x + 110) <=
+        this.playerObject.x + this.playerObject.width - this.PLAYER_PADDING
+      ) {
+        if (
+          this.playerObject.y + this.playerObject.height + 3 >= this.endPointObject.y + 115 ||
+          this.playerObject.anim === 0
+        ) {
           this.isWin = true
         }
-        return
       } else {
         const index = this.preStairIndex === -1 ? 0 : this.preStairIndex
-        if (this.playerObject.y + this.playerObject.height - 3 > this.stairList[index].y) {
+        if (
+          this.playerObject.anim < 3 &&
+          this.playerObject.y + this.playerObject.height < this.stairList[index].y - 3
+        ) {
           this.isFallingDown = true
         }
       }
@@ -1337,6 +1336,9 @@ class myGame {
   }
 
   drawWinBoard() {
+    if (this.ctxAlpha < 0) {
+      return
+    }
     this.ctx.globalAlpha = this.ctxAlpha
 
     this.ctx.drawImage(
@@ -1513,7 +1515,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (playAgainBtn) {
     playAgainBtn.addEventListener('click', () => {
-      console.log('play again')
       failModal.style.display = 'none'
       preGame.style.display = 'flex'
       window['myGame'].initGame()
