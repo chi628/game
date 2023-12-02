@@ -301,7 +301,6 @@ class myGame {
     this.loadCounter += this.winPlayerObject.imgLoaded
     this.loadCounter += this.failPlayerObject.imgLoaded
     this.loadCounter += this.brokenWood.imgLoaded
-    console.log('counter', this.loadCounter)
     this.isLoaded = this.loadCounter === this.LOADED_COUNT
   }
 
@@ -863,7 +862,7 @@ class myGame {
 
     if (this.isOverStage) {
       this.winBoard.anim += this.initByFPS(1)
-      if (this.winBoard.anim >= this.winBoard.anim_change) {
+      if (Math.round(this.winBoard.anim) >= this.winBoard.anim_change) {
         this.winBoard.anim = 0
         this.ctxAlpha = 0.5
         this.isOverStage = false
@@ -1120,6 +1119,7 @@ class myGame {
       this.winPlayerObject.currFrame = Math.floor(this.winPlayerObject.anim / 6)
       this.winPlayerObject.x = this.playerObject.x
       this.winPlayerObject.y = this.endPointObject.y + 120 - this.winPlayerObject.height + 2
+
       this.drawWinPlayer()
     } else {
       if (this.playerObject.anim <= 2) {
@@ -1262,6 +1262,7 @@ class myGame {
         if (this.playerObject.y + this.playerObject.height + 3 >= this.endPointObject.y + 120) {
           this.isWin = true
         }
+        return
       } else {
         const index = this.preStairIndex === -1 ? 0 : this.preStairIndex
         if (this.playerObject.y + this.playerObject.height - 3 > this.stairList[index].y) {
@@ -1510,6 +1511,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (playAgainBtn) {
     playAgainBtn.addEventListener('click', () => {
+      console.log('play again')
       failModal.style.display = 'none'
       preGame.style.display = 'flex'
       window['myGame'].initGame()
