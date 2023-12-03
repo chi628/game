@@ -319,6 +319,7 @@ class myGame {
     this.isRolling = false
     this.isFallingDown = false
     this.isCollideStage = false
+    this.isFirstFail = true
 
     this.camera = 0
     this.groundObject.camera.y = 0
@@ -1096,6 +1097,7 @@ class myGame {
 
   updatePlayer() {
     if (this.isCollideStage) {
+      this.isFirstFail = false
       this.failPlayerObject.currFrame = Math.floor(this.failPlayerObject.anim / 3)
 
       this.failPlayerObject.y += this.initByFPS(5)
@@ -1183,6 +1185,7 @@ class myGame {
     )
   }
 
+  isFirstFail = true
   checkPlayerStair() {
     const isStartGame = this.playerObject.x + this.playerObject.width - this.PLAYER_PADDING >= this.stairList[0].x + 10
 
@@ -1274,7 +1277,13 @@ class myGame {
       }
     }
 
-    if (this.stageOnStairIndex.includes(this.playerOnStairIndex) && !this.isJumping) {
+    if (
+      this.stageOnStairIndex.includes(this.playerOnStairIndex) &&
+      this.playerObject.anim > this.playerObject.anim_change - 1
+    ) {
+      if (this.isFirstFail) {
+        this.failPlayerObject.y = this.playerObject.y + Math.floor(this.failPlayerObject.height / 3)
+      }
       this.isCollideStage = true
     }
 
