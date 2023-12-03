@@ -1235,9 +1235,11 @@ class myGame {
         this.isJumpOnShoe = false
         this.playerObject.SetAnimChange(70)
       }
-
       // 檢查是否落在木頭階梯上
-      if (stairLevel[this.playerOnStairIndex] === 'w' && !this.isJumping) {
+      if (
+        stairLevel[this.playerOnStairIndex] === 'w' &&
+        this.playerObject.y + this.playerObject.height + 3 >= this.stairList[this.playerOnStairIndex].y
+      ) {
         // 還在正常階梯時
         if (this.stairList[this.playerOnStairIndex].state === 0) {
           this.playerObject.anim = 0
