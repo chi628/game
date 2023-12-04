@@ -1238,7 +1238,6 @@ class myGame {
     })
 
     this.isRolling = this.playerObject.anim < this.playerObject.anim_change - 5
-
     if (this.playerOnStairIndex > -1) {
       this.preStairIndex = this.playerOnStairIndex
       // 如果降落的階梯不含有鞋子，更改動畫
@@ -1284,10 +1283,9 @@ class myGame {
         }
       }
     }
-
     if (
       this.stageOnStairIndex.includes(this.playerOnStairIndex) &&
-      this.playerObject.anim > this.playerObject.anim_change - 1
+      (Math.floor(this.playerObject.anim) > this.playerObject.anim_change - 5 || this.playerObject.anim < 3)
     ) {
       if (this.isFirstFail) {
         this.failPlayerObject.y = this.playerObject.y + Math.floor(this.failPlayerObject.height / 3)
