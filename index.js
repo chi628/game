@@ -853,9 +853,11 @@ class myGame {
     }
 
     if (this.isCollideStage) {
-      this.failPlayerObject.anim += this.initByFPS(1)
+      if (!this.isDying) {
+        this.failPlayerObject.anim += this.initByFPS(1)
+      }
       if (this.failPlayerObject.anim >= this.failPlayerObject.anim_change) {
-        this.failPlayerObject.anim = this.failPlayerObject.anim_change - 1
+        this.failPlayerObject.anim = 4
         this.isDying = true
       }
     }
@@ -1098,9 +1100,12 @@ class myGame {
     )
   }
 
+  failAnimPlaytimes = 0
+  isTimeToDie = false
   updatePlayer() {
     if (this.isCollideStage) {
       this.isFirstFail = false
+      
       if (this.failPlayerObject.y + this.failPlayerObject.height < this.stairList[this.preStairIndex].y) {
         this.failPlayerObject.y = this.stairList[this.preStairIndex].y - this.failPlayerObject.height + 10
       }
