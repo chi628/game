@@ -856,6 +856,7 @@ class myGame {
       this.failPlayerObject.anim += this.initByFPS(1)
       if (this.failPlayerObject.anim >= this.failPlayerObject.anim_change) {
         this.failPlayerObject.anim = this.failPlayerObject.anim_change - 1
+        this.isDying = true
       }
     }
 
@@ -1100,20 +1101,18 @@ class myGame {
   updatePlayer() {
     if (this.isCollideStage) {
       this.isFirstFail = false
+      if (this.failPlayerObject.y + this.failPlayerObject.height < this.stairList[this.preStairIndex].y) {
+        this.failPlayerObject.y = this.stairList[this.preStairIndex].y - this.failPlayerObject.height + 10
+      }
       this.failPlayerObject.currFrame = Math.floor(this.failPlayerObject.anim / 3)
 
-      this.failPlayerObject.y += this.initByFPS(5)
-
-      if (this.failPlayerObject.y > this.height - 15) {
-        this.isDying = true
-      }
       this.drawFailPlayer()
     } else if (this.isFallingDown) {
       this.playerObject.currFrame += 1
       if (this.playerObject.currFrame >= 12 || this.playerObject.currFrame === 0) {
         this.playerObject.currFrame = 1
       }
-      this.playerObject.y += this.initByFPS(5)
+      this.playerObject.y += this.initByFPS(20)
 
       if (this.playerObject.y > this.height - 15) {
         this.isDying = true
