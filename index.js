@@ -6,7 +6,7 @@ import Swiper from 'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.mjs
  * w -> 木頭階梯
  * e -> 勝利平台
  */
-const stairLevel = ['l', 's', 'l', 's', 'w', 's', 'l', 's', 'l', 'w', 'l', 's', 's', 's', 's']
+const stairLevel = ['s', 'l', 'l', 's', 'w', 's', 'l', 'l', 's', 'w', 's', 'l', 'l', 's', 's']
 
 const stageList = [
   {
@@ -805,6 +805,8 @@ class myGame {
         this.stairList[this.brokenWoodIndex].alive = false
         this.playerObject.anim = 3
         this.isPlayingBrokenWood = true
+        this.isJumpOnShoe = false
+        this.playerObject.SetAnimChange(70)
       }
     }
     if (this.isPlayingBrokenWood) {
@@ -1126,10 +1128,15 @@ class myGame {
     } else {
       if (this.playerObject.anim <= 2) {
         this.playerObject.currFrame = 0
-        this.playerObject.y = this.height * 0.84 - this.playerObject.height + 2
 
         if (this.playerOnStairIndex > -1) {
           this.playerObject.y = this.stairList[this.playerOnStairIndex].y - this.playerObject.height + 2
+        } else if (this.preStairIndex > -1) {
+          this.playerObject.y = this.stairList[this.preStairIndex].y - this.playerObject.height + 2
+        } else if (this.isStartGame) {
+          this.playerObject.y = this.stairList[0].y - this.playerObject.height
+        } else {
+          this.playerObject.y = this.height * 0.84 - this.playerObject.height + 2
         }
       } else {
         // jump
@@ -1186,8 +1193,9 @@ class myGame {
   }
 
   isFirstFail = true
+  isStartGame = false
   checkPlayerStair() {
-    const isStartGame = this.playerObject.x + this.playerObject.width - this.PLAYER_PADDING >= this.stairList[0].x + 10
+    this.isStartGame = this.playerObject.x + this.playerObject.width - this.PLAYER_PADDING >= this.stairList[0].x + 10
 
     this.playerOnStairIndex = this.stairList.findIndex((stair, i) => {
       if (
@@ -1255,7 +1263,7 @@ class myGame {
       }
     }
 
-    if (this.playerOnStairIndex === -1 && isStartGame) {
+    if (this.playerOnStairIndex === -1 && this.isStartGame) {
       if (
         Math.floor(this.endPointObject.x + 110) <=
         this.playerObject.x + this.playerObject.width - this.PLAYER_PADDING
@@ -1269,8 +1277,8 @@ class myGame {
       } else {
         const index = this.preStairIndex === -1 ? 0 : this.preStairIndex
         if (
-          this.playerObject.anim < 3 &&
-          this.playerObject.y + this.playerObject.height < this.stairList[index].y - 3
+          this.playerObject.anim > this.playerObject.anim_change - 5 &&
+          this.playerObject.y + this.playerObject.height < Math.round(this.stairList[index].y - 3)
         ) {
           this.isFallingDown = true
         }
