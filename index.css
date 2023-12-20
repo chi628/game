@@ -14,7 +14,7 @@
 
 .container {
   width: 100vw;
-  /* max-width: 428px; */
+  max-width: 430px;
   height: 100dvh;
   overflow: hidden;
 }

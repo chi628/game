@@ -1407,8 +1407,6 @@ class myGame {
   }
 }
 
-var vConsole = new window.VConsole()
-
 let baseIndex = 0
 const shoeSwiper = new Swiper('.shoes-swiper', {
   pagination: {
