@@ -7,7 +7,7 @@ import Swiper from 'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.mjs
  * e -> 勝利平台
  */
 const stairLevel = ['s', 'l', 'l', 's', 'w', 's', 'l', 'l', 's', 'w', 's', 'l', 'l', 's', 's']
-
+let test = 0
 const stageList = [
   {
     id: 'boss',
@@ -1302,6 +1302,8 @@ class myGame {
       this.stageOnStairIndex.includes(this.preStairIndex) &&
       !this.stageOnStairIndex.includes(this.playerOnStairIndex)
     ) {
+      test++
+      console.log('test', test, this.preStairIndex, this.playerOnStairIndex)
       if (!this.successStageIndex.includes(this.preStairIndex)) {
         this.successStageIndex.push(this.preStairIndex)
         this.isOverStage = true
