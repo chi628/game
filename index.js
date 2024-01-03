@@ -1303,14 +1303,20 @@ class myGame {
       this.stageOnStairIndex.includes(this.preStairIndex) 
     ) {
       if (this.stageOnStairIndex.includes(this.playerOnStairIndex)) {
+        // if (
+        //   this.playerObject.y + this.playerObject.height >
+        //   this.stairList[this.playerOnStairIndex].y - this.stageObject.height - 5
+        // ) {
+        //   return
+        // }
+        // const t = this.stairList[this.playerOnStairIndex].y - this.stageObject.height - 5
+        // console.log('t', t, this.playerObject.y + this.playerObject.height)
         if (
-          this.playerObject.y + this.playerObject.height >
-          this.stairList[this.playerOnStairIndex].y - this.stageObject.height - 5
+          this.stairList[this.playerOnStairIndex].x + this.stairList[this.playerOnStairIndex].width >
+          this.playerObject.x
         ) {
           return
         }
-        const t = this.stairList[this.playerOnStairIndex].y - this.stageObject.height - 5
-        console.log('t', t, this.playerObject.y + this.playerObject.height)
       }
       test++
       if (!this.successStageIndex.includes(this.preStairIndex)) {
