@@ -26,8 +26,36 @@
     <link rel="stylesheet" href="./index.css" />
     <script src="https://unpkg.com/vconsole@latest/dist/vconsole.min.js"></script>
     <script src="./index.js" type="module"></script>
+    <style>
+      #pre {
+        font-size: 32px;
+        font-weight: bold;
+        position: fixed;
+        left: 0;
+        top: 50%;
+      }
+      #test {
+        font-size: 32px;
+        font-weight: bold;
+        position: fixed;
+        left: 0;
+        top: 60%;
+        z-index: 5;
+      }
+      #cur{
+        font-size: 32px;
+        font-weight: bold;
+        position: fixed;
+        left: 0;
+        top: 70%;
+        z-index: 5;
+      }
+    </style>
   </head>
   <body>
+    <div id="pre"></div>
+    <div id="test"></div>
+    <div id="cur"></div>
     <div class="container">
       <div id="pre-game" class="pre-game">
         <div class="pre-game-container">

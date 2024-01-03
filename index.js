@@ -1296,7 +1296,7 @@ class myGame {
       }
       this.isCollideStage = true
     }
-
+    document.getElementById('pre').innerText = this.preStairIndex
     if (
       this.preStairIndex > -1 &&
       this.stageOnStairIndex.includes(this.preStairIndex) &&
@@ -1314,6 +1314,8 @@ class myGame {
         }
       }
     }
+    document.getElementById('test').innerText = test
+    document.getElementById('cur').innerText = this.playerOnStairIndex
   }
 
   checkStageStatus() {
