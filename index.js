@@ -1304,10 +1304,15 @@ class myGame {
     ) {
       console.log('b',this.stageOnStairIndex.includes(this.playerOnStairIndex))
       if (this.stageOnStairIndex.includes(this.playerOnStairIndex)) {
-        if (
-          this.playerObject.y + this.playerObject.height >
-          this.stairList[this.playerOnStairIndex].y - this.stageObject.height - 5
-        ) {
+        
+        // if (
+        //   this.playerObject.y + this.playerObject.height >
+        //   this.stairList[this.playerOnStairIndex].y - this.stageObject.height - 10
+        // ) {
+        //   return
+        // }
+        if (this.playerObject.x+this.playerObject.width-this.PLAYER_PADDING < this.stairList[this.playerOnStairIndex].x+this.stairList[this.playerOnStairIndex].width) {
+          console.log('player', this.playerObject.x+this.playerObject.width-this.PLAYER_PADDING, 'stair',this.stairList[this.playerOnStairIndex].x+this.stairList[this.playerOnStairIndex].width)
           return
         }
         // const t = this.stairList[this.playerOnStairIndex].y - this.stageObject.height - 5
