@@ -1304,25 +1304,12 @@ class myGame {
     ) {
       console.log('b',this.stageOnStairIndex.includes(this.playerOnStairIndex))
       if (this.stageOnStairIndex.includes(this.playerOnStairIndex)) {
-        
-        // if (
-        //   this.playerObject.y + this.playerObject.height >
-        //   this.stairList[this.playerOnStairIndex].y - this.stageObject.height - 10
-        // ) {
-        //   return
-        // }
-        if (this.playerObject.x+this.playerObject.width-this.PLAYER_PADDING < this.stairList[this.playerOnStairIndex].x+this.stairList[this.playerOnStairIndex].width) {
-          console.log('player', this.playerObject.x+this.playerObject.width-this.PLAYER_PADDING, 'stair',this.stairList[this.playerOnStairIndex].x+this.stairList[this.playerOnStairIndex].width)
+        if (
+          this.playerObject.x + this.PLAYER_PADDING <
+          this.stairList[this.playerOnStairIndex].x + Math.floor(this.stairList[this.playerOnStairIndex].width * 0.9)
+        ) {
           return
         }
-        // const t = this.stairList[this.playerOnStairIndex].y - this.stageObject.height - 5
-        // console.log('t', this.stairList[this.playerOnStairIndex].x ,this.stairList[this.playerOnStairIndex].width,this.playerObject.x)
-        // if (
-        //   this.stairList[this.playerOnStairIndex].x + this.stairList[this.playerOnStairIndex].width >
-        //   this.playerObject.x + this.PLAYER_PADDING
-        // ) {
-        //   return
-        // }
       }
       test++
       if (!this.successStageIndex.includes(this.preStairIndex)) {
