@@ -1302,6 +1302,7 @@ class myGame {
       this.preStairIndex > -1 &&
       this.stageOnStairIndex.includes(this.preStairIndex) 
     ) {
+      console.log('b',this.stageOnStairIndex.includes(this.playerOnStairIndex))
       if (this.stageOnStairIndex.includes(this.playerOnStairIndex)) {
         // if (
         //   this.playerObject.y + this.playerObject.height >
@@ -1310,7 +1311,7 @@ class myGame {
         //   return
         // }
         // const t = this.stairList[this.playerOnStairIndex].y - this.stageObject.height - 5
-        // console.log('t', t, this.playerObject.y + this.playerObject.height)
+        console.log('t', this.stairList[this.playerOnStairIndex].x ,this.stairList[this.playerOnStairIndex].width,this.playerObject.x)
         if (
           this.stairList[this.playerOnStairIndex].x + this.stairList[this.playerOnStairIndex].width >
           this.playerObject.x
