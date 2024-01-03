@@ -1297,10 +1297,15 @@ class myGame {
       this.isCollideStage = true
     }
     document.getElementById('pre').innerText = this.preStairIndex
+    console.log('pre', this.preStairIndex)
     if (
       this.preStairIndex > -1 &&
       this.stageOnStairIndex.includes(this.preStairIndex) &&
-      !this.stageOnStairIndex.includes(this.playerOnStairIndex)
+      (!this.stageOnStairIndex.includes(this.playerOnStairIndex) ||
+      (
+        this.stageOnStairIndex.includes(this.playerOnStairIndex) &&
+        this.playerObject.x >= this.stairList[this.playerOnStairIndex].x + this.stairList[this.playerOnStairIndex]
+      ).width)
     ) {
       test++
       console.log('test', test, this.preStairIndex, this.playerOnStairIndex)
@@ -1314,6 +1319,11 @@ class myGame {
         }
       }
     }
+    console.log(
+      'pos',
+      this.playerObject.x,
+      this.stairList[this.playerOnStairIndex].x + this.stairList[this.playerOnStairIndex]
+    )
     document.getElementById('test').innerText = test
     document.getElementById('cur').innerText = this.playerOnStairIndex
   }
