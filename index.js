@@ -1297,7 +1297,7 @@ class myGame {
       this.isCollideStage = true
     }
     document.getElementById('pre').innerText = this.preStairIndex
-
+    console.log('a',this.preStairIndex > -1,this.stageOnStairIndex.includes(this.preStairIndex) )
     if (
       this.preStairIndex > -1 &&
       this.stageOnStairIndex.includes(this.preStairIndex) 
