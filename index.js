@@ -1297,18 +1297,22 @@ class myGame {
       this.isCollideStage = true
     }
     document.getElementById('pre').innerText = this.preStairIndex
-    console.log('pre', this.preStairIndex)
+
     if (
       this.preStairIndex > -1 &&
-      this.stageOnStairIndex.includes(this.preStairIndex) &&
-      (!this.stageOnStairIndex.includes(this.playerOnStairIndex) ||
-      (
-        this.stageOnStairIndex.includes(this.playerOnStairIndex) &&
-        this.playerObject.x >= this.stairList[this.playerOnStairIndex].x + this.stairList[this.playerOnStairIndex]
-      ).width)
+      this.stageOnStairIndex.includes(this.preStairIndex) 
     ) {
+      if (this.stageOnStairIndex.includes(this.playerOnStairIndex)) {
+        if (
+          this.playerObject.y + this.playerObject.height >
+          this.stairList[this.playerOnStairIndex].y - this.stageObject.height - 5
+        ) {
+          return
+        }
+        const t = this.stairList[this.playerOnStairIndex].y - this.stageObject.height - 5
+        console.log('t', t, this.playerObject.y + this.playerObject.height)
+      }
       test++
-      console.log('test', test, this.preStairIndex, this.playerOnStairIndex)
       if (!this.successStageIndex.includes(this.preStairIndex)) {
         this.successStageIndex.push(this.preStairIndex)
         this.isOverStage = true
@@ -1319,11 +1323,6 @@ class myGame {
         }
       }
     }
-    console.log(
-      'pos',
-      this.playerObject.x,
-      this.stairList[this.playerOnStairIndex].x + this.stairList[this.playerOnStairIndex]
-    )
     document.getElementById('test').innerText = test
     document.getElementById('cur').innerText = this.playerOnStairIndex
   }
