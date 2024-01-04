@@ -1105,7 +1105,7 @@ class myGame {
   updatePlayer() {
     if (this.isCollideStage) {
       this.isFirstFail = false
-      
+
       if (this.failPlayerObject.y + this.failPlayerObject.height < this.stairList[this.preStairIndex].y) {
         this.failPlayerObject.y = this.stairList[this.preStairIndex].y - this.failPlayerObject.height + 10
       }
@@ -1296,14 +1296,20 @@ class myGame {
       }
       this.isCollideStage = true
     }
-    document.getElementById('pre').innerText = this.preStairIndex
+    document.getElementById('pre').innerText = `${this.preStairIndex} ${this.stageOnStairIndex.includes(
+      this.preStairIndex
+    )}`
     console.log('a', this.preStairIndex, this.preStairIndex > -1, this.stageOnStairIndex.includes(this.preStairIndex))
-    if (
-      this.preStairIndex > -1 &&
-      this.stageOnStairIndex.includes(this.preStairIndex) 
-    ) {
+    if (this.preStairIndex > -1 && this.stageOnStairIndex.includes(this.preStairIndex)) {
       console.log('b', this.playerOnStairIndex, this.stageOnStairIndex.includes(this.playerOnStairIndex))
+
+      document.getElementById('cur').innerText = `${this.playerOnStairIndex}${this.stageOnStairIndex.includes(
+        this.playerOnStairIndex
+      )}`
       if (this.stageOnStairIndex.includes(this.playerOnStairIndex)) {
+        document.getElementById('incond').innerText = `${this.playerObject.x}${
+          this.stairList[this.playerOnStairIndex].x
+        }`
         if (
           this.playerObject.x + this.PLAYER_PADDING <
           this.stairList[this.playerOnStairIndex].x + Math.floor(this.stairList[this.playerOnStairIndex].width * 0.9)
@@ -1323,7 +1329,6 @@ class myGame {
       }
     }
     document.getElementById('test').innerText = test
-    document.getElementById('cur').innerText = this.playerOnStairIndex
   }
 
   checkStageStatus() {
