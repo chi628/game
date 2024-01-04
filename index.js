@@ -1311,7 +1311,7 @@ class myGame {
           this.stairList[this.playerOnStairIndex].x
         }`
         if (
-          this.playerObject.x + this.PLAYER_PADDING <
+          this.playerObject.x + this.playerObject.width * .35 <
           this.stairList[this.playerOnStairIndex].x + Math.floor(this.stairList[this.playerOnStairIndex].width * 0.9)
         ) {
           return
