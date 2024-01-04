@@ -1329,6 +1329,7 @@ class myGame {
       }
     }
     document.getElementById('test').innerText = test
+    document.getElementById('outcur').innerText = `oc${this.playerOnStairIndex}|${this.stageOnStairIndex.includes(this.playerOnStairIndex)}`
   }
 
   checkStageStatus() {
