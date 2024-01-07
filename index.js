@@ -7,51 +7,59 @@ import Swiper from 'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.mjs
  * e -> 勝利平台
  */
 const stairLevel = ['s', 'l', 'l', 's', 'w', 's', 'l', 'l', 's', 'w', 's', 'l', 'l', 's', 's']
-let test = 0
 const stageList = [
   {
     id: 'boss',
     name: '慣老闆',
+    displayName: '慣老闆',
     description: '成功遠離 前途一片光明',
   },
   {
     id: 'pig',
     name: '雷隊友',
+    displayName: '雷隊友',
     description: '神隊友降臨 天天都有神救援',
   },
   {
     id: 'weasel',
     name: '犯小人',
+    displayName: '犯小人',
     description: '完美防守 逢凶化吉迎貴人',
   },
   {
     id: 'money',
     name: '荷包空空',
+    displayName: '荷包空空',
     description: '年終翻倍 投資有賺無賠',
   },
   {
     id: 'invoice',
     name: '發票摃龜',
+    displayName: '發票摃龜',
     description: '有對有驚喜 張張中大獎',
   },
   {
     id: 'goldfish',
     name: '忘東忘西金魚腦',
+    displayName: '金魚腦',
     description: '進化金頭腦 耳聰目明記憶好',
   },
   {
     id: 'ghost',
     name: '水逆',
+    displayName: '水逆',
     description: '變身破關小天才 凡事不再怪水逆',
   },
   {
     id: 'love',
     name: '爛桃花',
+    displayName: '爛桃花',
     description: '單身轉角遇到愛 脫單好人好事多',
   },
   {
     id: 'clothes',
     name: '新衣服秒髒',
+    displayName: '新衣服秒髒',
     description: '打破莫非定律魔咒 衰神退散吧',
   },
 ]
@@ -93,6 +101,18 @@ const shoesList = [
     id: '1906-silver',
     name: '耀月銀',
   },
+]
+
+const shoesImgList = [
+  'Images/bb550vga.webp',
+  'Images/bb550vgc.webp',
+  'Images/bbw550bh.webp',
+  'Images/bb550vgb.webp',
+  'Images/bb550bk.webp',
+  'Images/m1906rea.webp',
+  'Images/m1906reb.webp',
+  'Images/m1906reh.webp',
+  'Images/m1906ree.webp',
 ]
 
 let shoeIndex = 0
@@ -232,6 +252,8 @@ class myGame {
   LOADED_COUNT = 78
   loadCounter = 0
   isLoaded = false
+  isDesc = false
+  isScrollToPoint = false // standby 畫面, player 是否滾到初始點
 
   constructor() {
     this.canvas = document.getElementById('my-canvas')
@@ -265,11 +287,17 @@ class myGame {
 
   touchStart(e) {
     e.preventDefault()
-    window['myGame'].isTouched = true
+    if (e.target.id === 'game-jump-btn') {
+      if (!this.isDesc) {
+        window['myGame'].isTouched = true
+      }
+    }
   }
 
   touchEnd() {
-    window['myGame'].isTouched = false
+    if (!this.isDesc) {
+      window['myGame'].isTouched = false
+    }
   }
 
   startGame() {
@@ -277,6 +305,11 @@ class myGame {
       document.getElementById('loading').style.display = 'block'
     }
     this.isStart = true
+    this.isDesc = true
+  }
+
+  addTouchEvent() {
+    this.isDesc = false
     document.addEventListener('touchstart', this.touchStart, { passive: false })
     document.addEventListener('touchend', this.touchEnd)
   }
@@ -320,6 +353,8 @@ class myGame {
     this.isFallingDown = false
     this.isCollideStage = false
     this.isFirstFail = true
+    this.isDesc = false
+    this.isScrollToPoint = false
 
     this.camera = 0
     this.groundObject.camera.y = 0
@@ -331,8 +366,10 @@ class myGame {
     this.mountL2Object.camera.y = 0
     this.mountL3Object.camera.x = 0
     this.mountL3Object.camera.y = 0
+    this.standbyPlayerObject.x = 0
 
     this.flagObject.anim = 0
+    this.standbyPlayerObject.anim = 0
     this.playerObject.anim = 0
     this.failPlayerObject.anim = 0
     this.winPlayerObject.anim = 0
@@ -357,6 +394,7 @@ class myGame {
     this.fpscounter = 0
     this.currentfps = 0
     this.resultAnim = 0
+    this.standbyRollCount = 0
   }
 
   loadImages() {
@@ -397,24 +435,9 @@ class myGame {
     this.propsBoxObject.LoadFrame('Images/props-box.webp')
 
     this.propsShoes = new Object(0, 0, 90, 40.3)
-    // 1197 × 537
-    this.propsShoes.LoadFrame('Images/bb550vga.webp')
-    // 1203 × 537
-    this.propsShoes.LoadFrame('Images/bb550vgc.webp')
-    // 1191 × 567
-    this.propsShoes.LoadFrame('Images/bbw550bh.webp')
-    // 1206 × 576
-    this.propsShoes.LoadFrame('Images/bb550vgb.webp')
-    // 1200 × 624
-    this.propsShoes.LoadFrame('Images/bb550bk.webp')
-    // 1188 × 549
-    this.propsShoes.LoadFrame('Images/m1906rea.webp')
-    // 1188 × 579
-    this.propsShoes.LoadFrame('Images/m1906reb.webp')
-    // 1188 × 558
-    this.propsShoes.LoadFrame('Images/m1906reh.webp')
-    // 1182 × 555
-    this.propsShoes.LoadFrame('Images/m1906ree.webp')
+    for (let i = 0; i < shoesImgList.length; i++) {
+      this.propsShoes.LoadFrame(shoesImgList[i])
+    }
 
     this.stageObject = new Object(0, 0, 85, 85)
     for (let i = 0; i < stageList.length; i++) {
@@ -427,6 +450,14 @@ class myGame {
     this.flagObject = new AnimatorObject(50, 83)
     for (let i = 0; i < 10; i++) {
       this.flagObject.LoadFrame('Images/flag' + i + '.webp')
+    }
+
+    this.standbyPlayerObject = new AnimatorObject(100, 140)
+    for (let i = 0; i < 12; i++) {
+      this.standbyPlayerObject.LoadFrame('Images/roll' + i + '.webp')
+    }
+    for (let i = 0; i < 12; i++) {
+      this.standbyPlayerObject.LoadFrame('Images/standby' + i + '.webp')
     }
 
     this.playerObject = new AnimatorObject(100, 140)
@@ -525,7 +556,7 @@ class myGame {
       }
 
       this.createStair({
-        x: startX + 150 * i,
+        x: startX + 120 * i,
         y: startY - 50 * i,
         width,
         height,
@@ -541,12 +572,17 @@ class myGame {
       })
     }
 
-    this.winBoard.SetAnimChange(60)
+    this.winBoard.SetAnimChange(120)
     this.flagObject.SetAnimChange(18)
-    this.playerObject.SetAnimChange(70)
+    this.standbyPlayerObject.SetAnimChange(24)
+    // this.playerObject.SetAnimChange(110)
+    this.playerObject.SetAnimChange(110)
     this.winPlayerObject.SetAnimChange(12)
     this.failPlayerObject.SetAnimChange(18)
     this.brokenWood.SetAnimChange(15)
+
+    this.standbyPlayerObject.x = 0
+    this.standbyPlayerObject.y = this.height * 0.84 - this.playerObject.height
 
     const playerInitXcoord = Math.floor(this.width * 0.6) - this.playerObject.width
     const playerInitYCoord = this.height * 0.84 - this.playerObject.height
@@ -762,7 +798,7 @@ class myGame {
     this.ctx.fillStyle = MAIN_BACKGROUND_COLOR
     this.ctx.fillRect(0, 0, this.width, this.height)
   }
-
+  standbyRollCount = 0
   draw() {
     if (!this.isLoaded) {
       this.loadCounter = 0
@@ -798,12 +834,12 @@ class myGame {
     this.drawEndPoint()
     this.drawFlag()
     this.stairObject.xSpeed = this.initByFPS(7)
-    this.stairObject.ySpeed = this.initByFPS(2)
+    this.stairObject.ySpeed = this.initByFPS(2.5)
     if (this.isStayOnWood) {
       if (this.stairList[this.brokenWoodIndex].alive) {
         this.stairList[this.brokenWoodIndex].state = 1
         this.stairList[this.brokenWoodIndex].alive = false
-        this.playerObject.anim = 3
+        this.playerObject.anim = 21
         this.isPlayingBrokenWood = true
         this.isJumpOnShoe = false
         this.playerObject.SetAnimChange(70)
@@ -831,7 +867,7 @@ class myGame {
     this.drawPropsBox()
     this.updateCamera()
 
-    this.isJumping = this.playerObject.anim > 2
+    this.isJumping = this.playerObject.anim > 20
 
     if (this.isTouched) {
       // 最後一個階梯的 x (階梯左側)
@@ -845,11 +881,27 @@ class myGame {
       this.flagObject.anim = 0
     }
 
-    if (this.currentfps > 25) {
-      this.playerObject.anim += this.initByFPS(1)
+    if (this.isStart) {
+      this.standbyPlayerObject.anim += this.initByFPS(1)
+      if (this.standbyPlayerObject.anim >= this.standbyPlayerObject.anim_change) {
+        this.standbyRollCount += 1
+        this.standbyPlayerObject.anim = 0
+      }
+      if (
+        this.standbyRollCount >= Math.floor((Math.floor(this.width * 0.6) - this.playerObject.width) / 24) &&
+        !this.isScrollToPoint
+      ) {
+        this.isScrollToPoint = true
+      }
     }
-    if (this.playerObject.anim >= this.playerObject.anim_change) {
-      this.playerObject.anim = 0
+
+    if (this.isStart && !this.isDesc) {
+      if (this.currentfps > 25) {
+        this.playerObject.anim += this.initByFPS(1)
+      }
+      if (this.playerObject.anim >= this.playerObject.anim_change) {
+        this.playerObject.anim = 0
+      }
     }
 
     if (this.isCollideStage) {
@@ -876,7 +928,7 @@ class myGame {
       }
       if (this.winBoard.anim <= 10) {
         this.ctxAlpha += this.initByFPS(0.05)
-      } else if (this.winBoard.anim > 50) {
+      } else if (this.winBoard.anim > 110) {
         this.ctxAlpha -= this.initByFPS(0.1)
       }
     }
@@ -1129,8 +1181,21 @@ class myGame {
       this.winPlayerObject.y = this.endPointObject.y + 120 - this.winPlayerObject.height + 2
 
       this.drawWinPlayer()
+    } else if (this.isDesc) {
+      if (this.isStart) {
+        if (!this.isScrollToPoint) {
+          this.standbyPlayerObject.currFrame = Math.floor(this.standbyPlayerObject.anim / 2)
+          this.standbyPlayerObject.x += 1
+          this.standbyPlayerObject.y = this.height * 0.84 - this.standbyPlayerObject.height + 15
+        } else {
+          this.standbyPlayerObject.currFrame = Math.floor(this.standbyPlayerObject.anim / 2) + 12
+          this.standbyPlayerObject.x = Math.floor(this.width * 0.6) - this.standbyPlayerObject.width
+          this.standbyPlayerObject.y = this.height * 0.84 - this.standbyPlayerObject.height
+        }
+      }
+      this.drawStandbyPlayer()
     } else {
-      if (this.playerObject.anim <= 2) {
+      if (this.playerObject.anim <= 20) {
         this.playerObject.currFrame = 0
 
         if (this.playerOnStairIndex > -1) {
@@ -1155,8 +1220,8 @@ class myGame {
         if (this.isJumpOnShoe) {
           distance = this.height * 0.4 + this.playerObject.height - 25
         }
-        const halfAnimChange = Math.floor((this.playerObject.anim_change - 2) / 2)
-        if (this.playerObject.anim - 2 < halfAnimChange) {
+        const halfAnimChange = Math.floor((this.playerObject.anim_change - 20) / 2)
+        if (this.playerObject.anim - 20 < halfAnimChange) {
           this.playerObject.y -= this.initByFPS(Math.floor(distance) / halfAnimChange)
         } else {
           this.playerObject.y += this.initByFPS(Math.floor(distance) / halfAnimChange)
@@ -1164,6 +1229,16 @@ class myGame {
       }
       this.drawPlayer()
     }
+  }
+
+  drawStandbyPlayer() {
+    this.ctx.drawImage(
+      this.standbyPlayerObject.frames[this.standbyPlayerObject.currFrame],
+      this.standbyPlayerObject.x,
+      this.standbyPlayerObject.y,
+      this.standbyPlayerObject.width,
+      this.standbyPlayerObject.height
+    )
   }
 
   drawPlayer() {
@@ -1224,12 +1299,12 @@ class myGame {
             if (index > -1) {
               if (this.propsShoeList[index].alive) {
                 // 一碰到鞋子，就跳躍
-                this.playerObject.anim = 3
+                this.playerObject.anim = 21
                 this.playerObject.currFrame = 12
                 this.playerObject.SetAnimChange(120)
                 this.isJumpOnShoe = true
                 this.propsShoeList[index].alive = false
-              } else if (this.isJumpOnShoe && this.playerObject.anim >= 70) {
+              } else if (this.isJumpOnShoe && this.playerObject.anim >= 90) {
                 // 完成吃掉鞋子動畫後，還在原階梯上，恢復原本動畫
                 this.isJumpOnShoe = false
                 this.playerObject.SetAnimChange(70)
@@ -1296,28 +1371,16 @@ class myGame {
       }
       this.isCollideStage = true
     }
-    document.getElementById('pre').innerText = `pre${this.preStairIndex}|${this.stageOnStairIndex.includes(
-      this.preStairIndex
-    )}`
-    console.log('a', this.preStairIndex, this.preStairIndex > -1, this.stageOnStairIndex.includes(this.preStairIndex))
-    if (this.preStairIndex > -1 && this.stageOnStairIndex.includes(this.preStairIndex)) {
-      console.log('b', this.playerOnStairIndex, this.stageOnStairIndex.includes(this.playerOnStairIndex))
 
-      document.getElementById('cur').innerText = `cur${this.playerOnStairIndex}|${this.stageOnStairIndex.includes(
-        this.playerOnStairIndex
-      )}`
+    if (this.preStairIndex > -1 && this.stageOnStairIndex.includes(this.preStairIndex)) {
       if (this.stageOnStairIndex.includes(this.playerOnStairIndex)) {
-        document.getElementById('incond').innerText = `in${this.playerObject.x}|${
-          this.stairList[this.playerOnStairIndex].x
-        }`
         if (
-          this.playerObject.x + this.playerObject.width * .35 <
+          this.playerObject.x + this.playerObject.width * 0.35 <
           this.stairList[this.playerOnStairIndex].x + Math.floor(this.stairList[this.playerOnStairIndex].width * 0.9)
         ) {
           return
         }
       }
-      test++
       if (!this.successStageIndex.includes(this.preStairIndex)) {
         this.successStageIndex.push(this.preStairIndex)
         this.isOverStage = true
@@ -1328,8 +1391,6 @@ class myGame {
         }
       }
     }
-    document.getElementById('test').innerText = test
-    document.getElementById('outcur').innerText = `oc${this.playerOnStairIndex}|${this.stageOnStairIndex.includes(this.playerOnStairIndex)}`
   }
 
   checkStageStatus() {
@@ -1356,6 +1417,17 @@ class myGame {
       let yCoord = this.stairList[this.stageOnStairIndex[i]].y - this.stageObject.height + 3
 
       this.ctx.drawImage(this.stageObject.frames[this.displayStagesIndex[i]], xCoord, yCoord, width, height)
+      this.ctx.font = 'bold 15px ProximaNova'
+      this.ctx.strokeStyle = 'black'
+      this.ctx.fillStyle = 'white'
+      this.ctx.lineWidth = 5
+      this.ctx.letterSpacing = '2px'
+      const x =
+        this.stairList[this.stageOnStairIndex[i]].x + Math.floor(this.stairList[this.stageOnStairIndex[i]].width / 2)
+      const y = this.stairList[this.stageOnStairIndex[i]].y + 15
+      let stageName = stageList[this.displayStagesIndex[i]].displayName
+      this.ctx.strokeText(stageName, x, y)
+      this.ctx.fillText(stageName, x, y)
     }
   }
 
@@ -1425,9 +1497,9 @@ class myGame {
   }
 }
 
-var vConsole = new window.VConsole()
 let baseIndex = 0
-const shoeSwiper = new Swiper('.shoes-swiper', {
+
+const shoe550Swiper = new Swiper('.swiper-550', {
   pagination: {
     el: '.swiper-pagination',
     clickable: true,
@@ -1436,30 +1508,89 @@ const shoeSwiper = new Swiper('.shoes-swiper', {
     activeIndexChange: function (swiper) {
       shoeIndex = swiper.activeIndex + baseIndex
 
-      if (shoeIndex < 5) {
-        const shoesColor550 = document.getElementById('550-shoes-color')
-        if (shoesColor550) {
-          shoesColor550.innerHTML = shoesList[shoeIndex].name
+      const shoesColor550 = document.getElementById('550-shoes-color')
+
+      if (shoesColor550) {
+        shoesColor550.innerHTML = shoesList[shoeIndex].name
+      }
+
+      if (swiperPagination) {
+        swiperPagination.childNodes[swiper.previousIndex].style.borderColor = '#151415'
+        swiperPagination.childNodes[swiper.activeIndex].style.borderColor = '#fff'
+      }
+    },
+    sliderFirstMove: function (swiper, event) {
+      if (swiper.isEnd && swiper.touches.diff < 0) {
+        baseIndex = 5
+
+        if (swiper550 && swiper1906) {
+          swiper550.style.display = 'none'
+          swiper1906.style.display = 'block'
+          shoe1906Swiper.slideTo(0)
         }
-        if (swiper.slides.length === 5) {
-          document.getElementById('swiper-pagination').childNodes[swiper.previousIndex].style.borderColor = '#151415'
-          document.getElementById('swiper-pagination').childNodes[swiper.activeIndex].style.borderColor = '#fff'
+
+        if (series550 && series1906) {
+          shoeIndex = baseIndex
+          series550.classList.remove('choose')
+          series1906.classList.add('choose')
         }
-      } else {
-        const shoesColor1906 = document.getElementById('1906-shoes-color')
-        if (shoesColor1906) {
-          shoesColor1906.innerHTML = shoesList[shoeIndex].name
-        }
-        if (swiper.slides.length === 4) {
-          document.getElementById('swiper-pagination').childNodes[swiper.previousIndex].style.borderColor = '#151415'
-          document.getElementById('swiper-pagination').childNodes[swiper.activeIndex].style.borderColor = '#fff'
+        if (swiper.activeIndex === 4) {
         }
       }
     },
-    init: function (swiper) {
-      shoeIndex = swiper.activeIndex
+  },
+
+  observer: true,
+  observeParents: true,
+  observeSlideChildren: true,
+})
+
+const shoe1906Swiper = new Swiper('.swiper-1906', {
+  pagination: {
+    el: '.swiper-pagination',
+    clickable: true,
+  },
+  on: {
+    activeIndexChange: function (swiper) {
+      shoeIndex = swiper.activeIndex + baseIndex
+
+      const shoesColor1906 = document.getElementById('1906-shoes-color')
+
+      if (shoesColor1906) {
+        shoesColor1906.innerHTML = shoesList[shoeIndex].name
+      }
+
+      if (swiper1906Pagination) {
+        swiper1906Pagination.childNodes[swiper.previousIndex].style.borderColor = '#151415'
+        swiper1906Pagination.childNodes[swiper.activeIndex].style.borderColor = '#fff'
+      }
+    },
+    sliderFirstMove: function (swiper, event) {
+      if ((swiper.isEnd && swiper.touches.diff < 0) || (swiper.isBeginning && swiper.touches.diff > 0)) {
+        baseIndex = 0
+
+        if (swiper550 && swiper1906) {
+          swiper550.style.display = 'block'
+          swiper1906.style.display = 'none'
+          shoe550Swiper.slideTo(0)
+        }
+
+        if (series550 && series1906) {
+          shoeIndex = baseIndex
+          series550.classList.add('choose')
+          series1906.classList.remove('choose')
+        }
+      }
+    },
+    slidesUpdated: function (swiper) {
+      if (swiper1906Pagination && swiper1906Pagination.childNodes.length > 0) {
+        swiper1906Pagination.childNodes[0].style.borderColor = '#fff'
+      }
     },
   },
+  observer: true,
+  observeParents: true,
+  observeSlideChildren: true,
 })
 
 const stageSwiper = new Swiper('.stage-swiper', {
@@ -1492,29 +1623,35 @@ let preGame
 let preGameBtn
 let series550
 let series1906
+let swiper550
+let swiper1906
 let shoesColor550
 let swiperPagination
+let swiper1906Pagination
 let successModal
 let failModal
-
-const shoes550List = ['red', 'brown', 'black', 'gray', 'white']
-const shoes1906List = ['red', 'blue', 'gray', 'silver']
+let gameJumpBtn
+let gameDescription
+let tryOut
 
 document.addEventListener('DOMContentLoaded', () => {
   window['myGame'] = new myGame()
 
   preGame = document.getElementById('pre-game')
   preGameBtn = document.getElementById('pre-game-btn')
-
   series550 = document.getElementById('series-550')
   series1906 = document.getElementById('series-1906')
+  swiper550 = document.querySelector('.swiper-550')
+  swiper1906 = document.querySelector('.swiper-1906')
   swiperPagination = document.getElementById('swiper-pagination')
+  swiper1906Pagination = document.getElementById('swiper-pagination-1906')
   successModal = document.getElementById('success-modal')
   failModal = document.getElementById('fail-modal')
+  gameJumpBtn = document.getElementById('game-jump-btn')
+  gameDescription = document.getElementById('game-description')
+  tryOut = document.getElementById('try-out')
 
   startGame()
-
-  append550Shoes()
 
   shoesColor550 = document.getElementById('550-shoes-color')
 
@@ -1529,10 +1666,13 @@ document.addEventListener('DOMContentLoaded', () => {
       baseIndex = 0
       series550.classList.add('choose')
       series1906.classList.remove('choose')
-      swiperPagination.classList.remove('pagination-1906')
-      shoeSwiper.removeAllSlides()
 
-      append550Shoes()
+      if (swiper550 && swiper1906) {
+        swiper550.style.display = 'block'
+        swiper1906.style.display = 'none'
+        shoe550Swiper.slideTo(0)
+      }
+
       swiperPagination.childNodes[0].style.borderColor = '#fff'
     })
 
@@ -1541,11 +1681,14 @@ document.addEventListener('DOMContentLoaded', () => {
       shoeIndex = baseIndex
       series550.classList.remove('choose')
       series1906.classList.add('choose')
-      swiperPagination.classList.remove('pagination-550')
-      shoeSwiper.removeAllSlides()
 
-      append1906Shoes()
-      swiperPagination.childNodes[0].style.borderColor = '#fff'
+      if (swiper550 && swiper1906) {
+        swiper550.style.display = 'none'
+        swiper1906.style.display = 'block'
+        shoe1906Swiper.slideTo(0)
+      }
+
+      swiper1906Pagination.childNodes[0].style.borderColor = '#fff'
     })
   }
 
@@ -1558,42 +1701,45 @@ document.addEventListener('DOMContentLoaded', () => {
       window['myGame'].initGame()
     })
   }
+
+  if (tryOut) {
+    tryOut.addEventListener('click', () => {
+      console.log('tryout clikc')
+    })
+  }
 })
 
 function startGame() {
   if (preGameBtn && preGame) {
     preGameBtn.addEventListener('click', () => {
       preGame.style.display = 'none'
+
+      if (gameDescription) {
+        gameDescription.style.display = 'flex'
+      }
+
+      const hintShoe = document.getElementById('hint-shoe')
+
+      if (hintShoe) {
+        hintShoe.src = shoesImgList[shoeIndex]
+      }
+
       window['myGame'].startGame()
+
+      if (gameJumpBtn) {
+        gameJumpBtn.style.display = 'block'
+        gameJumpBtn.addEventListener('click', gameJumpEvent)
+      }
     })
   }
 }
 
-function append550Shoes() {
-  for (let i = 0; i < shoes550List.length; i++) {
-    const shoes = document.createElement('div')
-    shoes.classList.add('swiper-slide')
-    shoes.classList.add('shoes-slide')
-    shoes.classList.add(`${shoes550List[i]}-550`)
-    shoeSwiper.appendSlide(shoes)
+function gameJumpEvent() {
+  window['myGame'].addTouchEvent()
+  if (gameDescription) {
+    gameDescription.style.display = 'none'
   }
-  if (swiperPagination) {
-    swiperPagination.classList.add('pagination-550')
-  }
-}
-
-function append1906Shoes() {
-  for (let i = 0; i < shoes1906List.length; i++) {
-    const shoes = document.createElement('div')
-    shoes.classList.add('swiper-slide')
-    shoes.classList.add('shoes-slide')
-    shoes.classList.add(`${shoes1906List[i]}-1906`)
-    shoeSwiper.appendSlide(shoes)
-  }
-
-  if (swiperPagination) {
-    swiperPagination.classList.add('pagination-1906')
-  }
+  gameJumpBtn.removeEventListener('click', gameJumpEvent)
 }
 
 function showStageList() {
@@ -1617,6 +1763,9 @@ function showStageList() {
 }
 
 function showModal() {
+  if (gameJumpBtn) {
+    gameJumpBtn.style.display = 'none'
+  }
   if (successStage.length > 0) {
     successModal.style.display = 'flex'
     showStageList()

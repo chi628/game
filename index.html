@@ -26,54 +26,8 @@
     <link rel="stylesheet" href="./index.css" />
     <script src="https://unpkg.com/vconsole@latest/dist/vconsole.min.js"></script>
     <script src="./index.js" type="module"></script>
-    <style>
-      #pre {
-        font-size: 32px;
-        font-weight: bold;
-        position: fixed;
-        left: 0;
-        top: 50%;
-      }
-      #test {
-        font-size: 32px;
-        font-weight: bold;
-        position: fixed;
-        left: 0;
-        top: 60%;
-        z-index: 5;
-      }
-      #cur {
-        font-size: 32px;
-        font-weight: bold;
-        position: fixed;
-        left: 0;
-        top: 70%;
-        z-index: 5;
-      }
-      #incond {
-        font-size: 32px;
-        font-weight: bold;
-        position: fixed;
-        left: 0;
-        top: 80%;
-        z-index: 5;
-      }
-      #outcur {
-        font-size: 32px;
-        font-weight: bold;
-        position: fixed;
-        left: 0;
-        top: 90%;
-        z-index: 5;
-      }
-    </style>
   </head>
   <body>
-    <div id="pre"></div>
-    <div id="test"></div>
-    <div id="incond"></div>
-    <div id="cur"></div>
-    <div id="outcur"></div>
     <div class="container">
       <div id="pre-game" class="pre-game">
         <div class="pre-game-container">
@@ -94,9 +48,24 @@
             </div>
             <div class="demo-shoes-container">
               <div class="shoes-bg-cloud"></div>
-              <div class="shoes-swiper swiper">
-                <div class="swiper-wrapper"></div>
-                <div id="swiper-pagination" class="swiper-pagination"></div>
+              <div class="shoes-swiper swiper swiper-550">
+                <div class="swiper-wrapper">
+                  <div class="swiper-slide shoes-slide red-550"></div>
+                  <div class="swiper-slide shoes-slide brown-550"></div>
+                  <div class="swiper-slide shoes-slide black-550"></div>
+                  <div class="swiper-slide shoes-slide gray-550"></div>
+                  <div class="swiper-slide shoes-slide white-550"></div>
+                </div>
+                <div id="swiper-pagination" class="swiper-pagination pagination-550"></div>
+              </div>
+              <div class="shoes-swiper swiper swiper-1906" style="display: none">
+                <div class="swiper-wrapper">
+                  <div class="swiper-slide shoes-slide red-1906"></div>
+                  <div class="swiper-slide shoes-slide blue-1906"></div>
+                  <div class="swiper-slide shoes-slide gray-1906"></div>
+                  <div class="swiper-slide shoes-slide silver-1906"></div>
+                </div>
+                <div id="swiper-pagination-1906" class="swiper-pagination pagination-1906"></div>
               </div>
             </div>
           </div>
@@ -117,6 +86,19 @@
           <div class="dot"></div>
         </div>
       </div>
+
+      <div id="game-description" class="game-description" style="display: none">
+        <p class="game-method">按住 <img src="./Images/game-jump-btn.webp" alt="" /> 翻越者向前移動</p>
+        <ul class="game-hint">
+          <li>放開按鈕停止移動，記得注意腳下!</li>
+          <li>穿上 <img id="hint-shoe" class="hint-shoe" src="Images/bb550vga.webp" alt="" /> 翻得更高</li>
+          <li>翻越障礙物即挑戰成功</li>
+          <!-- <li>點此<u id="try-out">小試身手</u><span class="icon-white-arrow"></span></li> -->
+        </ul>
+        <div class="click-go"></div>
+      </div>
+
+      <div id="game-jump-btn" class="game-jump-btn" style="display: none"></div>
       <canvas id="my-canvas"></canvas>
 
       <div id="fail-modal" class="modal" style="display: none">
