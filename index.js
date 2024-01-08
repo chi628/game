@@ -890,6 +890,7 @@ class myGame {
         !this.isScrollToPoint
       ) {
         this.isScrollToPoint = true
+        this.standbyPlayerObject.SetAnimChange(36)
       }
     }
 
@@ -1186,7 +1187,7 @@ class myGame {
           this.standbyPlayerObject.x += 2.5
           this.standbyPlayerObject.y = this.height * 0.84 - this.standbyPlayerObject.height + 29
         } else {
-          this.standbyPlayerObject.currFrame = Math.floor(this.standbyPlayerObject.anim / 2) + 12
+          this.standbyPlayerObject.currFrame = Math.floor(this.standbyPlayerObject.anim / 3) + 12
           this.standbyPlayerObject.x = Math.floor(this.width * 0.6) - this.standbyPlayerObject.width
           this.standbyPlayerObject.y = this.height * 0.84 - this.standbyPlayerObject.height
         }
