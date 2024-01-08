@@ -1284,7 +1284,8 @@ class myGame {
           stair.x + stair.width > this.playerObject.x + this.playerObject.width * 0.35)
       ) {
         // 修正跳到下一階時閃動問題
-        if (this.playerObject.y + this.playerObject.height - 3 > stair.y) {
+        const halfAnimChange = Math.floor((this.playerObject.anim_change - 20) / 2)
+        if (this.playerObject.y + this.playerObject.height - 3 > stair.y && this.playerObject.anim - 20 > halfAnimChange) {
           this.playerObject.anim = 0
         }
 
