@@ -575,7 +575,6 @@ class myGame {
     this.winBoard.SetAnimChange(120)
     this.flagObject.SetAnimChange(18)
     this.standbyPlayerObject.SetAnimChange(24)
-    // this.playerObject.SetAnimChange(110)
     this.playerObject.SetAnimChange(110)
     this.winPlayerObject.SetAnimChange(12)
     this.failPlayerObject.SetAnimChange(18)
@@ -842,7 +841,7 @@ class myGame {
         this.playerObject.anim = 21
         this.isPlayingBrokenWood = true
         this.isJumpOnShoe = false
-        this.playerObject.SetAnimChange(70)
+        this.playerObject.SetAnimChange(110)
       }
     }
     if (this.isPlayingBrokenWood) {
@@ -1308,7 +1307,7 @@ class myGame {
               } else if (this.isJumpOnShoe && this.playerObject.anim >= 90) {
                 // 完成吃掉鞋子動畫後，還在原階梯上，恢復原本動畫
                 this.isJumpOnShoe = false
-                this.playerObject.SetAnimChange(70)
+                this.playerObject.SetAnimChange(110)
               }
             }
           }
@@ -1323,7 +1322,7 @@ class myGame {
       // 如果降落的階梯不含有鞋子，更改動畫
       if (!this.shoeOnStairIndex.includes(this.playerOnStairIndex) && !this.isJumping) {
         this.isJumpOnShoe = false
-        this.playerObject.SetAnimChange(70)
+        this.playerObject.SetAnimChange(110)
       }
       // 檢查是否落在木頭階梯上
       if (
