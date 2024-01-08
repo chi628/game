@@ -498,18 +498,29 @@
   }
 }
 
+@keyframes goAnim {
+  from {
+    transform: translateY(0) translateX(-50%);
+  }
+  to {
+    transform: translateY(10px) translateX(-50%);
+  }
+}
+
 .click-go {
   --jump-btn-width: clamp(75px, 23.4vw, 120px);
   position: fixed;
-  bottom: calc(27px + var(--jump-btn-width));
+  bottom: calc(40px + var(--jump-btn-width));
   left: 50%;
   transform: translateX(-50%);
   width: clamp(77.8px, 24.3vw, 165px);
   aspect-ratio: 3/2;
-  background-image: url('./Images/clickgo.webp');
+  background-image: url('./Images/go.webp');
   background-repeat: no-repeat;
   background-size: contain;
   background-position: center;
+  animation: goAnim 0.6s cubic-bezier(0.5, 0.94, 0.56, 1.59);
+  animation-iteration-count: infinite;
 }
 
 .game-description {

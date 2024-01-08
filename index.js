@@ -249,6 +249,7 @@ class myGame {
 
   TREE_INIT_YCOORD
   PLAYER_PADDING
+  PLAYER_RIGHT_PADDING
   LOADED_COUNT = 78
   loadCounter = 0
   isLoaded = false
@@ -394,7 +395,6 @@ class myGame {
     this.fpscounter = 0
     this.currentfps = 0
     this.resultAnim = 0
-    this.standbyRollCount = 0
   }
 
   loadImages() {
@@ -589,6 +589,7 @@ class myGame {
     this.playerObject.x = playerInitXcoord
     this.playerObject.y = playerInitYCoord
     this.PLAYER_PADDING = this.playerObject.width * 0.25
+    this.PLAYER_RIGHT_PADDING = this.playerObject.width * 0.33
 
     this.failPlayerObject.x = playerInitXcoord
     this.failPlayerObject.y = playerInitYCoord
@@ -797,7 +798,6 @@ class myGame {
     this.ctx.fillStyle = MAIN_BACKGROUND_COLOR
     this.ctx.fillRect(0, 0, this.width, this.height)
   }
-  standbyRollCount = 0
   draw() {
     if (!this.isLoaded) {
       this.loadCounter = 0
@@ -883,11 +883,10 @@ class myGame {
     if (this.isStart) {
       this.standbyPlayerObject.anim += this.initByFPS(1)
       if (this.standbyPlayerObject.anim >= this.standbyPlayerObject.anim_change) {
-        this.standbyRollCount += 1
         this.standbyPlayerObject.anim = 0
       }
       if (
-        this.standbyRollCount >= Math.floor((Math.floor(this.width * 0.6) - this.playerObject.width) / 24) &&
+        this.standbyPlayerObject.x >= Math.floor(this.width * 0.6) - this.standbyPlayerObject.width &&
         !this.isScrollToPoint
       ) {
         this.isScrollToPoint = true
@@ -1184,8 +1183,8 @@ class myGame {
       if (this.isStart) {
         if (!this.isScrollToPoint) {
           this.standbyPlayerObject.currFrame = Math.floor(this.standbyPlayerObject.anim / 2)
-          this.standbyPlayerObject.x += 1
-          this.standbyPlayerObject.y = this.height * 0.84 - this.standbyPlayerObject.height + 15
+          this.standbyPlayerObject.x += 2.5
+          this.standbyPlayerObject.y = this.height * 0.84 - this.standbyPlayerObject.height + 29
         } else {
           this.standbyPlayerObject.currFrame = Math.floor(this.standbyPlayerObject.anim / 2) + 12
           this.standbyPlayerObject.x = Math.floor(this.width * 0.6) - this.standbyPlayerObject.width
@@ -1277,14 +1276,17 @@ class myGame {
 
     this.playerOnStairIndex = this.stairList.findIndex((stair, i) => {
       if (
-        (stair.x < this.playerObject.x + this.playerObject.width - this.playerObject.width * 0.35 &&
+        (stair.x < this.playerObject.x + this.playerObject.width - this.PLAYER_RIGHT_PADDING &&
           stair.x + stair.width >= this.playerObject.x + this.playerObject.width - this.PLAYER_PADDING) ||
         (stair.x <= this.playerObject.x + this.PLAYER_PADDING &&
-          stair.x + stair.width > this.playerObject.x + this.playerObject.width * 0.35)
+          stair.x + stair.width > this.playerObject.x + this.PLAYER_RIGHT_PADDING)
       ) {
         // 修正跳到下一階時閃動問題
         const halfAnimChange = Math.floor((this.playerObject.anim_change - 20) / 2)
-        if (this.playerObject.y + this.playerObject.height - 3 > stair.y && this.playerObject.anim - 20 > halfAnimChange) {
+        if (
+          this.playerObject.y + this.playerObject.height - 3 > stair.y &&
+          this.playerObject.anim - 20 > halfAnimChange
+        ) {
           this.playerObject.anim = 0
         }
 
