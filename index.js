@@ -1581,7 +1581,9 @@ class myGame {
       if (this.stageOnStairIndex.includes(this.playerOnStairIndex)) {
         if (
           this.playerObject.x + this.playerObject.width * 0.35 <
-          this.stairList[this.playerOnStairIndex].x + Math.floor(this.stairList[this.playerOnStairIndex].width * 0.9)
+          this.stairList[this.playerOnStairIndex].x +
+            Math.floor(this.stairList[this.playerOnStairIndex].width * 0.9) -
+            5
         ) {
           return
         }
