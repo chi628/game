@@ -1709,8 +1709,6 @@ class myGame {
 }
 
 let baseIndex = 0
-let isFirstEnd = false
-let is1906FirstEnd = false
 
 /**
  * 0108 改寫鞋子 swiper
@@ -1756,6 +1754,15 @@ const shoe550Swiper = new Swiper('.swiper-550', {
           series1906.classList.add('choose')
         }
       }
+    },
+    navigationNext: function (swiper) {
+      console.log('next', swiper)
+    },
+    navigationHide: function (swiper) {
+      console.log('hide', swiper)
+    },
+    click: function (swiper, event) {
+      console.log('click', swiper)
     },
   },
 
@@ -1862,8 +1869,14 @@ let tryOut
  * 0108 新增紅色跳躍按鈕 end
  */
 
+/**
+ * 0109 swiper btn 變數
+ */
 let swiperNextBtn
 let swiperPreBtn
+/**
+ * 0109 swiper btn 變數 end
+ */
 
 document.addEventListener('DOMContentLoaded', () => {
   window['myGame'] = new myGame()
@@ -1894,6 +1907,9 @@ document.addEventListener('DOMContentLoaded', () => {
    * 0108 新增 跳躍 button 容器 end
    */
 
+  /**
+   * 0109 swiper btn 監聽
+   */
   swiperNextBtn = document.getElementById('swiper-next-btn')
   swiperPreBtn = document.getElementById('swiper-pre-btn')
 
@@ -1901,10 +1917,8 @@ document.addEventListener('DOMContentLoaded', () => {
     swiperNextBtn.addEventListener('click', () => {
       const isSwiper550 = swiper550.style.display !== 'none'
       const isSwiper1906 = swiper1906.style.display !== 'none'
-      console.log('tes', isSwiper550, isSwiper1906)
       if (isSwiper550) {
-        shoe550Swiper.slideNext()
-        if (shoe550Swiper.isEnd && isFirstEnd) {
+        if (shoe550Swiper.isEnd) {
           if (swiper550 && swiper1906) {
             swiper550.style.display = 'none'
             swiper1906.style.display = 'block'
@@ -1916,18 +1930,12 @@ document.addEventListener('DOMContentLoaded', () => {
             series550.classList.remove('choose')
             series1906.classList.add('choose')
           }
-          isFirstEnd = false
-          is1906FirstEnd = false
         }
-
-        if (shoe550Swiper.isEnd && !isFirstEnd) {
-          isFirstEnd = true
-        }
+        shoe550Swiper.slideNext()
       }
 
       if (isSwiper1906) {
-        shoe1906Swiper.slideNext()
-        if (shoe1906Swiper.isEnd && is1906FirstEnd) {
+        if (shoe1906Swiper.isEnd) {
           baseIndex = 0
           if (swiper550 && swiper1906) {
             swiper550.style.display = 'block'
@@ -1940,12 +1948,8 @@ document.addEventListener('DOMContentLoaded', () => {
             series550.classList.add('choose')
             series1906.classList.remove('choose')
           }
-          isFirstEnd = false
-          is1906FirstEnd = false
         }
-        if (shoe1906Swiper.isEnd) {
-          is1906FirstEnd = true
-        }
+        shoe1906Swiper.slideNext()
       }
     })
   }
@@ -1963,8 +1967,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (isSwiper1906) {
         if (shoe1906Swiper.isBeginning) {
-          isFirstEnd = false
-          is1906FirstEnd = false
           if (swiper550 && swiper1906) {
             swiper550.style.display = 'block'
             swiper1906.style.display = 'none'
@@ -1982,6 +1984,10 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     })
   }
+  /**
+   *  0109 swiper btn 監聽 end
+   */
+
   startGame()
 
   // 0108 remove append550Shoes function
