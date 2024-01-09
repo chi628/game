@@ -1966,6 +1966,9 @@ document.addEventListener('DOMContentLoaded', () => {
       if (isSwiper550) {
         if (!shoe550Swiper.isBeginning) {
           shoe550Swiper.slidePrev()
+          if (shoe550Swiper.isBeginning) {
+            swiperPreBtn.style.display = 'none'
+          }
         }
       }
 
