@@ -498,6 +498,8 @@
   }
 }
 
+/* 0108 新增遊戲導覽 cut */
+
 @keyframes goAnim {
   from {
     transform: translateY(0) translateX(-50%);
@@ -585,6 +587,8 @@
   background-size: contain;
   background-position: center;
 }
+
+/* 0108 新增遊戲導覽 cut end */
 
 .icon-white-arrow::before {
   content: '';
@@ -985,4 +989,45 @@
 }
 .clothes {
   background-image: url(./Images/jump_clothes.png);
+}
+
+.wrapper-test {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+.test-right-button {
+  position: absolute;
+  width: 25px;
+  height: 25px;
+  background: #000;
+  right: 0;
+  top: 15px;
+}
+
+.arrow-next {
+  position: absolute;
+  width: 20px;
+  height: 35px;
+  /* background: #000; */
+  right: 15px;
+  top: 30%;
+  background-image: url('./Images/arrow-rl.svg');
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+}
+
+.arrow-pre {
+  position: absolute;
+  width: 20px;
+  height: 35px;
+  /* background: #000; */
+  left: 15px;
+  top: 30%;
+  background-image: url('./Images/arrow-rl.svg');
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+  transform: scaleX(-1);
 }

@@ -7,6 +7,9 @@ import Swiper from 'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.mjs
  * e -> 勝利平台
  */
 const stairLevel = ['s', 'l', 'l', 's', 'w', 's', 'l', 'l', 's', 'w', 's', 'l', 'l', 's', 's']
+/**
+ * 0108 新增障礙物 displayName
+ */
 const stageList = [
   {
     id: 'boss',
@@ -63,6 +66,9 @@ const stageList = [
     description: '打破莫非定律魔咒 衰神退散吧',
   },
 ]
+/**
+ * 0108 新增障礙物 displayName end
+ */
 
 const shoesList = [
   {
@@ -103,6 +109,9 @@ const shoesList = [
   },
 ]
 
+/**
+ * 0108 改寫鞋子路徑
+ */
 const shoesImgList = [
   'Images/bb550vga.webp',
   'Images/bb550vgc.webp',
@@ -114,6 +123,9 @@ const shoesImgList = [
   'Images/m1906reh.webp',
   'Images/m1906ree.webp',
 ]
+/**
+ * 0108 改寫鞋子路徑 end
+ */
 
 let shoeIndex = 0
 let stageIndex = 0
@@ -249,12 +261,22 @@ class myGame {
 
   TREE_INIT_YCOORD
   PLAYER_PADDING
+  /**
+   * 0108 新增 padding 變數 */
   PLAYER_RIGHT_PADDING
+  /**
+   * 0108 新增 padding 變數 end */
   LOADED_COUNT = 78
   loadCounter = 0
   isLoaded = false
+  /**
+   * 0108 新增導覽 cut 變數
+   */
   isDesc = false
   isScrollToPoint = false // standby 畫面, player 是否滾到初始點
+  /**
+   * 0108 新增導覽 cut 變數 end
+   */
 
   constructor() {
     this.canvas = document.getElementById('my-canvas')
@@ -288,17 +310,29 @@ class myGame {
 
   touchStart(e) {
     e.preventDefault()
+    /**
+     * 0108 改寫遊戲 start 監聽事件
+     */
     if (e.target.id === 'game-jump-btn') {
       if (!this.isDesc) {
         window['myGame'].isTouched = true
       }
     }
+    /**
+     * 0108 改寫遊戲 start 監聽事件 end
+     */
   }
 
   touchEnd() {
+    /**
+     * 0108 改寫遊戲放開螢幕監聽事件
+     */
     if (!this.isDesc) {
       window['myGame'].isTouched = false
     }
+    /**
+     * 0108 改寫遊戲放開螢幕監聽事件 end
+     */
   }
 
   startGame() {
@@ -306,14 +340,26 @@ class myGame {
       document.getElementById('loading').style.display = 'block'
     }
     this.isStart = true
+    /**
+     * 0108 新增導覽頁面判斷
+     */
     this.isDesc = true
+    /**
+     * 0108 新增導覽頁面判斷 end
+     */
   }
 
+  /**
+   * 0108 改寫觸發監聽螢幕時機
+   */
   addTouchEvent() {
     this.isDesc = false
     document.addEventListener('touchstart', this.touchStart, { passive: false })
     document.addEventListener('touchend', this.touchEnd)
   }
+  /**
+   * 0108 改寫觸發監聽螢幕時機 end
+   */
 
   checkImgLoaded() {
     this.loadCounter += this.bigCloudObject.imgLoaded
@@ -354,8 +400,14 @@ class myGame {
     this.isFallingDown = false
     this.isCollideStage = false
     this.isFirstFail = true
+    /**
+     * 0108 reset 導覽頁變數布林
+     */
     this.isDesc = false
     this.isScrollToPoint = false
+    /**
+     * 0108 reset 導覽頁變數布林 end
+     */
 
     this.camera = 0
     this.groundObject.camera.y = 0
@@ -367,10 +419,22 @@ class myGame {
     this.mountL2Object.camera.y = 0
     this.mountL3Object.camera.x = 0
     this.mountL3Object.camera.y = 0
+    /**
+     * 0108 reset standbyPlayer 的 x 軸
+     */
     this.standbyPlayerObject.x = 0
+    /**
+     * 0108 reset standbyPlayer 的 x 軸 end
+     */
 
     this.flagObject.anim = 0
+    /**
+     * 0108 reset standbyPlayer anim
+     */
     this.standbyPlayerObject.anim = 0
+    /**
+     * 0108 reset standbyPlayer anim end
+     */
     this.playerObject.anim = 0
     this.failPlayerObject.anim = 0
     this.winPlayerObject.anim = 0
@@ -435,9 +499,15 @@ class myGame {
     this.propsBoxObject.LoadFrame('Images/props-box.webp')
 
     this.propsShoes = new Object(0, 0, 90, 40.3)
+    /**
+     * 0108 改寫鞋子 img load 方式
+     */
     for (let i = 0; i < shoesImgList.length; i++) {
       this.propsShoes.LoadFrame(shoesImgList[i])
     }
+    /**
+     * 0108 改寫鞋子 img load 方式 end
+     */
 
     this.stageObject = new Object(0, 0, 85, 85)
     for (let i = 0; i < stageList.length; i++) {
@@ -452,6 +522,9 @@ class myGame {
       this.flagObject.LoadFrame('Images/flag' + i + '.webp')
     }
 
+    /**
+     * 0108 新增 standbyPlayer Object
+     */
     this.standbyPlayerObject = new AnimatorObject(100, 140)
     for (let i = 0; i < 12; i++) {
       this.standbyPlayerObject.LoadFrame('Images/roll' + i + '.webp')
@@ -459,6 +532,9 @@ class myGame {
     for (let i = 0; i < 12; i++) {
       this.standbyPlayerObject.LoadFrame('Images/standby' + i + '.webp')
     }
+    /**
+     * 0108 新增 standbyPlayer Object end
+     */
 
     this.playerObject = new AnimatorObject(100, 140)
     this.playerObject.LoadFrame('Images/standby0.webp')
@@ -555,6 +631,9 @@ class myGame {
           break
       }
 
+      /**
+       * 0108 改 階梯 x 軸間距
+       */
       this.createStair({
         x: startX + 120 * i,
         y: startY - 50 * i,
@@ -562,6 +641,9 @@ class myGame {
         height,
         currFrame: frameIndex,
       })
+      /**
+       * 0108 改 階梯 x 軸間距 end
+       */
     }
 
     // 選擇的鞋
@@ -572,16 +654,40 @@ class myGame {
       })
     }
 
+    /**
+     * 0108 改跳躍障礙物後 board 顯示時間
+     */
     this.winBoard.SetAnimChange(120)
+    /**
+     * 0108 改跳躍障礙物後 board 顯示時間 end
+     */
     this.flagObject.SetAnimChange(18)
+    /**
+     * 0108 設定 standby Player 動畫時間
+     */
     this.standbyPlayerObject.SetAnimChange(24)
+    /**
+     * 0108 設定 standby Player 動畫時間 end
+     */
+    /**
+     * 0108 改player 跳躍動畫時間
+     */
     this.playerObject.SetAnimChange(110)
+    /**
+     * 0108 改player 跳躍動畫時間 end
+     */
     this.winPlayerObject.SetAnimChange(12)
     this.failPlayerObject.SetAnimChange(18)
     this.brokenWood.SetAnimChange(15)
 
+    /**
+     * 0108 初始化 standby Player 位置
+     */
     this.standbyPlayerObject.x = 0
     this.standbyPlayerObject.y = this.height * 0.84 - this.playerObject.height
+    /**
+     * 0108 初始化 standby Player 位置 end
+     */
 
     const playerInitXcoord = Math.floor(this.width * 0.6) - this.playerObject.width
     const playerInitYCoord = this.height * 0.84 - this.playerObject.height
@@ -833,15 +939,33 @@ class myGame {
     this.drawEndPoint()
     this.drawFlag()
     this.stairObject.xSpeed = this.initByFPS(7)
+    /**
+     * 0108 改階梯移動 y 軸速度
+     */
     this.stairObject.ySpeed = this.initByFPS(2.5)
+    /**
+     * 0108 改階梯移動 y 軸速度 end
+     */
     if (this.isStayOnWood) {
       if (this.stairList[this.brokenWoodIndex].alive) {
         this.stairList[this.brokenWoodIndex].state = 1
         this.stairList[this.brokenWoodIndex].alive = false
+        /**
+         * 0108 改 player 重置動畫時間
+         */
         this.playerObject.anim = 21
+        /**
+         * 0108 改 player 重置動畫時間 end
+         */
         this.isPlayingBrokenWood = true
         this.isJumpOnShoe = false
+        /**
+         * 0108 修改 player anim change
+         */
         this.playerObject.SetAnimChange(110)
+        /**
+         * 0108 修改 player anim change end
+         */
       }
     }
     if (this.isPlayingBrokenWood) {
@@ -866,7 +990,13 @@ class myGame {
     this.drawPropsBox()
     this.updateCamera()
 
+    /**
+     * 0108 改 player 跳躍判斷時間
+     */
     this.isJumping = this.playerObject.anim > 20
+    /**
+     * 0108 改 player 跳躍判斷時間 end
+     */
 
     if (this.isTouched) {
       // 最後一個階梯的 x (階梯左側)
@@ -880,6 +1010,9 @@ class myGame {
       this.flagObject.anim = 0
     }
 
+    /**
+     * 0108 新增 standby anim 變化條件
+     */
     if (this.isStart) {
       this.standbyPlayerObject.anim += this.initByFPS(1)
       if (this.standbyPlayerObject.anim >= this.standbyPlayerObject.anim_change) {
@@ -893,7 +1026,13 @@ class myGame {
         this.standbyPlayerObject.SetAnimChange(36)
       }
     }
+    /**
+     * 0108 新增 standby anim 變化條件 end
+     */
 
+    /**
+     * 0108 改寫 player anim 變化條件
+     */
     if (this.isStart && !this.isDesc) {
       if (this.currentfps > 25) {
         this.playerObject.anim += this.initByFPS(1)
@@ -902,6 +1041,9 @@ class myGame {
         this.playerObject.anim = 0
       }
     }
+    /**
+     * 0108 改寫 player anim 變化條件 end
+     */
 
     if (this.isCollideStage) {
       if (!this.isDying) {
@@ -925,11 +1067,18 @@ class myGame {
         this.ctxAlpha = 0.5
         this.isOverStage = false
       }
+
+      /**
+       * 0108 改寫 winboard 淡出時間
+       */
       if (this.winBoard.anim <= 10) {
         this.ctxAlpha += this.initByFPS(0.05)
       } else if (this.winBoard.anim > 110) {
         this.ctxAlpha -= this.initByFPS(0.1)
       }
+      /**
+       * 0108 改寫 winboard 淡出時間 end
+       */
     }
 
     if (this.isWin || this.isDying) {
@@ -1181,6 +1330,10 @@ class myGame {
 
       this.drawWinPlayer()
     } else if (this.isDesc) {
+      /**
+       * 0108 新增導覽 cut 有一個 standbyPlayer 狀態
+       * else if 開始都是新增的
+       */
       if (this.isStart) {
         if (!this.isScrollToPoint) {
           this.standbyPlayerObject.currFrame = Math.floor(this.standbyPlayerObject.anim / 2)
@@ -1193,8 +1346,18 @@ class myGame {
         }
       }
       this.drawStandbyPlayer()
+      /**
+       * 0108 新增導覽 cut 有一個 standbyPlayer 狀態 end
+       */
     } else {
+      /**
+       * 0108 修改 player 站立時間
+       * 只改 20 這個數值
+       */
       if (this.playerObject.anim <= 20) {
+        /**
+         * 0108 修改 player 站立時間 end
+         */
         this.playerObject.currFrame = 0
 
         if (this.playerOnStairIndex > -1) {
@@ -1219,17 +1382,26 @@ class myGame {
         if (this.isJumpOnShoe) {
           distance = this.height * 0.4 + this.playerObject.height - 25
         }
+        /**
+         * 0108 修改 player 滾動時間
+         */
         const halfAnimChange = Math.floor((this.playerObject.anim_change - 20) / 2)
         if (this.playerObject.anim - 20 < halfAnimChange) {
           this.playerObject.y -= this.initByFPS(Math.floor(distance) / halfAnimChange)
         } else {
           this.playerObject.y += this.initByFPS(Math.floor(distance) / halfAnimChange)
         }
+        /**
+         * 0108 修改 player 滾動時間 end
+         */
       }
       this.drawPlayer()
     }
   }
 
+  /**
+   * 0108 新增畫 standbyPlayer function
+   */
   drawStandbyPlayer() {
     this.ctx.drawImage(
       this.standbyPlayerObject.frames[this.standbyPlayerObject.currFrame],
@@ -1239,6 +1411,9 @@ class myGame {
       this.standbyPlayerObject.height
     )
   }
+  /**
+   * 0108 新增畫 standbyPlayer function end
+   */
 
   drawPlayer() {
     this.ctx.drawImage(
@@ -1276,12 +1451,16 @@ class myGame {
     this.isStartGame = this.playerObject.x + this.playerObject.width - this.PLAYER_PADDING >= this.stairList[0].x + 10
 
     this.playerOnStairIndex = this.stairList.findIndex((stair, i) => {
+      // 0108 this.playerObject.width * 0.35 改成 this.PLAYER_RIGHT_PADDING
       if (
         (stair.x < this.playerObject.x + this.playerObject.width - this.PLAYER_RIGHT_PADDING &&
           stair.x + stair.width >= this.playerObject.x + this.playerObject.width - this.PLAYER_PADDING) ||
         (stair.x <= this.playerObject.x + this.PLAYER_PADDING &&
           stair.x + stair.width > this.playerObject.x + this.PLAYER_RIGHT_PADDING)
       ) {
+        /**
+         * 0108 修正跳下一階動畫問題
+         */
         // 修正跳到下一階時閃動問題
         const halfAnimChange = Math.floor((this.playerObject.anim_change - 20) / 2)
         if (
@@ -1290,6 +1469,9 @@ class myGame {
         ) {
           this.playerObject.anim = 0
         }
+        /**
+         * 0108 修正跳下一階動畫問題 end
+         */
 
         // 現在所在的 x 範圍在有鞋子
         if (this.shoeOnStairIndex.includes(i)) {
@@ -1301,16 +1483,30 @@ class myGame {
 
             if (index > -1) {
               if (this.propsShoeList[index].alive) {
+                /**
+                 * 0108 改 player object 跳躍時機
+                 */
                 // 一碰到鞋子，就跳躍
                 this.playerObject.anim = 21
+                /**
+                 * 0108 改 player object 跳躍時機 end
+                 */
                 this.playerObject.currFrame = 12
                 this.playerObject.SetAnimChange(120)
                 this.isJumpOnShoe = true
                 this.propsShoeList[index].alive = false
               } else if (this.isJumpOnShoe && this.playerObject.anim >= 90) {
+                /**
+                 * 0108 改 player object 跳躍時機
+                 * 上面 else if 裡的 this.playerObject.anim >= 70 改成 this.playerObject.anim >= 90
+                 */
                 // 完成吃掉鞋子動畫後，還在原階梯上，恢復原本動畫
                 this.isJumpOnShoe = false
                 this.playerObject.SetAnimChange(110)
+                /**
+                 * 0108 改 player object 跳躍時機
+                 * this.playerObject.SetAnimChange(70) 改成 this.playerObject.SetAnimChange(110)
+                 */
               }
             }
           }
@@ -1325,7 +1521,13 @@ class myGame {
       // 如果降落的階梯不含有鞋子，更改動畫
       if (!this.shoeOnStairIndex.includes(this.playerOnStairIndex) && !this.isJumping) {
         this.isJumpOnShoe = false
+        /**
+         * 0108 修改 player anim change
+         */
         this.playerObject.SetAnimChange(110)
+        /**
+         * 0108 修改 player anim change end
+         */
       }
       // 檢查是否落在木頭階梯上
       if (
@@ -1420,6 +1622,9 @@ class myGame {
       let yCoord = this.stairList[this.stageOnStairIndex[i]].y - this.stageObject.height + 3
 
       this.ctx.drawImage(this.stageObject.frames[this.displayStagesIndex[i]], xCoord, yCoord, width, height)
+      /**
+       * 0108 新增障礙物顯示名字
+       */
       this.ctx.font = 'bold 15px ProximaNova'
       this.ctx.strokeStyle = 'black'
       this.ctx.fillStyle = 'white'
@@ -1431,6 +1636,9 @@ class myGame {
       let stageName = stageList[this.displayStagesIndex[i]].displayName
       this.ctx.strokeText(stageName, x, y)
       this.ctx.fillText(stageName, x, y)
+      /**
+       * 0108 新增障礙物顯示名字 end
+       */
     }
   }
 
@@ -1501,8 +1709,18 @@ class myGame {
 }
 
 let baseIndex = 0
+let isFirstEnd = false
+let is1906FirstEnd = false
 
+/**
+ * 0108 改寫鞋子 swiper
+ * 移除原本的 shoeSwiper
+ */
 const shoe550Swiper = new Swiper('.swiper-550', {
+  navigation: {
+    nextEl: '.swiper-button-next',
+    prevEl: '.swiper-button-prev',
+  },
   pagination: {
     el: '.swiper-pagination',
     clickable: true,
@@ -1536,8 +1754,6 @@ const shoe550Swiper = new Swiper('.swiper-550', {
           shoeIndex = baseIndex
           series550.classList.remove('choose')
           series1906.classList.add('choose')
-        }
-        if (swiper.activeIndex === 4) {
         }
       }
     },
@@ -1595,6 +1811,9 @@ const shoe1906Swiper = new Swiper('.swiper-1906', {
   observeParents: true,
   observeSlideChildren: true,
 })
+/**
+ * 0108 改寫鞋子 swiper end
+ */
 
 const stageSwiper = new Swiper('.stage-swiper', {
   navigation: {
@@ -1633,9 +1852,18 @@ let swiperPagination
 let swiper1906Pagination
 let successModal
 let failModal
+/**
+ * 0108 新增紅色跳躍按鈕
+ */
 let gameJumpBtn
 let gameDescription
 let tryOut
+/**
+ * 0108 新增紅色跳躍按鈕 end
+ */
+
+let swiperNextBtn
+let swiperPreBtn
 
 document.addEventListener('DOMContentLoaded', () => {
   window['myGame'] = new myGame()
@@ -1644,17 +1872,119 @@ document.addEventListener('DOMContentLoaded', () => {
   preGameBtn = document.getElementById('pre-game-btn')
   series550 = document.getElementById('series-550')
   series1906 = document.getElementById('series-1906')
+  /**
+   * 0108 新增 swiper 容器
+   */
   swiper550 = document.querySelector('.swiper-550')
   swiper1906 = document.querySelector('.swiper-1906')
+  /**
+   * 0108 新增 swiper 容器 end
+   */
   swiperPagination = document.getElementById('swiper-pagination')
   swiper1906Pagination = document.getElementById('swiper-pagination-1906')
   successModal = document.getElementById('success-modal')
   failModal = document.getElementById('fail-modal')
+  /**
+   * 0108 新增 跳躍 button 容器
+   */
   gameJumpBtn = document.getElementById('game-jump-btn')
   gameDescription = document.getElementById('game-description')
   tryOut = document.getElementById('try-out')
+  /**
+   * 0108 新增 跳躍 button 容器 end
+   */
 
+  swiperNextBtn = document.getElementById('swiper-next-btn')
+  swiperPreBtn = document.getElementById('swiper-pre-btn')
+
+  if (swiperNextBtn) {
+    swiperNextBtn.addEventListener('click', () => {
+      const isSwiper550 = swiper550.style.display !== 'none'
+      const isSwiper1906 = swiper1906.style.display !== 'none'
+      console.log('tes', isSwiper550, isSwiper1906)
+      if (isSwiper550) {
+        shoe550Swiper.slideNext()
+        if (shoe550Swiper.isEnd && isFirstEnd) {
+          if (swiper550 && swiper1906) {
+            swiper550.style.display = 'none'
+            swiper1906.style.display = 'block'
+            shoe1906Swiper.slideTo(0)
+          }
+
+          if (series550 && series1906) {
+            shoeIndex = baseIndex
+            series550.classList.remove('choose')
+            series1906.classList.add('choose')
+          }
+          isFirstEnd = false
+          is1906FirstEnd = false
+        }
+
+        if (shoe550Swiper.isEnd && !isFirstEnd) {
+          isFirstEnd = true
+        }
+      }
+
+      if (isSwiper1906) {
+        shoe1906Swiper.slideNext()
+        if (shoe1906Swiper.isEnd && is1906FirstEnd) {
+          baseIndex = 0
+          if (swiper550 && swiper1906) {
+            swiper550.style.display = 'block'
+            swiper1906.style.display = 'none'
+            shoe550Swiper.slideTo(0)
+          }
+
+          if (series550 && series1906) {
+            shoeIndex = baseIndex
+            series550.classList.add('choose')
+            series1906.classList.remove('choose')
+          }
+          isFirstEnd = false
+          is1906FirstEnd = false
+        }
+        if (shoe1906Swiper.isEnd) {
+          is1906FirstEnd = true
+        }
+      }
+    })
+  }
+
+  if (swiperPreBtn) {
+    swiperPreBtn.addEventListener('click', () => {
+      const isSwiper550 = swiper550.style.display !== 'none'
+      const isSwiper1906 = swiper1906.style.display !== 'none'
+
+      if (isSwiper550) {
+        if (!shoe550Swiper.isBeginning) {
+          shoe550Swiper.slidePrev()
+        }
+      }
+
+      if (isSwiper1906) {
+        if (shoe1906Swiper.isBeginning) {
+          isFirstEnd = false
+          is1906FirstEnd = false
+          if (swiper550 && swiper1906) {
+            swiper550.style.display = 'block'
+            swiper1906.style.display = 'none'
+            shoe550Swiper.slideTo(0)
+          }
+
+          if (series550 && series1906) {
+            shoeIndex = baseIndex
+            series550.classList.add('choose')
+            series1906.classList.remove('choose')
+          }
+        } else {
+          shoe1906Swiper.slidePrev()
+        }
+      }
+    })
+  }
   startGame()
+
+  // 0108 remove append550Shoes function
 
   shoesColor550 = document.getElementById('550-shoes-color')
 
@@ -1670,11 +2000,22 @@ document.addEventListener('DOMContentLoaded', () => {
       series550.classList.add('choose')
       series1906.classList.remove('choose')
 
+      /**
+       *  0108 remove swiperPagination.classList.remove('pagination-1906')
+       *  0108 remove shoeSwiper.removeAllSlides()
+       */
+
+      /**
+       *  0108 新增 swiper 顯示條件
+       */
       if (swiper550 && swiper1906) {
         swiper550.style.display = 'block'
         swiper1906.style.display = 'none'
         shoe550Swiper.slideTo(0)
       }
+      /**
+       *  0108 新增 swiper 顯示條件 end
+       */
 
       swiperPagination.childNodes[0].style.borderColor = '#fff'
     })
@@ -1685,11 +2026,22 @@ document.addEventListener('DOMContentLoaded', () => {
       series550.classList.remove('choose')
       series1906.classList.add('choose')
 
+      /**
+       *  0108 remove swiperPagination.classList.remove('pagination-550')
+       *  0108 remove shoeSwiper.removeAllSlides()
+       */
+
+      /**
+       *  0108 新增 swiper 顯示條件
+       */
       if (swiper550 && swiper1906) {
         swiper550.style.display = 'none'
         swiper1906.style.display = 'block'
         shoe1906Swiper.slideTo(0)
       }
+      /**
+       *  0108 新增 swiper 顯示條件 end
+       */
 
       swiper1906Pagination.childNodes[0].style.borderColor = '#fff'
     })
@@ -1705,11 +2057,17 @@ document.addEventListener('DOMContentLoaded', () => {
     })
   }
 
+  /**
+   *  0108 新增 tryout eventListener
+   */
   if (tryOut) {
     tryOut.addEventListener('click', () => {
       console.log('tryout clikc')
     })
   }
+  /**
+   *  0108 新增 tryout eventListener end
+   */
 })
 
 function startGame() {
@@ -1717,6 +2075,9 @@ function startGame() {
     preGameBtn.addEventListener('click', () => {
       preGame.style.display = 'none'
 
+      /**
+       *  0108 新增 導覽 cut 顯示條件
+       */
       if (gameDescription) {
         gameDescription.style.display = 'flex'
       }
@@ -1727,16 +2088,32 @@ function startGame() {
         hintShoe.src = shoesImgList[shoeIndex]
       }
 
+      /**
+       *  0108 新增 導覽 cut 顯示條件 end
+       */
+
       window['myGame'].startGame()
 
+      /**
+       *  0108 新增 jumpbtn 顯示條件
+       */
       if (gameJumpBtn) {
         gameJumpBtn.style.display = 'block'
         gameJumpBtn.addEventListener('click', gameJumpEvent)
       }
+      /**
+       *  0108 新增 jumpbtn 顯示條件 end
+       */
     })
   }
 }
 
+// 0108 remove append550Shoes function
+// 0108 remove append1906Shoes function
+
+/**
+ *  0108 新增 jumpevent function
+ */
 function gameJumpEvent() {
   window['myGame'].addTouchEvent()
   if (gameDescription) {
@@ -1744,6 +2121,9 @@ function gameJumpEvent() {
   }
   gameJumpBtn.removeEventListener('click', gameJumpEvent)
 }
+/**
+ *  0108 新增 jumpevent function end
+ */
 
 function showStageList() {
   if (successStage.length) {
