@@ -1932,6 +1932,8 @@ document.addEventListener('DOMContentLoaded', () => {
           }
         }
         shoe550Swiper.slideNext()
+
+        swiperPreBtn.style.display = 'block'
       }
 
       if (isSwiper1906) {
@@ -1948,6 +1950,8 @@ document.addEventListener('DOMContentLoaded', () => {
             series550.classList.add('choose')
             series1906.classList.remove('choose')
           }
+
+          swiperPreBtn.style.display = 'none'
         }
         shoe1906Swiper.slideNext()
       }
@@ -1978,6 +1982,7 @@ document.addEventListener('DOMContentLoaded', () => {
             series550.classList.add('choose')
             series1906.classList.remove('choose')
           }
+          swiperPreBtn.style.display = 'none'
         } else {
           shoe1906Swiper.slidePrev()
         }
